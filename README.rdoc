@@ -1,0 +1,3 @@
+CSH Web Packet
+==========
+A web application for Computer Science House (CSH), using Ruby on Rails and SQLite. Functions as an online way for members to track and view our in-house sign-off system for new introductory members with some added security measures, such as verification and non-repudiation.

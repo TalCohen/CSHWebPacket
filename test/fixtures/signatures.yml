@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  freshman_id: 1
+  upperclassman_uuid: MyString
+  isSigned: false
+
+two:
+  freshman_id: 1
+  upperclassman_uuid: MyString
+  isSigned: false

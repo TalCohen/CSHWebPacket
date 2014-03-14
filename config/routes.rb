@@ -1,5 +1,5 @@
 Packet::Application.routes.draw do
-  get "welcome/index"
+  get "packet/index" #the location of the file
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -16,7 +16,7 @@ Packet::Application.routes.draw do
   #   resources :products
   
   resources :posts
-  root to: "welcome#index"
+  root to: "packet#index" #the action(method) on packet
 
 
   # Example resource route with options:

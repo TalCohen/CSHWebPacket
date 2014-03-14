@@ -4,4 +4,5 @@ class Signature < ActiveRecord::Base
     def to_s
       return "#{is_signed} -> #{freshman.name}"
     end
+
 end

@@ -5,3 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+
+upperclassmen = Upperclassman.all
+
+
+freshmen = Freshman.all
+freshmen.each do |f|

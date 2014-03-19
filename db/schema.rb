@@ -24,7 +24,8 @@ ActiveRecord::Schema.define(version: 2) do
   create_table "signatures", force: true do |t|
     t.integer  "freshman_id"
     t.string   "upperclassman_uuid"
-    t.boolean  "is_signed"
+    t.string   "upperclassman_name"
+    t.boolean  "is_signed",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

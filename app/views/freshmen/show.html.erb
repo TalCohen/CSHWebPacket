@@ -1,20 +1,4 @@
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-
-    <title>@freshman.name</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../../Static/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap theme -->
-    <link href="../../Static/css/bootstrap-theme.min.css" rel="stylesheet">
+    <title><%= @freshman.name %>'s Packet</title>
 
     <!-- Custom styles for this template -->
     <style>
@@ -35,16 +19,6 @@
       }
 
     </style>
-    <!--<link href="theme.css" rel="stylesheet">-->
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body role="document">
@@ -59,12 +33,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="upper.html">CSH Packet</a>
+          <%= link_to 'CSH Packet', signatures_index_path, { class: "navbar-brand" } %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="upper.html">My Packet</a></li>
-            <li><a href="grid.html">Grid</a></li>
+            <li><%= link_to 'My Packet', upperclassman_show_path(1) %></li>
+            <li><%= link_to 'Grid', signatures_index_path %></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maybe names here? <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -86,7 +60,7 @@
 
       <!-- Main jumbotron for a primary marketing message or call to action -->
      <div class="page-header">
-      <h1 class=>Chase Berry <small>Freshman</small></h1>
+         <h1 class=><%= @freshman.name %> <small>Freshman</small></h1>
       <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Sign Packet</button>
     </div>
 
@@ -96,10 +70,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Chase Berry</h4>
+            <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
           </div>
           <div class="modal-body">
-            Are you sure you want to sign <span style="font-weight: bold;">Chase Berry's</span> Packet?
+            Are you sure you want to sign <span style="font-weight: bold;"><%= @freshman.name %>'s</span> Packet?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -110,7 +84,7 @@
     </div>
 
       <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-hover table-condensed">
           <thead>
             <tr>
               <th>Name</th>
@@ -119,7 +93,21 @@
           </thead>
 
           <tbody>
-            <tr>
+            <% @signatures.each do |s| %>
+              <% if s[1].is_signed %>
+                <tr class="success">
+              <% else %>
+                <tr>
+              <% end %>
+              <td><%= link_to "#{s[0]}", upperclassman_show_path(s[1].upperclassman_id) %></td>
+              <% if s[1].is_signed %>
+                <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+              <% else %>
+                <td><span class="glyphicon glyphicon-remove"></span> No</td>
+              <% end %>
+              </tr>
+            <% end %>
+            <!--<tr>
               <td><a href="upper.html">Cohen, Tal</a></td>
               <td>YES</td>
             </tr>
@@ -198,27 +186,20 @@
             <tr>
               <td>Demos, Stephen</td>
               <td>YES</td>
-            </tr>
+          </tr>-->
           </tbody>
         </table>
       </div>
 
       <div class="progress">
-        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-          60%
+          <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
+          <%= @progress %>%
         </div>
       </div>
 
 
     </div> <!-- /container -->
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="../../Static/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/docs.min.js"></script>
   </body>
 </html>
 

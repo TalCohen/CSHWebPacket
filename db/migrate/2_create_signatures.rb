@@ -2,8 +2,7 @@ class CreateSignatures < ActiveRecord::Migration
   def change
     create_table :signatures do |t|
       t.integer :freshman_id
-      t.string :upperclassman_uuid
-      t.string :upperclassman_name
+      t.integer :upperclassman_id
       t.boolean :is_signed, default: false
 
       t.timestamps

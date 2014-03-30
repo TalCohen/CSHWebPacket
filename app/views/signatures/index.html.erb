@@ -1,20 +1,6 @@
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+    <!--<link rel="shortcut icon" href="../../assets/ico/favicon.ico">-->
 
     <title>Packet Grid</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../../Static/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap theme -->
-    <link href="../../Static/css/bootstrap-theme.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <style>
@@ -35,16 +21,6 @@
       }
 
     </style>
-    <!--<link href="theme.css" rel="stylesheet">-->
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body role="document">
@@ -59,12 +35,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="upper.html">CSH Packet</a>
+          <%= link_to 'CSH Packet', signatures_index_path, { class: "navbar-brand" } %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="upper.html">My Packet</a></li>
-            <li><a href="grid.html">Grid</a></li>
+            <li><%= link_to 'My Packet', upperclassman_show_path(1) %></li>
+            <li class="active"><%= link_to 'Grid', signatures_index_path %></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maybe names here? <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -89,11 +65,15 @@
       </div>
 
       <div class="table-responsive" style="overflow-x: auto">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover table-condensed">
+
           <thead>
             <tr>
               <th></th>
-              <th>
+              <% @upperclassmen.each do |u| %>
+                <th><%= link_to "#{u.name}", upperclassman_show_path(u.id) %></th>
+              <% end %>
+              <!--<th>
                 <a href="upper.html">Cohen, Tal</a>
               </th>
               <th>
@@ -200,11 +180,25 @@
               </th>
               <th>
                 Demos, Stephen
-              </th>
+              </th>-->
             </tr>
           </thead>
           <tbody>
-            <tr>
+
+            <% @freshmen.each do |f| %>
+              <tr>
+                <th><%= link_to "#{f.name}", freshman_show_path(f.id) %></th>
+                <% f.signatures.each do |s| %>
+                  <% if s.is_signed %>
+                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
+                  <% else %>
+                    <td><span class="glyphicon glyphicon-remove"></span></td>
+                  <% end %>
+                <% end %>
+              </tr>
+            <% end %>
+
+            <!--<tr>
               <th>Berry, Chase</th>
               <td class="success"><span class="glyphicon glyphicon-ok"></span></td>
               <td class="danger"><span class="glyphicon glyphicon-remove"></span></td>
@@ -1022,25 +1016,9 @@
               <td>NO</td>
               <td>YES</td>
               <td>YES</td>
-            </tr>
+          </tr>-->
           </tbody>
         </table>
       </div>
       
     </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="../../Static/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/docs.min.js"></script>
-  </body>
-</html>
-
-
-
-
-
-

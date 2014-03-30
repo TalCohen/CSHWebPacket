@@ -105,10 +105,10 @@ module PacketLdap
             eboard = find_eboard
 
             filter = LDAP::Filter.intersect(active_onfloor, eboard)
-            
             result = @ldap.search({
                 :base       => LDAP_USER_BASE,
                 :filter     => filter,
+                :attributes => ["*", "+"]
             })
             return result
         end

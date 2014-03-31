@@ -1,5 +1,14 @@
 class FreshmenController < ApplicationController
   def index
+    @freshmen = []
+
+    # Gets the freshmen and how many signatures they have
+    fresh = Freshman.all
+    fresh.each do |f|
+      signatures = f.signatures.where(is_signed: true)
+      @freshmen.push([f, signatures.length])
+      end
+    @freshmen.sort! {|a,b| b[1] <=> a[1]}
   end
 
   def show

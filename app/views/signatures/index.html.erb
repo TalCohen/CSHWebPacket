@@ -35,24 +35,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to 'CSH Packet', signatures_index_path, { class: "navbar-brand" } %>
+          <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><%= link_to 'My Packet', upperclassman_show_path(1) %></li>
+            <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
             <li class="active"><%= link_to 'Grid', signatures_index_path %></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Maybe names here? <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
+            <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
+            <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -93,5 +83,5 @@
           </tbody>
         </table>
       </div>
-      
+      <%= @user.name %>  
     </div> <!-- /container -->

@@ -113,6 +113,16 @@ module PacketLdap
             return result
         end
 
+        def find_by_username(username)
+            filter = LDAP::Filter.eq('uid', username)
+            result = @ldap.search({
+                :base       => LDAP_USER_BASE,
+                :filter     => filter,
+                :attributes => ["*", "+"]
+            })
+            return result
+        end
+
 
         private
             

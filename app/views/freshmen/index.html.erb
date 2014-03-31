@@ -1,2 +1,77 @@
-<h1>Freshmen#index</h1>
-<p>Find me in app/views/freshmen/index.html.erb</p>
+    <title>Freshmen Packets</title>
+
+    <!-- Custom styles for this template -->
+    <style>
+
+      body {
+        padding-top: 70px;
+        padding-bottom: 30px;
+      }
+
+      .theme-dropdown .dropdown-menu {
+        position: static;
+        display: block;
+        margin-bottom: 20px;
+      }
+
+      .theme-showcase > p > .btn {
+        margin: 5px 0;
+      }
+
+    </style>
+  </head>
+
+  <body role="document">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
+            <li><%= link_to 'Grid', signatures_index_path %></li>
+            <li class="active"><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
+            <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container theme-showcase" role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="page-header">
+        <h1>Freshmen Packets</h1>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Packets Signed</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @freshmen.each do |f| %>
+              <tr>
+                <td><%= link_to "#{f[0].name}", freshman_show_path(f[0].id) %></td>
+                <td><%= f[1] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+    </div> <!-- /container -->
+

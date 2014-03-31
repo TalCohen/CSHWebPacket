@@ -40,7 +40,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
-            <li class="active"><%= link_to 'Grid', signatures_index_path %></li>
+            <li class="active"><%= link_to 'Grid', signatures_path %></li>
             <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
             <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
           </ul>
@@ -83,5 +83,4 @@
           </tbody>
         </table>
       </div>
-      <%= @user.name %>  
     </div> <!-- /container -->

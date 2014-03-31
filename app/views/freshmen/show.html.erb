@@ -38,7 +38,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
-            <li><%= link_to 'Grid', signatures_index_path %></li>
+            <li><%= link_to 'Grid', signatures_path %></li>
             <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
             <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
           </ul>
@@ -51,10 +51,12 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
      <div class="page-header">
          <h1 class=><%= @freshman.name %> <small>Freshman</small></h1>
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Sign Packet</button>
+         <% if !@user_signature.is_signed %>
+             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
     </div>
 
     <!-- Modal -->
+            <%= form_for @user_signature do |f| %>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -67,11 +69,16 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <a href="sign.html"><button type="button" class="btn btn-primary">Sign</button></a>
+            <%= f.submit 'Sign', {class: 'btn btn-success' }%>
           </div>
         </div>
       </div>
     </div>
+            <% end %>
+        <% else %>
+          <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
+          </div>
+        <% end %>
 
       <div class="table-responsive">
         <table class="table table-bordered table-hover table-condensed">
@@ -106,8 +113,6 @@
           <%= @progress %>%
         </div>
       </div>
-
-
     </div> <!-- /container -->
 
   </body>

@@ -1,12 +1,8 @@
 Packet::Application.routes.draw do
-  get "signatures/update"
-  get "signatures/index"
+  resources :signatures, only: [:index, :update]
   get "upperclassmen/index"
   get "upperclassmen/show/:id" => "upperclassmen#show", as: "upperclassman_show"
   get "freshmen/index"
   get "freshmen/show/:id" => "freshmen#show", as: "freshman_show"
-  #root to: "signatures#index"
   root to: "upperclassmen#show"
-  resource :packet
-  #upperclassman_show_path(@upperclassman) # => "/upperclassmen/show/345"
 end

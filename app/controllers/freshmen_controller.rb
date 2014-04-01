@@ -40,6 +40,8 @@ class FreshmenController < ApplicationController
     @progress = progress.to_s
 
     # Gets the signature that the user is looking at
-    @user_signature = @user.signatures.find_by(freshman_id: @freshman.id)
+    if @user
+      @user_signature = @user.signatures.find_by(freshman_id: @freshman.id)
+    end
   end
 end

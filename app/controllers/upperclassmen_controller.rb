@@ -13,8 +13,14 @@ class UpperclassmenController < ApplicationController
 
   def show
     # If no paramaters are given, make the it user's page.
-    if !params[:id]
-      params[:id] = @user.id
+    # If exception, redirect to signature/index
+    begin
+      if !params[:id]
+        params[:id] = @user.id
+      end
+    rescue
+      params[:id] = 1
+      redirect_to signatures_path
     end
 
     @upperclassman = Upperclassman.find(params[:id]) # Get the upperclassman object

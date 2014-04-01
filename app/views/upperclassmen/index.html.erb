@@ -33,11 +33,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+          <% if @user %>
+              <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+          <% else %>
+              <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
+          <% end %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
+            <% if @user %>
+              <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
+            <% end %>
             <li><%= link_to 'Grid', signatures_path %></li>
             <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
             <li class="active"><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>

@@ -1,7 +1,13 @@
 class SignaturesController < ApplicationController
   def index
     @freshmen = Freshman.all
-    @upperclassmen = Upperclassman.all
+    @upperclassmen = Array.new(Upperclassman.all)
+
+    if @user
+      # Put user at front of grid
+      @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@user.id)))
+    end
+
   end
 
   def update

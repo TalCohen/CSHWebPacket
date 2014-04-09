@@ -3,22 +3,10 @@
 
 require_relative 'packet_ldap'
 
-module PacketLdap
-
+def create_upperclassmen
   # Gets an array of the upperclassmen
-  packet_ldap =  Ldap.new
+  packet_ldap =  PacketLdap::Ldap.new
   upperclassmen =  packet_ldap.find_upperclassmen
-
-
-  # Creates some dummy freshmen names
-  freshmen = ["f_chase_berry", "f_michael_lynch", "f_aidan_mcinerny", \
-               "f_eric_knapik", "f_harlan_haskins", "f_andrew_jeddeloh", \
-               "f_madison_flaherty", "f_tish_khan", "f_ben_grawi", \
-               "f_john_king", "f_paul_lane", "f_adrian_svenson", \
-               "f_drew_gottlieb", "f_josh_milas", "f_jamie_yates", \
-               "f_mihir_singh", "f_oliver_barnum", "f_susan_lunn", \
-               "f_victoria_weaver", "f_will_lueking"] 
-
 
   # Creates the upperclassmen objects
   puts("\nCreating Upperclassmen...")
@@ -27,9 +15,16 @@ module PacketLdap
                              uuid: "#{upper.entryuuid[0]}")
     puts("Upperclassman - #{u.name}, #{u.uuid}")
   end
-
   puts("Upperclassmen Length - #{upperclassmen.length}")
+end
 
+def create_freshmen
+  # Creates some dummy freshmen names
+  freshmen = []
+  f = File.read("/var/www/priv/packet/db/freshmen.txt")
+  f.each_line do |line|
+    freshmen.push(line.chomp)
+  end
 
   # Creates the freshmen and signatures objects
   puts("\nCreating Freshmen and Signatures...")
@@ -42,5 +37,9 @@ module PacketLdap
     end
     
   end
-
 end
+
+create_upperclassmen
+create_freshmen
+
+

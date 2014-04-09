@@ -8,7 +8,8 @@ class UpperclassmenController < ApplicationController
       signatures = u.signatures.where(is_signed: true)
       @upperclassmen.push([u, signatures.length])
       end
-    @upperclassmen.sort! {|a,b| b[1] <=> a[1]}
+    # Sort the upperclassmen based on highest signature count, then id
+    @upperclassmen.sort! {|a,b| [b[1],a[0].id] <=> [a[1],b[0].id]}
   end
 
   def show
@@ -30,11 +31,14 @@ class UpperclassmenController < ApplicationController
     @signatures = []
     signed = 0.0
     u_signatures.each do |s|
+      # signatures will be a list of [Freshman, Signature]
       @signatures.push([Freshman.find(s.freshman_id).name, s])
       if s.is_signed
         signed += 1
       end
     end
+    # Sort the signatures
+    @signatures.sort! {|a,b| b[1] <=> a[1]}
 
     # Gets the information for the progress bar
     progress = (signed / u_signatures.length * 100).round(2)

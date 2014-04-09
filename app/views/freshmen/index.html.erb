@@ -57,6 +57,32 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="page-header">
         <h1>Freshmen Packets</h1>
+        <% if @admin %>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Freshman</button>
+    </div>
+
+    <!-- Modal -->
+            <%= form_for :freshman do |f| %>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Add Freshman</h4>
+          </div>
+          <div class="modal-body">
+            <p>
+              <%= f.text_field :name, { class: "form-control", placeholder: "Name", autocomplete: "off" } %>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <%= f.submit 'Add Freshman', { class: 'btn btn-success' }%>
+        </div>
+      </div>
+    </div>
+            <% end %>
+        <% end %>
       </div>
 
       <div class="table-responsive">

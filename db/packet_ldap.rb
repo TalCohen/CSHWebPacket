@@ -69,11 +69,12 @@ module PacketLdap
         end
 
         def find_active_onfloor
-            active = LDAP::Filter.eq('active', '1')
+            #active = LDAP::Filter.eq('active', '1')
             onfloor = LDAP::Filter.eq('onfloor', '1')
 
-            filter = LDAP::Filter.join(active, onfloor)
-            return filter
+            #filter = LDAP::Filter.join(active, onfloor)
+            #return filter
+            return onfloor
         end
 
         def find_eboard

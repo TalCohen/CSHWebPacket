@@ -1,4 +1,20 @@
 class FreshmenController < ApplicationController
+  def create
+    # Just to be sure an admin is posting
+    if @admin
+      # Get the name entered
+      fresh = params[:freshman][:name]
+      # Create the freshman object
+      f = Freshman.create(name: fresh)
+      # Create the signature relationship to each upperclassman.
+      Upperclassman.all.each do |u|
+        s = Signature.create(freshman_id: f.id, upperclassman_id: u.id)
+      end
+    end
+
+    redirect_to :back
+  end
+
   def index
     @freshmen = []
 
@@ -7,8 +23,9 @@ class FreshmenController < ApplicationController
     fresh.each do |f|
       signatures = f.signatures.where(is_signed: true)
       @freshmen.push([f, signatures.length])
-      end
-    @freshmen.sort! {|a,b| b[1] <=> a[1]}
+    end
+    # Sort the freshmen based on highest signature count, then id
+    @freshmen.sort! {|a,b| [b[1],a[0].id] <=> [a[1],b[0].id]}
   end
 
   def show
@@ -23,6 +40,8 @@ class FreshmenController < ApplicationController
       if s.is_signed
         signed += 1
       end
+    # Sort the signatures
+    @signatures.sort! {|a,b| b[1] <=> a[1]} 
     end
      
     # Gets the information for the progress bar

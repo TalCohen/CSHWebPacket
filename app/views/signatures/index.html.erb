@@ -63,18 +63,18 @@
 
           <thead>
             <tr>
-              <th></th>
-              <% @upperclassmen.each do |u| %>
-                <th><%= link_to "#{u.name}", upperclassman_show_path(u.id) %></th>
+              <th style="padding-right: 170px"></th>
+              <% @freshmen.each do |f| %>
+                <th><%= link_to "#{f.name}", freshman_show_path(f.id) %></th>
               <% end %>
             </tr>
           </thead>
           <tbody>
 
-            <% @freshmen.each do |f| %>
+            <% @upperclassmen.each do |u| %>
               <tr>
-                <th><%= link_to "#{f.name}", freshman_show_path(f.id) %></th>
-                <% f.signatures.each do |s| %>
+                <th><%= link_to "#{u.name}", upperclassman_show_path(u.id) %></th>
+                <% u.signatures.each do |s| %>
                   <% if s.is_signed %>
                     <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
                   <% else %>

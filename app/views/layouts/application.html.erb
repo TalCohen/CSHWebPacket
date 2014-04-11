@@ -11,7 +11,59 @@
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 
-<%= yield %>
+  <%= yield :title %>
 
+   <!-- Custom styles for this template -->
+   <style>
+
+      body {
+        padding-top: 70px;
+        padding-bottom: 30px;
+      }
+
+      .theme-dropdown .dropdown-menu {
+        position: static;
+        display: block;
+        margin-bottom: 20px;
+      }
+
+      .theme-showcase > p > .btn {
+        margin: 5px 0;
+      }
+
+  </style>
+</head>
+
+<body role="document">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <% if @user %>
+              <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+          <% else %>
+              <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
+          <% end %>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <%= yield :navbar %>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container theme-showcase" role="main">
+
+    <%= yield %>
+
+    </div> <!-- /container -->
 </body>
 </html>

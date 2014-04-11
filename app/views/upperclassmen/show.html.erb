@@ -1,101 +1,57 @@
-    <title><%= @upperclassman.name %>'s Packet</title>
+<% content_for :title do %>
+  <title><%= @upperclassman.name %>'s Packet</title>
+<% end %>
 
-    <!-- Custom styles for this template -->
-    <style>
 
-      body {
-        padding-top: 70px;
-        padding-bottom: 30px;
-      }
+<% content_for :navbar do %>
+  <% if @user %>
+    <% if @user.id == @upperclassman.id %>
+      <li class="active">
+    <% else %>
+      <li>
+    <% end %>
+    <%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
+  <% end %>
+  <li><%= link_to 'Grid', signatures_path %></li>
+  <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
+  <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
+<% end %>
 
-      .theme-dropdown .dropdown-menu {
-        position: static;
-        display: block;
-        margin-bottom: 20px;
-      }
 
-      .theme-showcase > p > .btn {
-        margin: 5px 0;
-      }
+<div class="page-header">
+  <h1><%= @upperclassman.name %> <small>Upperclassman</small></h1>
+</div>
 
-    </style>
-  </head>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Signed?</th>
+      </tr>
+    </thead>
 
-  <body role="document">
-
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <% if @user %>
-              <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+    <tbody>
+      <% @signatures.each do |s| %>
+        <% if s[1].is_signed %>
+          <tr class="success">
+        <% else %>
+          <tr>
+        <% end %>
+          <td><%= link_to "#{s[0]}", freshman_show_path(s[1].freshman_id) %></td>
+          <% if s[1].is_signed %>
+            <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
           <% else %>
-              <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
+            <td><span class="glyphicon glyphicon-remove"></span> No</td>
           <% end %>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <% if @user %>
-              <% if @user.id == @upperclassman.id %>
-                <li class="active">
-              <% else %>
-                <li>
-              <% end %>
-                <%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
-            <% end %>
-            <li><%= link_to 'Grid', signatures_path %></li>
-            <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
-            <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
-    <div class="container theme-showcase" role="main">
-
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="page-header">
-        <h1><%= @upperclassman.name %> <small>Upperclassman</small></h1>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover table-condensed">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Signed?</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @signatures.each do |s| %>
-              <% if s[1].is_signed %>
-                <tr class="success">
-              <% else %>
-                <tr>
-              <% end %>
-                <td><%= link_to "#{s[0]}", freshman_show_path(s[1].freshman_id) %></td>
-                <% if s[1].is_signed %>
-                  <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-                <% else %>
-                  <td><span class="glyphicon glyphicon-remove"></span> No</td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="progress">
-          <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
-          <%= @progress %>%
-        </div>
-      </div>
-    </div> <!-- /container -->
-
+<div class="progress">
+  <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
+    <%= @progress %>%
+  </div>
+</div>

@@ -1,90 +1,46 @@
-    <title>Packet Grid</title>
+<% content_for :title do %>
+  <title>Packet Grid</title>
+<% end %>
 
-    <!-- Custom styles for this template -->
-    <style>
 
-      body {
-        padding-top: 70px;
-        padding-bottom: 30px;
-      }
+<% content_for :navbar do %>
+  <% if @user %>
+    <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
+  <% end %>
+  <li class="active"><%= link_to 'Grid', signatures_path %></li>
+  <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
+  <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
+<% end %>
 
-      .theme-dropdown .dropdown-menu {
-        position: static;
-        display: block;
-        margin-bottom: 20px;
-      }
 
-      .theme-showcase > p > .btn {
-        margin: 5px 0;
-      }
+<div class="page-header">
+  <h1>Packet Grid</h1>
+</div>
 
-    </style>
-  </head>
+<div class="table-responsive" style="overflow-x: auto">
+  <table class="table table-bordered table-hover table-condensed">
+    <thead>
+      <tr>
+        <th style="padding-right: 170px"></th>
+        <% @freshmen.each do |f| %>
+          <th><%= link_to "#{f.name}", freshman_show_path(f.id) %></th>
+        <% end %>
+      </tr>
+    </thead>
 
-  <body role="document">
-
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <% if @user %>
-              <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
-          <% else %>
-              <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
+    <tbody>
+      <% @upperclassmen.each do |u| %>
+        <tr>
+          <th><%= link_to "#{u.name}", upperclassman_show_path(u.id) %></th>
+          <% u.signatures.each do |s| %>
+            <% if s.is_signed %>
+              <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
+            <% else %>
+              <td><span class="glyphicon glyphicon-remove"></span></td>
+            <% end %>
           <% end %>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <% if @user %>
-              <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
-            <% end %>
-            <li class="active"><%= link_to 'Grid', signatures_path %></li>
-            <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
-            <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-
-    <div class="container theme-showcase" role="main">
-
-      <div class="page-header">
-        <h1>Packet Grid</h1>
-      </div>
-
-      <div class="table-responsive" style="overflow-x: auto">
-        <table class="table table-bordered table-hover table-condensed">
-
-          <thead>
-            <tr>
-              <th style="padding-right: 170px"></th>
-              <% @freshmen.each do |f| %>
-                <th><%= link_to "#{f.name}", freshman_show_path(f.id) %></th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-
-            <% @upperclassmen.each do |u| %>
-              <tr>
-                <th><%= link_to "#{u.name}", upperclassman_show_path(u.id) %></th>
-                <% u.signatures.each do |s| %>
-                  <% if s.is_signed %>
-                    <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
-                  <% else %>
-                    <td><span class="glyphicon glyphicon-remove"></span></td>
-                  <% end %>
-                <% end %>
-              </tr>
-            <% end %>
-
-          </tbody>
-        </table>
-      </div>
-    </div> <!-- /container -->
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

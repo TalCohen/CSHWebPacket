@@ -1,126 +1,109 @@
-    <title><%= @freshman.name %>'s Packet</title>
+<% content_for :title do %>
+  <title><%= @freshman.name %>'s Packet</title>
+<% end %>
 
-    <!-- Custom styles for this template -->
-    <style>
 
-      body {
-        padding-top: 70px;
-        padding-bottom: 30px;
-      }
+<% content_for :navbar do %>
+  <% if @user %>
+    <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
+  <% end %>
+  <li><%= link_to 'Grid', signatures_path %></li>
+  <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
+  <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
+<% end %>
 
-      .theme-dropdown .dropdown-menu {
-        position: static;
-        display: block;
-        margin-bottom: 20px;
-      }
 
-      .theme-showcase > p > .btn {
-        margin: 5px 0;
-      }
+<div class="page-header">
+  <h1 class=><%= @freshman.name %> <small>Freshman</small></h1>
+  <% if @user and not @user_signature.is_signed %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
+  <% elsif @user and @user_signature.is_signed%>
+    <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
+  <% end %>
 
-    </style>
-  </head>
+  <% if @admin %>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Delete Freshman</button>
+  <% end %>
+</div>
 
-  <body role="document">
-
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <% if @user %>
-              <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
-          <% else %>
-              <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
-          <% end %>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <% if @user %>
-              <li><%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
-            <% end %>
-            <li><%= link_to 'Grid', signatures_path %></li>
-            <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
-            <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+<% if @user and not @user_signature.is_signed %>
+<%= form_for @user_signature do |f| %>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to sign <span style="font-weight: bold;"><%= @freshman.name %>'s</span> Packet?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.submit 'Sign', {class: 'btn btn-success' }%>
       </div>
     </div>
+  </div>
+</div>
+<% end %>
+<% end %>
 
-    <div class="container theme-showcase" role="main">
-
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-     <div class="page-header">
-         <h1 class=><%= @freshman.name %> <small>Freshman</small></h1>
-         <% if @user and !@user_signature.is_signed %>
-             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
-    </div>
-
-    <!-- Modal -->
-            <%= form_for @user_signature do |f| %>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to sign <span style="font-weight: bold;"><%= @freshman.name %>'s</span> Packet?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <%= f.submit 'Sign', {class: 'btn btn-success' }%>
-          </div>
-        </div>
+<% if @admin %>
+<%= form_for :freshman, method: :delete do |f| %>
+<!-- Modal2 -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to <span style="font-weight: bold;">delete</span> <%= @freshman.name %>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.submit 'Delete', {class: 'btn btn-danger' }%>
       </div>
     </div>
-            <% end %>
+  </div>
+</div>
+<% end %>
+<% end %>
+
+
+<div class="table-responsive">
+  <table class="table table-bordered table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Signed?</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @signatures.each do |s| %>
+        <% if s[1].is_signed %>
+          <tr class="success">
         <% else %>
-          <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
-          </div>
+          <tr>
         <% end %>
+        <td><%= link_to "#{s[0]}", upperclassman_show_path(s[1].upperclassman_id) %></td>
+        <% if s[1].is_signed %>
+          <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+        <% else %>
+          <td><span class="glyphicon glyphicon-remove"></span> No</td>
+        <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover table-condensed">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Signed?</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @signatures.each do |s| %>
-              <% if s[1].is_signed %>
-                <tr class="success">
-              <% else %>
-                <tr>
-              <% end %>
-              <td><%= link_to "#{s[0]}", upperclassman_show_path(s[1].upperclassman_id) %></td>
-              <% if s[1].is_signed %>
-                <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-              <% else %>
-                <td><span class="glyphicon glyphicon-remove"></span> No</td>
-              <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="progress">
-          <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
-          <%= @progress %>%
-        </div>
-      </div>
-    </div> <!-- /container -->
-
-  </body>
-</html>
+<div class="progress">
+  <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
+  <%= @progress %>%
+  </div>
+</div>
 

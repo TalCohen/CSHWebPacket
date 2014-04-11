@@ -15,6 +15,17 @@ class FreshmenController < ApplicationController
     redirect_to :back
   end
 
+  def destroy
+    # Just to be sure an admin is deleting
+    if @admin
+      # Get the freshman to delete and delete
+      fresh = Freshman.find(params[:id])
+      fresh.destroy
+    end
+
+    redirect_to freshmen_index_path
+  end
+
   def index
     @freshmen = []
 

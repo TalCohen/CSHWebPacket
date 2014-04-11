@@ -23,7 +23,7 @@ class FreshmenController < ApplicationController
       fresh.destroy
     end
 
-    redirect_to freshmen_index_path
+    redirect_to freshmen_path
   end
 
   def index

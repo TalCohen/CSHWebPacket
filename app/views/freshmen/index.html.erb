@@ -42,7 +42,7 @@
     <tbody>
       <% @freshmen.each do |f| %>
         <tr>
-          <td><%= link_to "#{f[0].name}", freshman_show_path(f[0].id) %></td>
+          <td><%= link_to "#{f[0].name}", freshman_path(f[0].id) %></td>
           <td><%= f[1] %></td>
         </tr>
       <% end %>

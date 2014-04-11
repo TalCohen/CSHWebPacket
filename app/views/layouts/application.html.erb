@@ -47,7 +47,7 @@
             <span class="icon-bar"></span>
           </button>
           <% if @user %>
-            <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+            <%= link_to 'CSH Packet', upperclassman_path(@user.id), { class: "navbar-brand" } %>
           <% else %>
             <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
           <% end %>
@@ -55,18 +55,18 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <% if @user %>
-              <li <% if current_page?(upperclassman_show_path(@user.id)) %>class="active"<% end %>>
-                <%= link_to 'My Packet', upperclassman_show_path(@user.id) %>
+              <li <% if current_page?(upperclassman_path(@user.id)) %>class="active"<% end %>>
+                <%= link_to 'My Packet', upperclassman_path(@user.id) %>
               </li>
             <% end %>
             <li <% if current_page?(signatures_path) %>class="active"<% end %>>
               <%= link_to 'Grid', signatures_path %>
             </li>
-            <li <% if current_page?(freshmen_index_path) %>class="active"<% end %>>
-              <%= link_to 'Freshmen Packets', freshmen_index_path %>
+            <li <% if current_page?(freshmen_path) %>class="active"<% end %>>
+              <%= link_to 'Freshmen Packets', freshmen_path %>
             </li>
-            <li <% if current_page?(upperclassmen_index_path) %>class="active"<% end %>>
-              <%= link_to 'Upperclassmen Packets', upperclassmen_index_path %>
+            <li <% if current_page?(upperclassmen_path) %>class="active"<% end %>>
+              <%= link_to 'Upperclassmen Packets', upperclassmen_path %>
             </li>
           </ul>
         </div><!--/.nav-collapse -->

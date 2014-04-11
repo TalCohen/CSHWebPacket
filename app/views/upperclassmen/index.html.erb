@@ -14,7 +14,7 @@
     <tbody>
       <% @upperclassmen.each do |u| %>
         <tr>
-          <td><%= link_to "#{u[0].name}", upperclassman_show_path(u[0].id) %></td>
+          <td><%= link_to "#{u[0].name}", upperclassman_path(u[0].id) %></td>
           <td><%= u[1] %></td>
         </tr>
       <% end %>

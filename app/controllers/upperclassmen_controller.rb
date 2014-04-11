@@ -1,7 +1,9 @@
 class UpperclassmenController < ApplicationController
   def index
-    @upperclassmen = []
+    # Define title
+    @title = "Upperclassmen Packets"
 
+    @upperclassmen = []
     # Gets the upperclassmen and how many signatures they have
     uppers = Upperclassman.all
     uppers.each do |u|
@@ -23,8 +25,11 @@ class UpperclassmenController < ApplicationController
       params[:id] = 1
       redirect_to signatures_path
     end
-
+  
     @upperclassman = Upperclassman.find(params[:id]) # Get the upperclassman object
+
+    # Define title
+    @title = "#{@upperclassman.name}'s Packet"
 
     # Gets the signatures and freshmen objects needed
     u_signatures = @upperclassman.signatures

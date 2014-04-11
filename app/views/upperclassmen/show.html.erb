@@ -1,23 +1,3 @@
-<% content_for :title do %>
-  <title><%= @upperclassman.name %>'s Packet</title>
-<% end %>
-
-
-<% content_for :navbar do %>
-  <% if @user %>
-    <% if @user.id == @upperclassman.id %>
-      <li class="active">
-    <% else %>
-      <li>
-    <% end %>
-    <%= link_to 'My Packet', upperclassman_show_path(@user.id) %></li>
-  <% end %>
-  <li><%= link_to 'Grid', signatures_path %></li>
-  <li><%= link_to 'Freshmen Packets', freshmen_index_path %></li>
-  <li><%= link_to 'Upperclassmen Packets', upperclassmen_index_path %></li>
-<% end %>
-
-
 <div class="page-header">
   <h1><%= @upperclassman.name %> <small>Upperclassman</small></h1>
 </div>

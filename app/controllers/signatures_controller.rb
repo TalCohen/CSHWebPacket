@@ -1,5 +1,9 @@
 class SignaturesController < ApplicationController
   def index
+    # Define title
+    @title = "Packet Grid"
+
+    # Get freshmen and upperclassmen
     @freshmen = Freshman.all
     @upperclassmen = Array.new(Upperclassman.all)
 

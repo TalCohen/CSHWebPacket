@@ -27,8 +27,10 @@ class FreshmenController < ApplicationController
   end
 
   def index
-    @freshmen = []
+    # Define title
+    @title = "Freshmen Packets"
 
+    @freshmen = []
     # Gets the freshmen and how many signatures they have
     fresh = Freshman.all
     fresh.each do |f|
@@ -41,6 +43,9 @@ class FreshmenController < ApplicationController
 
   def show
     @freshman = Freshman.find(params[:id]) # Get the freshman object
+
+    # Define title
+    @title = "#{@freshman.name}'s Packet"
 
     # Gets the signatures and upperclassmen needed
     f_signatures = @freshman.signatures 

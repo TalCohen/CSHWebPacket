@@ -5,16 +5,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="author" content="Tal Cohen">
 
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 
-  <%= yield :title %>
+  <title><%= @title %></title>
 
-   <!-- Custom styles for this template -->
-   <style>
+    <!-- Custom styles for this template -->
+    <style>
 
       body {
         padding-top: 70px;
@@ -31,7 +31,7 @@
         margin: 5px 0;
       }
 
-  </style>
+    </style>
 </head>
 
 <body role="document">
@@ -47,14 +47,27 @@
             <span class="icon-bar"></span>
           </button>
           <% if @user %>
-              <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
+            <%= link_to 'CSH Packet', upperclassman_show_path(@user.id), { class: "navbar-brand" } %>
           <% else %>
-              <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
+            <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
           <% end %>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <%= yield :navbar %>
+            <% if @user %>
+              <li <% if current_page?(upperclassman_show_path(@user.id)) %>class="active"<% end %>>
+                <%= link_to 'My Packet', upperclassman_show_path(@user.id) %>
+              </li>
+            <% end %>
+            <li <% if current_page?(signatures_path) %>class="active"<% end %>>
+              <%= link_to 'Grid', signatures_path %>
+            </li>
+            <li <% if current_page?(freshmen_index_path) %>class="active"<% end %>>
+              <%= link_to 'Freshmen Packets', freshmen_index_path %>
+            </li>
+            <li <% if current_page?(upperclassmen_index_path) %>class="active"<% end %>>
+              <%= link_to 'Upperclassmen Packets', upperclassmen_index_path %>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

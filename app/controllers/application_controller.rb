@@ -15,13 +15,16 @@ class ApplicationController < ActionController::Base
 
       # If user is admin, admin is true
       admin = File.read("/var/www/priv/packet/admin.txt").chomp
-      if @user.name == admin
+      if @user.uuid == admin
         @admin = true
       end
     rescue
       @user = nil
       @admin = nil
     end
+    
+    # Instantiate title
+    @title = ""
     
   end
 

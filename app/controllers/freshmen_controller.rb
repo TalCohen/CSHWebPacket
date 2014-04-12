@@ -37,8 +37,8 @@ class FreshmenController < ApplicationController
       signatures = f.signatures.where(is_signed: true)
       @freshmen.push([f, signatures.length])
     end
-    # Sort the freshmen based on highest signature count, then id
-    @freshmen.sort! {|a,b| [b[1],a[0].id] <=> [a[1],b[0].id]}
+    # Sort the freshmen based on highest signature count, then aphabetically
+    @freshmen.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
   end
 
   def show
@@ -48,7 +48,7 @@ class FreshmenController < ApplicationController
     @title = "#{@freshman.name}'s Packet"
 
     # Gets the signatures and upperclassmen needed
-    f_signatures = @freshman.signatures 
+    f_signatures = @freshman.get_signatures
     @signatures = []
     signed = 0.0
     f_signatures.each do |s|
@@ -56,8 +56,6 @@ class FreshmenController < ApplicationController
       if s.is_signed
         signed += 1
       end
-    # Sort the signatures
-    @signatures.sort! {|a,b| b[1] <=> a[1]} 
     end
      
     # Gets the information for the progress bar

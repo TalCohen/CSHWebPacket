@@ -3,9 +3,12 @@ class SignaturesController < ApplicationController
     # Define title
     @title = "Packet Grid"
 
-    # Get freshmen and upperclassmen
+    # Get sorted freshmen and upperclassmen
     @freshmen = Freshman.all
+    @freshmen.sort! {|a,b| a <=> b}
+
     @upperclassmen = Array.new(Upperclassman.all)
+    @upperclassmen.sort! {|a,b| a <=> b}
 
     if @user
       # Put user at front of grid

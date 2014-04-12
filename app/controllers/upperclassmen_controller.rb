@@ -10,8 +10,8 @@ class UpperclassmenController < ApplicationController
       signatures = u.signatures.where(is_signed: true)
       @upperclassmen.push([u, signatures.length])
       end
-    # Sort the upperclassmen based on highest signature count, then id
-    @upperclassmen.sort! {|a,b| [b[1],a[0].id] <=> [a[1],b[0].id]}
+    # Sort the upperclassmen based on highest signature count, then alphabetically
+    @upperclassmen.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
   end
 
   def show
@@ -32,7 +32,7 @@ class UpperclassmenController < ApplicationController
     @title = "#{@upperclassman.name}'s Packet"
 
     # Gets the signatures and freshmen objects needed
-    u_signatures = @upperclassman.signatures
+    u_signatures = @upperclassman.get_signatures
     @signatures = []
     signed = 0.0
     u_signatures.each do |s|
@@ -42,8 +42,6 @@ class UpperclassmenController < ApplicationController
         signed += 1
       end
     end
-    # Sort the signatures
-    @signatures.sort! {|a,b| b[1] <=> a[1]}
 
     # Gets the information for the progress bar
     progress = (signed / u_signatures.length * 100).round(2)

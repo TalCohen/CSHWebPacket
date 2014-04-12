@@ -7,8 +7,8 @@ class Signature < ActiveRecord::Base
     end
 
     def <=>(other)
-       # Compare signatures based on is_signed then id (true > false)
-      (self.is_signed == other.is_signed) ? ((self.id > other.id) ? -1 : 1) : (self.is_signed ? 1 : -1)
+      # Compare signatures based on is_signed (true > false)
+      (self.is_signed != other.is_signed) ? (self.is_signed ? 1 : -1) : 0
     end
 
 end

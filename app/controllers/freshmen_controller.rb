@@ -52,6 +52,7 @@ class FreshmenController < ApplicationController
     @signatures = []
     signed = 0.0
     f_signatures.each do |s|
+      # signatures will be a list of [Upperclassman, Signature]
       @signatures.push([Upperclassman.find(s.upperclassman_id).name, s])
       if s.is_signed
         signed += 1

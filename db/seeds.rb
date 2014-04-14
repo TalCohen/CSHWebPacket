@@ -11,15 +11,15 @@ def create_upperclassmen
   # Creates the upperclassmen objects
   puts("\nCreating Upperclassmen...")
   upperclassmen.each do |upper|
-    u = Upperclassman.create(name: "#{upper.givenName[0]} #{upper.sn[0]}",
-                             uuid: "#{upper.entryuuid[0]}")
+    u = Upperclassman.new
+    u.create_upperclassman(upper)
     puts("Upperclassman - #{u.name}, #{u.uuid}")
   end
   puts("Upperclassmen Length - #{upperclassmen.length}")
 end
 
 def create_freshmen
-  # Creates some dummy freshmen names
+  # Get the freshmen names from the file
   freshmen = []
   f = File.read("/var/www/priv/packet/db/freshmen.txt")
   f.each_line do |line|
@@ -29,17 +29,11 @@ def create_freshmen
   # Creates the freshmen and signatures objects
   puts("\nCreating Freshmen and Signatures...")
   freshmen.each do |fresh|
-    f = Freshman.create(name: fresh)
-    puts("Freshman - #{f.name}")
-
-    Upperclassman.all.each do |u|
-      s = Signature.create(freshman_id: f.id, upperclassman_id: u.id)
-    end
-    
+    puts("Freshman - #{fresh}")
+    f = Freshman.new
+    f.create_freshman(fresh)
   end
 end
 
 create_upperclassmen
 create_freshmen
-
-

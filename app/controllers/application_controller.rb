@@ -12,6 +12,13 @@ class ApplicationController < ActionController::Base
       user = ldap.find_by_username(request.env['REMOTE_USER'])[0]
       user_uuid = user.entryuuid[0]
       @user = Upperclassman.find_by uuid: "#{user_uuid}"
+      
+      # Check if user is nil (not onfloor upperclassman)
+      if @user == nil
+        # Create upperclassman as alumni
+        @user = Upperclassman.new
+        @user.create_upperclassman(user, alumni=true)
+      end
 
       # If user is admin, admin is true
       admin = File.read("/var/www/priv/packet/admin.txt").chomp

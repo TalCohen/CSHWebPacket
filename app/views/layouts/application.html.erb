@@ -59,7 +59,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <% if @user %>
-              <li <% if current_page?(upperclassman_path(@user.id)) %>class="active"<% end %>>
+              <li <% if current_page?(upperclassman_path(@user.id)) or current_page?(root_path) %>class="active"<% end %>>
                 <%= link_to 'My Packet', upperclassman_path(@user.id) %>
               </li>
             <% end %>

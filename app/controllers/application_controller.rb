@@ -7,32 +7,45 @@ class ApplicationController < ActionController::Base
 
   before_action do
     # Find current user
-    begin
       ldap = PacketLdap::Ldap.new
-      user = ldap.find_by_username(request.env['REMOTE_USER'])[0]
-      user_uuid = user.entryuuid[0]
-      @user = Upperclassman.find_by uuid: "#{user_uuid}"
-      
-      # Check if user is nil (not onfloor upperclassman)
-      if @user == nil
-        # Create upperclassman as alumni
-        @user = Upperclassman.new
-        @user.create_upperclassman(user, alumni=true)
-      end
+      username = request.env['REMOTE_USER']
 
-      # If user is admin, admin is true
-      admin = File.read("/var/www/priv/packet/admin.txt").chomp
-      if @user.uuid == admin
-        @admin = true
+      if username == nil      # User is accessing from freshmen-packet.csh
+        @freshman_user = true 
+        @freshman_first = true
+        @user = nil
+        
+        # Redirect to freshmen index
+        controller = params[:controller]
+        action = params[:action]
+        if not (controller == "freshmen" and (action == "index" or action == "create"))
+          redirect_to freshmen_path
+        end
+        
+      else                    # User is accessing from packet.csh
+        @freshman_user = false
+        user = ldap.find_by_username(username)[0]
+        user_uuid = user.entryuuid[0]
+        @user = Upperclassman.find_by uuid: "#{user_uuid}"
+      
+        # Check if user is nil (not onfloor upperclassman)
+        if @user == nil
+          # Create upperclassman as alumni
+          @user = Upperclassman.new
+          @user.create_upperclassman(user, alumni=true)
+        end
+
+        # Check if user is admin
+        admin = File.read("/var/www/priv/packet/admin.txt").chomp
+        if @user.uuid == admin
+          @admin = true
+        end
+
+        #@user = nil
+        #@admin = nil
       end
-    rescue
-      @user = nil
-      @admin = nil
-    end
-    
-    # Instantiate title
-    @title = ""
-    
+      # Instantiate title
+      @title = ""
   end
 
 

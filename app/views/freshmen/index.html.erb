@@ -1,51 +1,69 @@
-<div class="page-header">
-  <h1>Freshmen Packets</h1>
-  <% if @admin %>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Freshman</button>
-  <% end %>
-</div>
+ <% if @freshman_first %>
+  <div class="col-lg-4">
+    <div class="page-header">
+     <h1>Freshman Sign-in</h1> 
+    </div>
+    <% if flash[:notice] %>
+      <div class="alert alert-danger"><%= flash[:notice] %></div>
+    <% end %>
+    <%= form_for :freshman, method: :set do |f| %>
+      <%= f.text_field :name, { class: "form-control", placeholder: "Username", autocomplete: "off" } %> <br />
+      <%= f.password_field :password, { class: "form-control", placeholder: "Password" } %> <br />
+      <%= f.submit("Login") %>
+    <% end %>
+  </div>
 
-<% if @admin %>
-<%= form_for :freshman do |f| %>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Add Freshman</h4>
-      </div>
-      <div class="modal-body">
-        <p>
-          <%= f.text_field :name, { class: "form-control", placeholder: "Name", autocomplete: "off" } %>
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= f.submit 'Add Freshman', { class: 'btn btn-success' }%>
+<% else  %>
+
+  <div class="page-header">
+    <h1>Freshmen Packets</h1>
+    <% if @admin %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Freshman</button>
+    <% end %>
+  </div>
+
+  <% if @admin %>
+  <%= form_for :freshman do |f| %>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Add Freshman</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            <%= f.text_field :name, { class: "form-control", placeholder: "Name", autocomplete: "off" } %>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <%= f.submit 'Add Freshman', { class: 'btn btn-success' }%>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<% end %>
-<% end %>
+  <% end %>
+  <% end %>
 
-<div class="table-responsive">
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Signatures Received</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @freshmen.each do |f| %>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed">
+      <thead>
         <tr>
-          <td><%= link_to "#{f[0].name}", freshman_path(f[0].id) %></td>
-          <td><%= f[1] %></td>
+          <th>Name</th>
+          <th>Signatures Received</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+
+      <tbody>
+        <% @freshmen.each do |f| %>
+          <tr>
+            <td><%= link_to "#{f[0].name}", freshman_path(f[0].id) %></td>
+            <td><%= f[1] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

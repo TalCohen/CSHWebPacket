@@ -36,6 +36,7 @@
 
 <body role="document">
 
+
     <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -48,10 +49,13 @@
           </button>
           <% if @user %>
             <%= link_to 'CSH Packet', upperclassman_path(@user.id), { class: "navbar-brand" } %>
+          <% elsif @freshman_user %>
+            <%= link_to 'CSH Packet', "", { class: "navbar-brand" } %>
           <% else %>
             <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
           <% end %>
         </div>
+      <% if not @freshman_user %>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <% if @user %>
@@ -70,6 +74,7 @@
             </li>
           </ul>
         </div><!--/.nav-collapse -->
+      <% end %>
       </div>
     </div>
 

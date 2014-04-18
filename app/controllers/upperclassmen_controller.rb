@@ -18,7 +18,7 @@ class UpperclassmenController < ApplicationController
     # If no paramaters are given, make the it user's page.
     # If exception, redirect to signature/index
     begin
-      if !params[:id]
+      if not params[:id]
         params[:id] = @user.id
       end
     rescue

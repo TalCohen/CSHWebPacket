@@ -1,5 +1,11 @@
 <div class="page-header">
-  <h1><%= @upperclassman.name %> <small>Upperclassman</small></h1>
+  <h1><%= @upperclassman.name %> 
+    <% if not @upperclassman.alumni %>
+      <small>Upperclassman</small>
+    <% else %>
+      <small>Off-floor/Alumni/Advisory/Honorary Member</small>
+    <% end %>
+  </h1>
 </div>
 
 <div class="table-responsive">

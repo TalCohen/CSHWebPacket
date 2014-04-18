@@ -74,11 +74,13 @@ class FreshmenController < ApplicationController
 
     # Iterate through alumni signatures and add to alumni list
     @alumni_signatures = Array.new(15)
+    # Gets the alumni signatures ordered by oldest signature to newest
     alumni = Signature.includes(:upperclassman).where(freshman_id: @freshman.id,
-                              "upperclassmen.alumni" => true, is_signed: true)
+      "upperclassmen.alumni" => true, is_signed: true).order(updated_at: :asc)
     alumni.each do |a|
       index = @alumni_signatures.index(nil)
       if index
+        # Replace nil with [Alumni, Signature]
         @alumni_signatures[index] = 
                 [Upperclassman.find(a.upperclassman_id).name, a]
         signed += 1

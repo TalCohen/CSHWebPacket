@@ -26,7 +26,7 @@ class Freshman < ActiveRecord::Base
     # and then aphabetically
     #
     # returns - The sorted list
-    signatures = self.signatures
+    signatures = Signature.includes(:upperclassman).where(freshman_id: self.id, "upperclassmen.alumni" => false)
     return signatures.sort {|a,b| [b,Upperclassman.find(a.upperclassman_id)] <=> [a,Upperclassman.find(b.upperclassman_id)]}
   end
 

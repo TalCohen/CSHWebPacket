@@ -5,7 +5,7 @@ class UpperclassmenController < ApplicationController
 
     @upperclassmen = []
     # Gets the upperclassmen and how many signatures they have
-    uppers = Upperclassman.all
+    uppers = Upperclassman.where(alumni: false)
     uppers.each do |u|
       signatures = u.signatures.where(is_signed: true)
       @upperclassmen.push([u, signatures.length])

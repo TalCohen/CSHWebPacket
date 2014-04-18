@@ -71,9 +71,23 @@ class FreshmenController < ApplicationController
         signed += 1
       end
     end
+
+    # Iterate through alumni signatures and add to alumni list
+    @alumni_signatures = Array.new(15)
+    alumni = Signature.includes(:upperclassman).where(freshman_id: @freshman.id,
+                              "upperclassmen.alumni" => true, is_signed: true)
+    alumni.each do |a|
+      index = @alumni_signatures.index(nil)
+      if index
+        @alumni_signatures[index] = 
+                [Upperclassman.find(a.upperclassman_id).name, a]
+        signed += 1
+      end
+    end
+    
      
     # Gets the information for the progress bar
-    progress = (signed / f_signatures.length * 100).round(2)
+    progress = (signed / (f_signatures.length + @alumni_signatures.length) * 100).round(2)
     @progress_color = ""
     if progress < 10
       @progress_color = "progress-bar-danger"

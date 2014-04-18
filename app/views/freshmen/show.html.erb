@@ -82,6 +82,28 @@
         <% end %>
         </tr>
       <% end %>
+
+      <% @alumni_signatures.each do |s| %>
+        <% if s %>
+          <% if s[1].is_signed %>
+            <tr class="success">
+          <% else %>
+            <tr>
+          <% end %>
+          <td>Off-floor/Alumni/Advisory/Honorary Member - <%= s[0] %></td>
+          <% if s[1].is_signed %>
+            <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+          <% else %>
+            <td><span class="glyphicon glyphicon-remove"></span> No</td>
+          <% end %>
+          </tr>
+        <% else %>
+          <tr>
+            <td>Off-floor/Alumni/Advisory/Honorary Member</td>
+            <td><span class="glyphicon glyphicon-remove"></span> No</td>
+          </tr>
+        <% end %>
+      <% end %>
     </tbody>
   </table>
 </div>

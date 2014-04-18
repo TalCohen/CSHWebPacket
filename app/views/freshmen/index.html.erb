@@ -9,7 +9,7 @@
     <%= form_for :freshman, method: :set do |f| %>
       <%= f.text_field :name, { class: "form-control", placeholder: "Username", autocomplete: "off" } %> <br />
       <%= f.password_field :password, { class: "form-control", placeholder: "Password" } %> <br />
-      <%= f.submit("Login") %>
+      <%= f.submit 'Login', { class: 'btn btn-primary' } %>
     <% end %>
   </div>
 

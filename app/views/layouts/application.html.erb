@@ -48,7 +48,7 @@
             <span class="icon-bar"></span>
           </button>
           <% if @user %>
-            <%= link_to 'CSH Packet', upperclassman_path(@user.id), { class: "navbar-brand" } %>
+            <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
           <% elsif @freshman_user %>
             <%= link_to 'CSH Packet', "", { class: "navbar-brand" } %>
           <% else %>

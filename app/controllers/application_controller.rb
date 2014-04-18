@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
       ldap = PacketLdap::Ldap.new
       username = request.env['REMOTE_USER']
 
-      if username == nil      # User is accessing from freshmen-packet.csh
+      if username == nil # User is accessing from freshmen-packet.csh
         @freshman_user = true 
         @freshman_first = true
         @user = nil
@@ -21,8 +21,7 @@ class ApplicationController < ActionController::Base
         if not (controller == "freshmen" and (action == "index" or action == "create"))
           redirect_to freshmen_path
         end
-        
-      else                    # User is accessing from packet.csh
+      else # User is accessing from packet.csh
         @freshman_user = false
         user = ldap.find_by_username(username)[0]
         user_uuid = user.entryuuid[0]
@@ -40,10 +39,8 @@ class ApplicationController < ActionController::Base
         if @user.uuid == admin
           @admin = true
         end
-
-        #@user = nil
-        #@admin = nil
       end
+
       # Instantiate title
       @title = ""
   end

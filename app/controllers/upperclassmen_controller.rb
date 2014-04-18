@@ -16,17 +16,18 @@ class UpperclassmenController < ApplicationController
 
   def show
     # If no paramaters are given, make the it user's page.
-    # If exception, redirect to signature/index
-    begin
-      if not params[:id]
-        params[:id] = @user.id
-      end
-    rescue
-      params[:id] = 1
-      redirect_to signatures_path
+    if not params[:id]
+      params[:id] = @user.id
     end
-  
-    @upperclassman = Upperclassman.find(params[:id]) # Get the upperclassman object
+
+    # If upperclassman exists, get upperclassman object, otherwise redirect
+    if Upperclassman.exists?(params[:id])
+      @upperclassman = Upperclassman.find(params[:id])
+    else
+      flash[:notice] = "Invalid upperclassman page"
+      redirect_to upperclassmen_path
+      return
+    end
 
     # Define title
     @title = "#{@upperclassman.name}'s Packet"

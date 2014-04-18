@@ -55,7 +55,14 @@ class FreshmenController < ApplicationController
   end
 
   def show
-    @freshman = Freshman.find(params[:id]) # Get the freshman object
+    # If freshman exists, get freshman object, otherwise, redirect
+    if Freshman.exists?(params[:id])
+      @freshman = Freshman.find(params[:id])
+    else
+      flash[:notice] = "Invalid freshman page"
+      redirect_to freshmen_path
+      return
+    end
 
     # Define title
     @title = "#{@freshman.name}'s Packet"

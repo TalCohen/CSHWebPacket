@@ -27,14 +27,19 @@
         </tr>
       <% end %>
 
-      <% @alumni_signatures.each do |s| %>
+      <tr>
+        <th>Off-floor/Alumni/Advisory/Honorary Member Name</th>
+        <th>Signed?</th>
+      </tr>
+
+      <% @alumni_signatures.each_with_index do |s, index| %>
         <% if s %>
           <% if s[1].is_signed %>
             <tr class="success">
           <% else %>
             <tr>
           <% end %>
-          <td>Off-floor/Alumni/Advisory/Honorary Member - <%= s[0] %></td>
+          <td><%= index + 1 %>. <%= s[0] %></td>
           <% if s[1].is_signed %>
             <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
           <% else %>
@@ -43,7 +48,7 @@
           </tr>
         <% else %>
           <tr>
-            <td>Off-floor/Alumni/Advisory/Honorary Member</td>
+            <td><%= index + 1 %>. </td>
             <td><span class="glyphicon glyphicon-remove"></span> No</td>
           </tr>
         <% end %>

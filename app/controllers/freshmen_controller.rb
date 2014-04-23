@@ -76,21 +76,12 @@ class FreshmenController < ApplicationController
       end
     end
 
-    # Iterate through alumni signatures and add to alumni list
-    @alumni_signatures = Array.new(15)
-    # Gets the alumni signatures ordered by oldest signature to newest
-    alumni = Signature.includes(:upperclassman).where(freshman_id: @freshman.id,
-      "upperclassmen.alumni" => true, is_signed: true).order(updated_at: :asc)
-    alumni.each do |a|
-      index = @alumni_signatures.index(nil)
-      if index
-        # Replace nil with [Alumni, Signature]
-        @alumni_signatures[index] = 
-                [Upperclassman.find(a.upperclassman_id).name, a]
-        signed += 1
-      end
-    end
-    
+   # Gets the alumni signatures as a list of [Alumni, Signature] or nil
+   @alumni_signatures = @freshman.get_alumni_signatures
+   
+   # Gets the amount of alumni signatures
+   alumni_count = @alumni_signatures.select { |s| s != nil }.length
+   signed += alumni_count
      
     # Gets the information for the progress bar
     progress = (signed / (f_signatures.length + @alumni_signatures.length) * 100).round(2)

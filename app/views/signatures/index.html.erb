@@ -26,6 +26,19 @@
           <% end %>
         </tr>
       <% end %>
+
+      <tr>
+        <th>Off-floor/Alumni/Advisory/Honorary Members</th>
+        <% @freshmen.each do |f| %>
+          <% if f.get_alumni_signatures_count == 15 %>
+            <td class="success"><span class="glyphicon glyphicon-ok"></span> 
+          <% else %>
+            <td><span class="glyphicon glyphicon-remove"></span> 
+          <% end %>
+          (<%= f.get_alumni_signatures_count %>/15)
+          </td>
+        <% end %>
+      </tr>
     </tbody>
   </table>
 </div>

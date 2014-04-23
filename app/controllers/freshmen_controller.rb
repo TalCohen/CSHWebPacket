@@ -5,11 +5,8 @@ class FreshmenController < ApplicationController
       # Get the name entered
       fresh = params[:freshman][:name]
       # Create the freshman object
-      f = Freshman.create(name: fresh)
-      # Create the signature relationship to each upperclassman.
-      Upperclassman.all.each do |u|
-        s = Signature.create(freshman_id: f.id, upperclassman_id: u.id)
-      end
+      f = Freshman.new
+      f.create_freshman(fresh)
       redirect_to :back
     elsif @freshman_user
       # Really bad way of doing this, in my opinion, but oh well.

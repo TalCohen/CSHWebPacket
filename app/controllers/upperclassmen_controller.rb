@@ -46,16 +46,6 @@ class UpperclassmenController < ApplicationController
 
     # Gets the information for the progress bar
     progress = (signed / u_signatures.length * 100).round(2)
-    @progress_color = ""
-    if progress < 10
-      @progress_color = "progress-bar-danger"
-    elsif progress < 60
-      @progress_color = "progress-bar-warning"
-    elsif progress < 100
-      @progress_color = "progress-bar-info"
-    else
-      @progress_color = "progress-bar-success"
-    end
     @progress = progress.to_s
 
   end

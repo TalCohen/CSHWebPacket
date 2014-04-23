@@ -47,10 +47,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <% if @user %>
+          <% if @user and not @freshman_user %>
             <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
           <% elsif @freshman_user %>
-            <%= link_to 'CSH Packet', "", { class: "navbar-brand" } %>
+            <%= link_to 'CSH Packet', "#", { class: "navbar-brand" } %>
           <% else %>
             <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
           <% end %>
@@ -74,6 +74,12 @@
             </li>
           </ul>
         </div><!--/.nav-collapse -->
+      <% elsif @freshman_user and not @freshman_first %>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><%= link_to 'Logout', "" %></li>
+          </ul>
+        </div>
       <% end %>
       </div>
     </div>

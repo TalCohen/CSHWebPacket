@@ -40,15 +40,20 @@ class FreshmenController < ApplicationController
     # Define title
     @title = "Freshmen Packets"
 
+    # Gets the total count of signatures on the packet (15 off-fllor/alumni)
+    @total_signatures = Upperclassman.where(alumni: false).length + 15
+
     @freshmen = []
     # Gets the freshmen and how many signatures they have
     fresh = Freshman.all
     fresh.each do |f|
-      signatures = f.signatures.where(is_signed: true)
+      signatures = f.signatures.where(is_signed: true).limit(@total_signatures)
       @freshmen.push([f, signatures.length])
     end
     # Sort the freshmen based on highest signature count, then aphabetically
     @freshmen.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
+
+
   end
 
   def show

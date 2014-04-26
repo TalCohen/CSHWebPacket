@@ -51,7 +51,7 @@
   <% end %>
 
   <div class="table-responsive">
-    <table class="table table-bordered table-striped table-condensed">
+    <table class="table table-bordered table-hover table-condensed">
       <thead>
         <tr>
           <th>Name</th>
@@ -61,9 +61,13 @@
 
       <tbody>
         <% @freshmen.each do |f| %>
-          <tr>
+          <% if f[1] == @total_signatures %>
+            <tr class="success">
+          <% else %>
+            <tr>
+          <% end %>
             <td><%= link_to "#{f[0].name}", freshman_path(f[0].id) %></td>
-            <td><%= f[1] %></td>
+            <td><%= f[1] %> / <%= @total_signatures %></td>
           </tr>
         <% end %>
       </tbody>

@@ -60,7 +60,7 @@
           <ul class="nav navbar-nav">
             <% if @user %>
               <li <% if current_page?(upperclassman_path(@user.id)) or current_page?(root_path) %>class="active"<% end %>>
-                <%= link_to 'My Packet', upperclassman_path(@user.id) %>
+                <%= link_to 'My Signatures', upperclassman_path(@user.id) %>
               </li>
             <% end %>
             <li <% if current_page?(signatures_path) %>class="active"<% end %>>
@@ -70,7 +70,7 @@
               <%= link_to 'Freshmen Packets', freshmen_path %>
             </li>
             <li <% if current_page?(upperclassmen_path) %>class="active"<% end %>>
-              <%= link_to 'Upperclassmen Packets', upperclassmen_path %>
+              <%= link_to 'Upperclassmen Signatures', upperclassmen_path %>
             </li>
           </ul>
         </div><!--/.nav-collapse -->

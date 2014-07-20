@@ -8,6 +8,12 @@
   </h1>
 </div>
 
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
+    <%= @progress %>%
+  </div>
+</div>
+
 <div class="table-responsive">
   <table class="table table-bordered table-hover table-condensed">
     <thead>
@@ -35,18 +41,3 @@
     </tbody>
   </table>
 </div>
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
-    <%= @progress %>%
-  </div>
-</div>
-
-<!--<script>
-  function askAgain(id) {
-    console.log("hitting");
-    var elem = document.getElementById(id);
-    elem.innerHTML="Click again to confirm";
-    elem.className="btn btn-xs btn-warning"
-  }
-</script>-->

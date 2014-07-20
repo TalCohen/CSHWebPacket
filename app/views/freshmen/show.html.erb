@@ -93,17 +93,21 @@
         <% end %>
         </tr>
       <% end %>
+    </tbody>
 
+    <thead>
       <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
+        <th></th>
+        <th></th>
       </tr>
 
       <tr>
         <th>Off-floor/Alumni/Advisory/Honorary Member Name</th>
         <th>Signed?</th>
       </tr>
+    </thead>
 
+    <tbody>
       <% @alumni_signatures.each_with_index do |s, index| %>
         <% if s %>
           <% if s[1].is_signed %>

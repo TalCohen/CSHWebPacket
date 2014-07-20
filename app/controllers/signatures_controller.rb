@@ -1,4 +1,6 @@
 class SignaturesController < ApplicationController
+  before_action :authenticate_upperclassman!
+
   def index
     # Define title
     @title = "Packet Grid"

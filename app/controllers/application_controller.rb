@@ -45,5 +45,53 @@ class ApplicationController < ActionController::Base
       @title = ""
   end
 
+  ##                 ##
+  ## NEW RESTRUCTURE ##
+  ##                 ##
+
+  private
+
+  def get_uuid
+    ldap = PacketLdap::Ldap.new
+    username = request.env['REMOTE_USER']
+    user = ldap.find_by_username(username)[0]
+    return user.entryuuid[0]
+  end
+
+  def current_upperclassman
+    user_uuid = send("get_uuid")
+    @current_upperclassman ||= Upperclassman.find_by(uuid: user_uuid)
+  end
+
+  def current_admin
+    admin = File.read("/var/www/priv/packet/admin.txt").chomp
+    @current_upperclassman if @current_upperclassman.uuid == admin 
+  end
+
+  def current_freshman
+    @current_freshman ||= Freshman.find(session[:current_freshman_id])
+  end
+
+  %w(upperclassman admin freshman).each do |role|
+    define_method("#{role}_signed_in?") do
+      send("current_#{role}").present?
+    end
+
+    define_method("authenticate_#{role}!") do
+      unless send("#{role}_signed_in?")
+        redirect_to root_path, alert: 'Not authorized!'
+      end
+    end
+  end
+
+  def signed_in?
+    upperclassman_signed_in? || freshman_signed_in?
+  end
+
+  def authenticate!
+    unless signed_in?
+      redirect_to root_path, alert: 'Not authorized!'
+    end
+  end
 
 end

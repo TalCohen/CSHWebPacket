@@ -1,4 +1,6 @@
 class FreshmenController < ApplicationController
+  before_action :authenticate!
+
   def create
     # Just to be sure an admin is posting
     if @admin
@@ -70,6 +72,14 @@ class FreshmenController < ApplicationController
 
     # Get the freshman object
     @freshman = Freshman.find(params[:id])
+
+    # If you're a freshman and you're not on your page, redirect
+    unless upperclassman_signed_in?
+      if freshman_signed_in? and current_freshman != @freshman
+        flash[:notice] = "Can only edit own info!"
+        redirect_to freshmen_path
+      end
+    end
 
     # Define title
     @title = "#{@freshman.name}'s Packet"

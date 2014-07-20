@@ -1,4 +1,6 @@
 class UpperclassmenController < ApplicationController
+  before_action :authenticate_upperclassman!
+
   def index
     # Define title
     @title = "Upperclassmen Packets"

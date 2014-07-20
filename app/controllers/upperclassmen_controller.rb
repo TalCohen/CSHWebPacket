@@ -7,7 +7,7 @@ class UpperclassmenController < ApplicationController
     # Gets the upperclassmen and how many signatures they have
     uppers = Upperclassman.where(alumni: false)
     uppers.each do |u|
-      signatures = u.signatures.where(is_signed: true)
+      signatures = u.signatures.includes(:freshman).where("freshmen.active" => true, is_signed: true)
       @upperclassmen.push([u, signatures.length])
       end
     # Sort the upperclassmen based on highest signature count, then alphabetically
@@ -38,9 +38,12 @@ class UpperclassmenController < ApplicationController
     signed = 0.0
     u_signatures.each do |s|
       # signatures will be a list of [Freshman, Signature]
-      @signatures.push([Freshman.find(s.freshman_id).name, s])
-      if s.is_signed
-        signed += 1
+      freshman = Freshman.find(s.freshman_id)
+      if (freshman.active)
+        @signatures.push([freshman.name, s])
+        if s.is_signed
+          signed += 1
+        end
       end
     end
 

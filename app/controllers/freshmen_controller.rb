@@ -44,8 +44,8 @@ class FreshmenController < ApplicationController
     @total_signatures = Upperclassman.where(alumni: false).length + 15
 
     @freshmen = []
-    # Gets the freshmen and how many signatures they have
-    fresh = Freshman.all
+    # Gets the active freshmen and how many signatures they have
+    fresh = Freshman.where(active: true)
     fresh.each do |f|
       upper_signatures = f.signatures.includes(:upperclassman).where(is_signed: 
                                   true, "upperclassmen.alumni" => false)
@@ -61,14 +61,15 @@ class FreshmenController < ApplicationController
   end
 
   def show
-    # If freshman exists, get freshman object, otherwise, redirect
-    if Freshman.exists?(params[:id])
-      @freshman = Freshman.find(params[:id])
-    else
+    # If freshman does not exist, or if the freshman is not active and you are not admin, redirect
+    if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not @admin)
       flash[:notice] = "Invalid freshman page"
       redirect_to freshmen_path
       return
     end
+
+    # Get the freshman object
+    @freshman = Freshman.find(params[:id])
 
     # Define title
     @title = "#{@freshman.name}'s Packet"
@@ -111,4 +112,13 @@ class FreshmenController < ApplicationController
       @user_signature = @user.signatures.find_by(freshman_id: @freshman.id)
     end
   end
+
+  def update
+    # Gets the freshman to update, and updates
+    freshman = Freshman.find(params[:id])
+
+    freshman.update_attributes(active: !freshman.active)
+    redirect_to :back
+  end
+
 end

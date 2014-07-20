@@ -17,7 +17,7 @@
       <% @upperclassmen.each do |u| %>
         <tr>
           <th><%= link_to "#{u.name}", upperclassman_path(u.id) %></th>
-          <% u.signatures.find(:all, :include => :freshman, :order => 'freshmen.name').each do |s| %>
+          <% u.signatures.includes(:freshman).where("freshmen.active" => true).order("freshmen.name").each do |s| %>
             <% if s.is_signed %>
               <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
             <% else %>

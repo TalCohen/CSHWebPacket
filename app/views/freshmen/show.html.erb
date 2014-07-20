@@ -1,13 +1,24 @@
 <div class="page-header">
-  <h1 class=><%= @freshman.name %> <small>Freshman</small></h1>
+  <h1 <% if not @freshman.active %> style="color: red;"<% end %>>
+    <%= @freshman.name %> <small>Freshman</small>
+  </h1>
   <% if @user and not @user_signature.is_signed %>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
-  <% elsif @user and @user_signature.is_signed%>
+  <% elsif @user and @user_signature.is_signed %>
     <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
   <% end %>
 
   <% if @admin %>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Delete Freshman</button>
+    <br/>
+    <br/>
+    <%= form_for @freshman do |f| %>
+      <% if @freshman.active %>
+        <%= f.submit 'Deactivate', { class: 'btn btn-warning' } %>
+      <% else %>
+        <%= f.submit 'Activate', { class: 'btn btn-info' } %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 

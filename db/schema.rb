@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 3) do
+ActiveRecord::Schema.define(version: 20140720034549) do
 
   create_table "freshmen", force: true do |t|
     t.string   "name"
     t.string   "password"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active"
   end
 
   create_table "signatures", force: true do |t|

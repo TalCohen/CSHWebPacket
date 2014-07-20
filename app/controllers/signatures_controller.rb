@@ -4,7 +4,7 @@ class SignaturesController < ApplicationController
     @title = "Packet Grid"
 
     # Get sorted freshmen and upperclassmen
-    @freshmen = Freshman.all.order(name: :asc)
+    @freshmen = Freshman.where(active: true).order(name: :asc)
     #@freshmen.sort! {|a,b| a <=> b}
 
     @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))

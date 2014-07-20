@@ -55,12 +55,11 @@ class ApplicationController < ActionController::Base
     ldap = PacketLdap::Ldap.new
     username = request.env['REMOTE_USER']
     user = ldap.find_by_username(username)[0]
-    return user.entryuuid[0]
+    uuid = user.entryuuid[0]
   end
 
   def current_upperclassman
-    user_uuid = send("get_uuid")
-    @current_upperclassman ||= Upperclassman.find_by(uuid: user_uuid)
+    @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) if session[:current_freshman_id] 
   end
 
   def current_admin
@@ -69,7 +68,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_freshman
-    @current_freshman ||= Freshman.find(session[:current_freshman_id])
+    @current_freshman ||= Freshman.find(session[:current_freshman_id]) if session[:current_freshman_id]
   end
 
   %w(upperclassman admin freshman).each do |role|
@@ -85,11 +84,12 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    upperclassman_signed_in? || freshman_signed_in?
+    freshman_signed_in? || upperclassman_signed_in? 
   end
 
   def authenticate!
     unless signed_in?
+      throw "TAKE ME SOMEWHERE TO AUTHENTICATE?!?!?!?! :("
       redirect_to root_path, alert: 'Not authorized!'
     end
   end

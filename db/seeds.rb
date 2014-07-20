@@ -21,7 +21,8 @@ end
 def create_freshmen
   # Get the freshmen names from the file
   freshmen = []
-  f = File.read("/var/www/priv/packet/db/freshmen.txt")
+  #f = File.read("/var/www/priv/packet/db/freshmen.txt")
+  f = File.read("/var/www/priv/packet/db/julien.txt")
   f.each_line do |line|
     freshmen.push(line.chomp)
   end

@@ -24,7 +24,7 @@
         <% else %>
           <tr>
         <% end %>
-          <td><%= link_to "#{s[0]}", freshman_path(s[1].freshman_id) %></td>
+        <td><%= link_to "#{s[0]}", freshman_path(s[1].freshman_id) %></td>
           <% if s[1].is_signed %>
             <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
           <% else %>
@@ -41,3 +41,12 @@
     <%= @progress %>%
   </div>
 </div>
+
+<!--<script>
+  function askAgain(id) {
+    console.log("hitting");
+    var elem = document.getElementById(id);
+    elem.innerHTML="Click again to confirm";
+    elem.className="btn btn-xs btn-warning"
+  }
+</script>-->

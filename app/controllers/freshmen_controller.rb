@@ -47,8 +47,12 @@ class FreshmenController < ApplicationController
     # Gets the freshmen and how many signatures they have
     fresh = Freshman.all
     fresh.each do |f|
-      signatures = f.signatures.where(is_signed: true).limit(@total_signatures)
-      @freshmen.push([f, signatures.length])
+      upper_signatures = f.signatures.includes(:upperclassman).where(is_signed: 
+                                  true, "upperclassmen.alumni" => false)
+      alumni_signatures = f.signatures.includes(:upperclassman).where(is_signed:
+                                true, "upperclassmen.alumni" => true).limit(15)
+      signatures_length = upper_signatures.length + alumni_signatures.length
+      @freshmen.push([f, signatures_length])
     end
     # Sort the freshmen based on highest signature count, then aphabetically
     @freshmen.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}

@@ -7,6 +7,7 @@ class Freshman < ActiveRecord::Base
     # fresh - An ldap entry for the freshman
     self.name = fresh
     self.password = fresh
+    self.active = true
     self.save
     # Iterate through all upperclassmen and create a signature object with them
     Upperclassman.all.each do |u|

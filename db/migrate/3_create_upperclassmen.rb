@@ -3,6 +3,7 @@ class CreateUpperclassmen < ActiveRecord::Migration
     create_table :upperclassmen do |t|
       t.string :name
       t.string :uuid
+      t.boolean :admin, default: false
       t.boolean :alumni, deafult: false
 
       t.timestamps

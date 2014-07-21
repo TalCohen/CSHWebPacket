@@ -12,9 +12,9 @@ class SignaturesController < ApplicationController
     @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
     #@upperclassmen.sort! {|a,b| a <=> b}
 
-    if @user and not @user.alumni
+    unless @current_upperclassman.alumni
       # Put user at front of grid
-      @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@user.id)))
+      @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@current_upperclassman.id)))
     end
 
   end

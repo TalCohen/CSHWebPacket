@@ -19,7 +19,7 @@ class UpperclassmenController < ApplicationController
   def show
     # If no paramaters are given, make the it user's page.
     if not params[:id]
-      params[:id] = @user.id
+      params[:id] = @current_upperclassman.id
     end
 
     # If upperclassman exists, get upperclassman object, otherwise redirect

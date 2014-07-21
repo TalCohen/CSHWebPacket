@@ -3,7 +3,7 @@ class FreshmenController < ApplicationController
 
   def create
     # Just to be sure an admin is posting
-    if @admin
+    if admin_signed_in?
       # Get the name entered
       fresh = params[:freshman][:name]
       # Create the freshman object
@@ -29,7 +29,7 @@ class FreshmenController < ApplicationController
 
   def destroy
     # Just to be sure an admin is deleting
-    if @admin
+    if admin_signed_in?
       # Get the freshman to delete and delete
       fresh = Freshman.find(params[:id])
       fresh.destroy
@@ -64,7 +64,7 @@ class FreshmenController < ApplicationController
 
   def show
     # If freshman does not exist, or if the freshman is not active and you are not admin, redirect
-    if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not @admin)
+    if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not admin_signed_in?)
       flash[:notice] = "Invalid freshman page"
       redirect_to freshmen_path
       return
@@ -118,9 +118,7 @@ class FreshmenController < ApplicationController
     @progress = progress.to_s
 
     # Gets the signature that the user is looking at
-    if @user
-      @user_signature = @user.signatures.find_by(freshman_id: @freshman.id)
-    end
+    @user_signature = @current_upperclassman.signatures.find_by(freshman_id: @freshman.id)
   end
 
   def update

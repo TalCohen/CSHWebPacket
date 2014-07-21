@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+=begin
   before_action do
     # Find current user
       ldap = PacketLdap::Ldap.new
@@ -44,27 +45,28 @@ class ApplicationController < ActionController::Base
       # Instantiate title
       @title = ""
   end
-
+=end
   ##                 ##
   ## NEW RESTRUCTURE ##
   ##                 ##
+
 
   private
 
   def get_uuid
     ldap = PacketLdap::Ldap.new
     username = request.env['REMOTE_USER']
+    return nil if username == nil
     user = ldap.find_by_username(username)[0]
     uuid = user.entryuuid[0]
   end
 
   def current_upperclassman
-    @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) if session[:current_freshman_id] 
+    @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) 
   end
 
   def current_admin
-    admin = File.read("/var/www/priv/packet/admin.txt").chomp
-    @current_upperclassman if @current_upperclassman.uuid == admin 
+    current_upperclassman if current_upperclassman.admin
   end
 
   def current_freshman
@@ -78,7 +80,7 @@ class ApplicationController < ActionController::Base
 
     define_method("authenticate_#{role}!") do
       unless send("#{role}_signed_in?")
-        redirect_to root_path, alert: 'Not authorized!'
+        redirect_to new_sessions_path
       end
     end
   end
@@ -89,8 +91,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate!
     unless signed_in?
-      throw "TAKE ME SOMEWHERE TO AUTHENTICATE?!?!?!?! :("
-      redirect_to root_path, alert: 'Not authorized!'
+      redirect_to new_sessions_path
     end
   end
 

@@ -47,20 +47,20 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <% if @user and not @freshman_user %>
+          <% if @current_upperclassman %>
             <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
-          <% elsif @freshman_user %>
+          <% elsif @current_freshman %>
             <%= link_to 'CSH Packet', "#", { class: "navbar-brand" } %>
           <% else %>
             <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
           <% end %>
         </div>
-      <% if not @freshman_user %>
+      <% unless @current_freshman %>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <% if @user %>
-              <li <% if current_page?(upperclassman_path(@user.id)) or current_page?(root_path) %>class="active"<% end %>>
-                <%= link_to 'My Signatures', upperclassman_path(@user.id) %>
+            <% if @current_upperclassman %>
+              <li <% if current_page?(upperclassman_path(@current_upperclassman.id)) or current_page?(root_path) %>class="active"<% end %>>
+                <%= link_to 'My Signatures', upperclassman_path(@current_upperclassman.id) %>
               </li>
             <% end %>
             <li <% if current_page?(signatures_path) %>class="active"<% end %>>
@@ -74,10 +74,10 @@
             </li>
           </ul>
         </div><!--/.nav-collapse -->
-      <% elsif @freshman_user and not @freshman_first %>
+      <% else %>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav pull-right">
-            <li><%= link_to 'Logout', "" %></li>
+            <li><%= link_to 'Logout', "/sessions", method: :delete %></li>
           </ul>
         </div>
       <% end %>

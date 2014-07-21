@@ -1,0 +1,15 @@
+<div class="col-lg-4">
+  <div class="page-header">
+    <h1>Freshman Sign-in</h1>
+  </div>
+  <% if flash[:notice] %>
+    <div class="alert alert-danger"><%= flash[:notice] %></div>
+  <% end %>
+  <%= form_tag sessions_path do %>
+    <%= text_field_tag :name, params[:name], 
+      { class: "form-control", placeholder: "Username", autocomplete: "off"} %> <br />
+    <%= password_field_tag :password, params[:password],
+      { class: "form-control", placeholder: "Password" } %> <br />
+    <%= submit_tag 'Login', { class: 'btn btn-primary' } %>
+  <% end %>
+</div>

@@ -35,7 +35,7 @@ class UpperclassmenController < ApplicationController
     @title = "#{@upperclassman.name}'s Signatures"
 
     # Get all freshmen objects on the packet
-    freshmen = Freshman.where(on_packet: true, active:true)
+    freshmen = Freshman.where(on_packet: true, active:true).order(name: :asc)
     
     # Get the signed freshmen
     @signed_freshmen = []
@@ -44,6 +44,9 @@ class UpperclassmenController < ApplicationController
         @signed_freshmen.push(s.freshman)
       end
     end
+
+    # Sort the signed freshmen array alphabetically
+    @signed_freshmen.sort_by!{ |s| s.name }
     
     # Get the unsigned freshmen
     @unsigned_freshmen = freshmen - @signed_freshmen

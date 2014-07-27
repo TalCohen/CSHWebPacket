@@ -1,6 +1,29 @@
 class SignaturesController < ApplicationController
   before_action :authenticate_upperclassman!
 
+  def create
+    freshman_id = params[:signature][:freshman]
+    # Check if the freshman exists, if it's active and on the packet, and 
+    # check if a signature already exists with that signer
+    if Freshman.exists?(freshman_id)
+      freshman = Freshman.find(freshman_id)
+      if freshman.active and freshman.on_packet
+        if upperclassman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_upperclassman)
+          Signature.create(freshman: freshman, signer: @current_upperclassman)
+	elsif freshman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_freshman)
+          Signature.create(freshman: freshman, signer: @current_freshman)
+	else
+          flash[:notice] = "Unable to sign packet"
+	end
+      else
+        flash[:notice] = "Unable to sign packet"
+      end
+    else
+      flash[:notice] = "Unable to sign packet"
+    end
+    redirect_to :back
+  end
+
   def index
     # Define title
     @title = "Packet Grid"
@@ -15,13 +38,5 @@ class SignaturesController < ApplicationController
       @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@current_upperclassman.id)))
     end
 
-  end
-
-  def update
-    # Gets the signature to update, and updates
-    signature = Signature.find(params[:id])
-
-    signature.update_attributes(is_signed: true)
-    redirect_to :back
   end
 end

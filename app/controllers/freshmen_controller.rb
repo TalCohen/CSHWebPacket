@@ -132,6 +132,8 @@ class FreshmenController < ApplicationController
     elsif freshman_signed_in?
       @user_signature = Signature.exists?(freshman: @freshman, signer: @current_freshman)
     end
+
+    @signature = Signature.new
   end
 
   def update

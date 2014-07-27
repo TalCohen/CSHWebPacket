@@ -1,3 +1,7 @@
+<% if flash[:notice] %>
+  <div class="alert alert-danger"><%= flash[:notice] %></div>
+<% end %>
+
 <div class="page-header">
   <h1 <% if not @freshman.active %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>
@@ -23,7 +27,7 @@
 </div>
 
 <% if not @user_signature %>
-<%= form_for @freshman do |f| %>
+<%= form_for @signature do |s| %>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -33,11 +37,12 @@
         <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
       </div>
       <div class="modal-body">
+        <%= s.text_field :freshman, { class: "form-control hidden", value: @freshman.id } %>
         Are you sure you want to sign <span style="font-weight: bold;"><%= @freshman.name %>'s</span> Packet?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= submit_tag 'Sign', {class: 'btn btn-success' }%>
+        <%= s.submit 'Sign', {class: 'btn btn-success' }%>
       </div>
     </div>
   </div>

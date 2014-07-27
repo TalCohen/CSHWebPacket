@@ -1,5 +1,5 @@
 Packet::Application.routes.draw do
-  resources :signatures, only: [:index, :update]
+  resources :signatures, only: [:index, :create]
   resources :upperclassmen, only: [:index, :show]
   resources :freshmen, only: [:create, :destroy, :index, :show, :update]
   resources :stats, only: [:index]

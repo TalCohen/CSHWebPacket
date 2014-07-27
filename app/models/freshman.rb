@@ -39,14 +39,14 @@ class Freshman < ActiveRecord::Base
     alumni_signatures = Array.new(15)
 
     # Gets the alumni signatures ordered by oldest signature to newest
-    alumni = Signature.includes(:upperclassman).where(freshman_id: self.id,
-      "upperclassmen.alumni" => true, is_signed: true).order(updated_at: :asc)
-    alumni.each do |a|
+    upperclassmen_signatures = Signature.where(freshman_id: self.id, signer_type: "Upperclassman").order(updated_at: :asc)
+
+    upperclassmen_signatures.each do |s|
+      u = s.signer
       index = alumni_signatures.index(nil)
-      if index
-        # Replace nil with [Alumni, Signature]
-        alumni_signatures[index] =
-              [Upperclassman.find(a.upperclassman_id).name, a]
+      if index and u.alumni
+        # Replace nil with Alumni.name
+        alumni_signatures[index] = u
       end
     end
 

@@ -6,11 +6,9 @@ class SignaturesController < ApplicationController
     @title = "Packet Grid"
 
     # Get sorted freshmen and upperclassmen
-    @freshmen = Freshman.where(active: true).order(name: :asc)
-    #@freshmen.sort! {|a,b| a <=> b}
+    @freshmen = Freshman.where(active: true, on_packet: true).order(name: :asc)
 
     @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
-    #@upperclassmen.sort! {|a,b| a <=> b}
 
     unless @current_upperclassman.alumni
       # Put user at front of grid

@@ -2,9 +2,9 @@
   <h1 <% if not @freshman.active %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>
   </h1>
-  <% if @current_upperclassman and not @user_signature.is_signed %>
+  <% if not @user_signature %>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
-  <% elsif @current_upperclassman and @user_signature.is_signed %>
+  <% else %>
     <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
   <% end %>
 
@@ -22,8 +22,8 @@
   <% end %>
 </div>
 
-<% if @current_upperclassman.admin and not @user_signature.is_signed %>
-<%= form_for @user_signature do |f| %>
+<% if not @user_signature %>
+<%= form_for @freshman do |f| %>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -37,7 +37,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= f.submit 'Sign', {class: 'btn btn-success' }%>
+        <%= submit_tag 'Sign', {class: 'btn btn-success' }%>
       </div>
     </div>
   </div>
@@ -83,19 +83,46 @@
       </tr>
     </thead>
 
-    <tbody>
-      <% @signatures.each do |s| %>
-        <% if s[1].is_signed %>
-          <tr class="success">
-        <% else %>
-          <tr>
-        <% end %>
-        <td><%= link_to "#{s[0]}", upperclassman_path(s[1].upperclassman_id) %></td>
-        <% if s[1].is_signed %>
+    <tbody><!-- Upperclassmen -->
+      <% @upperclassmen_signed.each do |u| %>
+        <tr class="success">
+          <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
           <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-        <% else %>
+        </tr>
+      <% end %>
+
+      <% @upperclassmen_unsigned.each do |u| %>
+        <tr>
+          <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
           <td><span class="glyphicon glyphicon-remove"></span> No</td>
-        <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+
+      <tr>
+        <th>Freshman Name</th>
+        <th>Signed?</th>
+      </tr>
+    </thead>
+
+    <tbody><!-- Freshmen -->
+      <% @freshmen_signed.each do |f| %>
+        <tr class="success">
+          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+          <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+        </tr>
+      <% end %>
+
+       <% @freshmen_unsigned.each do |f| %>
+        <tr>
+          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+          <td><span class="glyphicon glyphicon-remove"></span> No</td>
         </tr>
       <% end %>
     </tbody>
@@ -112,20 +139,12 @@
       </tr>
     </thead>
 
-    <tbody>
-      <% @alumni_signatures.each_with_index do |s, index| %>
+    <tbody><!-- Alumni -->
+      <% @alumni_signed.each_with_index do |s, index| %>
         <% if s %>
-          <% if s[1].is_signed %>
-            <tr class="success">
-          <% else %>
-            <tr>
-          <% end %>
-          <td><%= index + 1 %>. <%= s[0] %></td>
-          <% if s[1].is_signed %>
+          <tr class="success">
+            <td><%= index + 1 %>. <%= s.name %></td>
             <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-          <% else %>
-            <td><span class="glyphicon glyphicon-remove"></span> No</td>
-          <% end %>
           </tr>
         <% else %>
           <tr>

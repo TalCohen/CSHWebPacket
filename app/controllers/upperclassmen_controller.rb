@@ -34,7 +34,6 @@ class UpperclassmenController < ApplicationController
     # Define title
     @title = "#{@upperclassman.name}'s Signatures"
 
-
     # Get all freshmen objects on the packet
     freshmen = Freshman.where(on_packet: true, active:true)
     
@@ -50,6 +49,6 @@ class UpperclassmenController < ApplicationController
     @unsigned_freshmen = freshmen - @signed_freshmen
     
     # Gets the information for the progress bar
-    @progress = (100 * @signed_freshmen.length / freshmen.length).round(2).to_s
+    @progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s
   end
 end

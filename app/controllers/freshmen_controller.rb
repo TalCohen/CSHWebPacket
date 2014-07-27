@@ -84,27 +84,36 @@ class FreshmenController < ApplicationController
     # Define title
     @title = "#{@freshman.name}'s Packet"
 
-    # Gets the signatures and upperclassmen needed
-    f_signatures = @freshman.get_signatures
-    @signatures = []
-    signed = 0.0
-    f_signatures.each do |s|
-      # signatures will be a list of [Upperclassman, Signature]
-      @signatures.push([Upperclassman.find(s.upperclassman_id).name, s])
-      if s.is_signed
-        signed += 1
+    # Gets the signed upperclassmen and freshmen
+    signatures = Signature.where(freshman_id: @freshman.id)
+    @upperclassmen_signed = []
+    @freshmen_signed = []
+
+    signatures.each do |s|
+      if s.signer_type == "Freshman" and s.signer.active and s.signer.on_packet
+        @freshmen_signed.push(s.signer)
+      elsif s.signer_type == "Upperclassman" and not s.signer.alumni
+        @upperclassmen_signed.push(s.signer)
       end
     end
 
-   # Gets the alumni signatures as a list of [Alumni, Signature] or nil
-   @alumni_signatures = @freshman.get_alumni_signatures
-   
-   # Gets the amount of alumni signatures
-   alumni_count = @alumni_signatures.select { |s| s != nil }.length
-   signed += alumni_count
-     
+    # Gets the unsigned upperclassmen and freshmen
+    @upperclassmen_unsigned = Upperclassman.where(alumni: false) - @upperclassmen_signed
+    @freshmen_unsigned = Freshman.where(active: true, on_packet: true) - @freshmen_signed
+
+    # Sort the arrays alphabetically
+    @upperclassmen_signed.sort_by!{ |s| s.name }
+    @upperclassmen_unsigned.sort_by!{ |s| s.name }
+    @freshmen_signed.sort_by!{ |s| s.name }
+    @freshmen_unsigned.sort_by!{ |s| s.name }
+
+    # Gets the alumni signatures as a list of alumni
+    @alumni_signed = @freshman.get_alumni_signatures
+
     # Gets the information for the progress bar
-    progress = (signed / (f_signatures.length + @alumni_signatures.length) * 100).round(2)
+    signed = @upperclassmen_signed.length + @freshmen_signed.length + @freshman.get_alumni_signatures_count
+    total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + @alumni_signed.length - @freshman.get_alumni_signatures_count
+    progress = (100.0 * signed / total).round(2)
     @progress_color = ""
     if progress < 10
       @progress_color = "progress-bar-danger"
@@ -117,8 +126,12 @@ class FreshmenController < ApplicationController
     end
     @progress = progress.to_s
 
-    # Gets the signature that the user is looking at
-    @user_signature = @current_upperclassman.signatures.find_by(freshman_id: @freshman.id)
+    # Determine whether this packet is signed or not
+    if upperclassman_signed_in?
+      @user_signature = Signature.exists?(freshman: @freshman, signer: @current_upperclassman)
+    elsif freshman_signed_in?
+      @user_signature = Signature.exists?(freshman: @freshman, signer: @current_freshman)
+    end
   end
 
   def update

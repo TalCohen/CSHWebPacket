@@ -1,20 +1,17 @@
 class Freshman < ActiveRecord::Base
-  has_many :signatures, dependent: :destroy
+  has_many :signatures, as: :signer, dependent: :destroy
   has_secure_password
   validates_presence_of :password, :on => :create
 
-  def create_freshman(fresh)
+  def create_freshman(fresh, on_packet)
     # Creates a freshman based on an ldap entry
     #
     # fresh - An ldap entry for the freshman
     self.name = fresh
     self.password = fresh
     self.password_confirmation = fresh
+    self.on_packet = on_packet
     self.save
-    # Iterate through all upperclassmen and create a signature object with them
-    Upperclassman.all.each do |u|
-      Signature.create(freshman_id: self.id, upperclassman_id: u.id)
-    end
   end
 
   def <=>(other)

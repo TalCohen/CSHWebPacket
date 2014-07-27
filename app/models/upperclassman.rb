@@ -1,5 +1,5 @@
 class Upperclassman < ActiveRecord::Base
-  has_many :signatures, dependent: :destroy
+  has_many :signatures, as: :signer, dependent: :destroy
 
   def create_upperclassman(upper, alumni=false)
     # Creates an upperclassman based on an ldap entry

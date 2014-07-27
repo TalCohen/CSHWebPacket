@@ -17,17 +17,21 @@ ActiveRecord::Schema.define(version: 3) do
     t.string   "name"
     t.string   "password_digest"
     t.boolean  "active",          default: true
+    t.boolean  "on_packet"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "signatures", force: true do |t|
     t.integer  "freshman_id"
-    t.integer  "upperclassman_id"
-    t.boolean  "is_signed",        default: false
+    t.integer  "signer_id"
+    t.string   "signer_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "signatures", ["freshman_id"], name: "index_signatures_on_freshman_id"
+  add_index "signatures", ["signer_id", "signer_type"], name: "index_signatures_on_signer_id_and_signer_type"
 
   create_table "upperclassmen", force: true do |t|
     t.string   "name"

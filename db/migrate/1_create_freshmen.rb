@@ -4,6 +4,7 @@ class CreateFreshmen < ActiveRecord::Migration
       t.string :name
       t.string :password_digest
       t.boolean :active, default: true
+      t.boolean :on_packet
 
       t.timestamps
     end

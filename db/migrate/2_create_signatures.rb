@@ -1,9 +1,8 @@
 class CreateSignatures < ActiveRecord::Migration
   def change
     create_table :signatures do |t|
-      t.integer :freshman_id
-      t.integer :upperclassman_id
-      t.boolean :is_signed, default: false
+      t.references :freshman, index: true
+      t.references :signer, polymorphic: true, index: true
 
       t.timestamps
     end

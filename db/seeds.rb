@@ -21,20 +21,21 @@ end
 def create_freshmen
   # Get the freshmen names from the file
   freshmen = []
-  #f = File.read("/var/www/priv/packet/db/freshmen.txt")
-  f = File.read("/var/www/priv/packet/db/julien.txt")
+  f = File.read("/var/www/priv/packet/db/freshmen.txt")
+  #f = File.read("/var/www/priv/packet/db/julien.txt")
   f.each_line do |line|
     freshmen.push(line.chomp)
   end
 
-  # Creates the freshmen and signatures objects
-  puts("\nCreating Freshmen and Signatures...")
+  # Creates the freshmen objects
+  puts("\nCreating Freshmen")
   freshmen.each do |fresh|
     puts("Freshman - #{fresh}")
     f = Freshman.new
-    f.create_freshman(fresh)
+    f.create_freshman(fresh, true)
   end
 end
 
 create_upperclassmen
 create_freshmen
+Signature.create(freshman_id: Freshman.first.id, signer: Upperclassman.find(2))

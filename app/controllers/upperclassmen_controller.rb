@@ -3,13 +3,13 @@ class UpperclassmenController < ApplicationController
 
   def index
     # Define title
-    @title = "Upperclassmen Packets"
+    @title = "Upperclassmen Signatures"
 
     @upperclassmen = []
     # Gets the upperclassmen and how many signatures they have
     uppers = Upperclassman.where(alumni: false)
     uppers.each do |u|
-      signatures = u.signatures.includes(:freshman).where("freshmen.active" => true, is_signed: true)
+      signatures = u.signatures.includes(:freshman).where("freshmen.active" => true, "freshmen.on_packet" => true)
       @upperclassmen.push([u, signatures.length])
       end
     # Sort the upperclassmen based on highest signature count, then alphabetically
@@ -32,26 +32,24 @@ class UpperclassmenController < ApplicationController
     end
 
     # Define title
-    @title = "#{@upperclassman.name}'s Packet"
+    @title = "#{@upperclassman.name}'s Signatures"
 
-    # Gets the signatures and freshmen objects needed
-    u_signatures = @upperclassman.get_signatures
-    @signatures = []
-    signed = 0.0
-    u_signatures.each do |s|
-      # signatures will be a list of [Freshman, Signature]
-      freshman = Freshman.find(s.freshman_id)
-      if (freshman.active)
-        @signatures.push([freshman.name, s])
-        if s.is_signed
-          signed += 1
-        end
+
+    # Get all freshmen objects on the packet
+    freshmen = Freshman.where(on_packet: true, active:true)
+    
+    # Get the signed freshmen
+    @signed_freshmen = []
+    @upperclassman.signatures.each do |s|
+      if s.freshman.on_packet and s.freshman.active
+        @signed_freshmen.push(s.freshman)
       end
     end
-
+    
+    # Get the unsigned freshmen
+    @unsigned_freshmen = freshmen - @signed_freshmen
+    
     # Gets the information for the progress bar
-    progress = (signed / u_signatures.length * 100).round(2)
-    @progress = progress.to_s
-
+    @progress = (100 * @signed_freshmen.length / freshmen.length).round(2).to_s
   end
 end

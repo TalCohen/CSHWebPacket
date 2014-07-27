@@ -24,18 +24,17 @@
     </thead>
 
     <tbody>
-      <% @signatures.each do |s| %>
-        <% if s[1].is_signed %>
-          <tr class="success">
-        <% else %>
-          <tr>
-        <% end %>
-        <td><%= link_to "#{s[0]}", freshman_path(s[1].freshman_id) %></td>
-          <% if s[1].is_signed %>
-            <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-          <% else %>
-            <td><span class="glyphicon glyphicon-remove"></span> No</td>
-          <% end %>
+      <% @signed_freshmen.each do |f| %>
+        <tr class="success">
+          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+          <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+        </tr>
+      <% end %>
+
+      <% @unsigned_freshmen.each do |f| %>
+        <tr>
+          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+          <td><span class="glyphicon glyphicon-remove"></span> No</td>
         </tr>
       <% end %>
     </tbody>

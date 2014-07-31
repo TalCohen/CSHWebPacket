@@ -60,17 +60,15 @@
                   <%= link_to 'My Packet', freshman_path(@current_freshman.id) %>
                 </li>
               <% end %>
-              <% unless @current_freshman %>
-                <li <% if current_page?(signatures_path) %>class="active"<% end %>>
-                  <%= link_to 'Grid', signatures_path %>
-                </li>
-              <% end %>
               <li <% if current_page?(freshmen_path) %>class="active"<% end %>>
                 <%= link_to 'Freshmen Packets', freshmen_path %>
               </li>
               <% unless @current_freshman %>
                 <li <% if current_page?(upperclassmen_path) %>class="active"<% end %>>
                   <%= link_to 'Upperclassmen Signatures', upperclassmen_path %>
+                </li>
+                <li <% if current_page?(signatures_path) %>class="active"<% end %>>
+                  <%= link_to 'Grid', signatures_path %>
                 </li>
               <% end %>
             </ul>

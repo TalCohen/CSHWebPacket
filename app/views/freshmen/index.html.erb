@@ -1,11 +1,11 @@
 <div class="page-header">
   <h1>Freshmen Packets</h1>
-  <% if @current_upperclassman.admin %>
+  <% if not @current_freshman and @current_upperclassman.admin %>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Freshman</button>
   <% end %>
 </div>
 
-<% if @current_upperclassman.admin %>
+<% if not @current_freshman and @current_upperclassman.admin %>
 <%= form_for :freshman do |f| %>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -22,7 +22,7 @@
         <%= f.password_field :password_confirmation, { class: "form-control", placeholder: "Password Confirmation", autocomplete: "off" } %> <br />
 
         <%= f.label "Active" %>
-        <%= f.check_box "active" %> <br />
+        <%= f.check_box "active", { class: "active"} %> <br />
 
         <%= f.label "On Packet" %>
         <%= f.check_box "on_packet" %>

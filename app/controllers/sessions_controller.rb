@@ -2,6 +2,8 @@ class SessionsController < ApplicationController
   def new
     if upperclassman_signed_in?
       redirect_to root_url
+    elsif freshman_signed_in?
+      redirect_to freshman_path(@current_freshman.id)
     end
   end
 

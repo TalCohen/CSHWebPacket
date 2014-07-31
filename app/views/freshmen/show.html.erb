@@ -8,7 +8,7 @@
     <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
   <% end %>
 
-  <% if @current_upperclassman.admin %>
+  <% if not @current_freshman and @current_upperclassman.admin %>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Delete Freshman</button>
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal3">Edit Freshman</button>
   <% end %>
@@ -38,8 +38,8 @@
 <% end %>
 <% end %>
 
-<% if @current_upperclassman.admin %>
-<%= form_for :freshman, method: :delete do |f| %>
+<% if not @current_freshman and @current_upperclassman.admin %>
+<%= form_for @freshman, method: :delete do |f| %>
 <!-- Modal2 -->
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">

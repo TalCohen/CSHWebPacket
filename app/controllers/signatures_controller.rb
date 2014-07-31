@@ -1,5 +1,6 @@
 class SignaturesController < ApplicationController
-  before_action :authenticate_upperclassman!
+  before_action :authenticate!
+  before_action :authenticate_upperclassman!, only: :index
 
   def create
     freshman_id = params[:signature][:freshman]

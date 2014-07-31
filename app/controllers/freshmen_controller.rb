@@ -86,6 +86,7 @@ class FreshmenController < ApplicationController
     # Get the freshman object
     @freshman = Freshman.find(params[:id])
 
+=begin
     # If you're a freshman and you're not on your page, redirect
     unless upperclassman_signed_in?
       if freshman_signed_in? and current_freshman != @freshman
@@ -93,6 +94,7 @@ class FreshmenController < ApplicationController
         redirect_to freshmen_path
       end
     end
+=end
 
     # Define title
     @title = "#{@freshman.name}'s Packet"

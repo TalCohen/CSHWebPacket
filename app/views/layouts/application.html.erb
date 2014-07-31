@@ -47,40 +47,40 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <% if @current_upperclassman %>
-            <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
-          <% elsif @current_freshman %>
-            <%= link_to 'CSH Packet', "#", { class: "navbar-brand" } %>
-          <% else %>
-            <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
-          <% end %>
+          <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
         </div>
-      <% unless @current_freshman %>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <% if @current_upperclassman %>
-              <li <% if current_page?(upperclassman_path(@current_upperclassman.id)) or current_page?(root_path) %>class="active"<% end %>>
-                <%= link_to 'My Signatures', upperclassman_path(@current_upperclassman.id) %>
+        <% if @current_freshman or @current_upperclassman %>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <% if @current_upperclassman %>
+                <li <% if current_page?(upperclassman_path(@current_upperclassman.id)) or current_page?(root_path) %>class="active"<% end %>>
+                  <%= link_to 'My Signatures', upperclassman_path(@current_upperclassman.id) %>
+              <% elsif @current_freshman %>
+                <li <% if current_page?(freshman_path(@current_freshman.id)) %>class="active"<% end %>>
+                  <%= link_to 'My Packet', freshman_path(@current_freshman.id) %>
+                </li>
+              <% end %>
+              <% unless @current_freshman %>
+                <li <% if current_page?(signatures_path) %>class="active"<% end %>>
+                  <%= link_to 'Grid', signatures_path %>
+                </li>
+              <% end %>
+              <li <% if current_page?(freshmen_path) %>class="active"<% end %>>
+                <%= link_to 'Freshmen Packets', freshmen_path %>
               </li>
+              <% unless @current_freshman %>
+                <li <% if current_page?(upperclassmen_path) %>class="active"<% end %>>
+                  <%= link_to 'Upperclassmen Signatures', upperclassmen_path %>
+                </li>
+              <% end %>
+            </ul>
+            <% if @current_freshman %>
+              <ul class="nav navbar-nav pull-right">
+                <li><%= link_to 'Logout', "/sessions", method: :delete %></li>
+              </ul>
             <% end %>
-            <li <% if current_page?(signatures_path) %>class="active"<% end %>>
-              <%= link_to 'Grid', signatures_path %>
-            </li>
-            <li <% if current_page?(freshmen_path) %>class="active"<% end %>>
-              <%= link_to 'Freshmen Packets', freshmen_path %>
-            </li>
-            <li <% if current_page?(upperclassmen_path) %>class="active"<% end %>>
-              <%= link_to 'Upperclassmen Signatures', upperclassmen_path %>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      <% else %>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav pull-right">
-            <li><%= link_to 'Logout', "/sessions", method: :delete %></li>
-          </ul>
-        </div>
-      <% end %>
+          </div><!--/.nav-collapse -->
+        <% end %>
       </div>
     </div>
 

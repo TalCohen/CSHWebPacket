@@ -104,14 +104,22 @@
     <tbody><!-- Upperclassmen -->
       <% @upperclassmen_signed.each do |u| %>
         <tr class="success">
-          <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+          <% if @current_upperclassman %>
+            <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+          <% else %>
+            <td><%= u.name %>
+          <% end %>
           <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
         </tr>
       <% end %>
 
       <% @upperclassmen_unsigned.each do |u| %>
         <tr>
-          <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+          <% if @current_upperclassman %>
+            <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+          <% else %>
+            <td><%= u.name %>
+          <% end %>
           <td><span class="glyphicon glyphicon-remove"></span> No</td>
         </tr>
       <% end %>

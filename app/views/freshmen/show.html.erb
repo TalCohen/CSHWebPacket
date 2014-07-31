@@ -10,15 +10,7 @@
 
   <% if @current_upperclassman.admin %>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Delete Freshman</button>
-    <br/>
-    <br/>
-    <%= form_for @freshman do |f| %>
-      <% if @freshman.active %>
-        <%= f.submit 'Deactivate', { class: 'btn btn-warning' } %>
-      <% else %>
-        <%= f.submit 'Activate', { class: 'btn btn-info' } %>
-      <% end %>
-    <% end %>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal3">Edit Freshman</button>
   <% end %>
 </div>
 
@@ -62,6 +54,31 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <%= f.submit 'Delete', {class: 'btn btn-danger' }%>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<%= form_for @freshman do |f| %>
+<!-- Modal 3 -->
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
+      </div>
+      <div class="modal-body">
+        <%= f.text_field :name, { class: "form-control", placeholder: @freshman.name, autocomplete: "off" } %> <br />
+        <%= f.label "Active" %>
+        <%= f.check_box "active" %> <br />
+        <%= f.label "On Packet" %>
+        <%= f.check_box "on_packet" %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.submit 'Update', {class: 'btn btn-info' }%>
       </div>
     </div>
   </div>

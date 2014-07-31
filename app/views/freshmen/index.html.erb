@@ -17,8 +17,13 @@
       </div>
       <div class="modal-body">
         <%= f.text_field :name, { class: "form-control", placeholder: "Name", autocomplete: "off" } %> <br />
+
         <%= f.password_field :password, { class: "form-control", placeholder: "Password", autocomplete: "off" } %> <br />
         <%= f.password_field :password_confirmation, { class: "form-control", placeholder: "Password Confirmation", autocomplete: "off" } %> <br />
+
+        <%= f.label "Active" %>
+        <%= f.check_box "active" %> <br />
+
         <%= f.label "On Packet" %>
         <%= f.check_box "on_packet" %>
       </div>

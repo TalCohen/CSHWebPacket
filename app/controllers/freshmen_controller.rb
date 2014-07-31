@@ -9,14 +9,15 @@ class FreshmenController < ApplicationController
       n = freshman[:name]
       p = freshman[:password]
       pc = freshman[:password_confirmation]
+      a = freshman[:active] == "1"
       op = freshman[:on_packet] == "1"
 
       # Create the freshman object and sends a message to the views
-      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, on_packet: op)
+      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, active: a, on_packet: op)
       if new_freshman.save
-        flash[:success] = "Successfully created freshman"
+        flash[:success] = "Successfully created freshman."
       else
-        flash[:error] = "Unable to create freshman"
+        flash[:error] = "Unable to create freshman."
       end
       redirect_to :back
     elsif @freshman_user
@@ -29,7 +30,7 @@ class FreshmenController < ApplicationController
         @freshman_first = false
         show
       else
-        flash[:notice] = "Invalid username/password"
+        flash[:notice] = "Invalid username/password."
         redirect_to freshmen_path
       end
     end
@@ -42,6 +43,11 @@ class FreshmenController < ApplicationController
       # Get the freshman to delete and delete
       fresh = Freshman.find(params[:id])
       fresh.destroy
+      if fresh.destroyed?
+        flash[:success] = "Successfully deleted freshman."
+      else
+        flash[:error] = "Unable to delete freshman."
+      end
     end
 
     redirect_to freshmen_path
@@ -72,7 +78,7 @@ class FreshmenController < ApplicationController
   def show
     # If freshman does not exist, or if the freshman is not active and you are not admin, redirect
     if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not admin_signed_in?)
-      flash[:error] = "Invalid freshman page"
+      flash[:error] = "Invalid freshman page."
       redirect_to freshmen_path
       return
     end
@@ -146,8 +152,20 @@ class FreshmenController < ApplicationController
   def update
     # Gets the freshman to update, and updates
     freshman = Freshman.find(params[:id])
-
-    freshman.update_attributes(active: !freshman.active)
+    if not (admin_signed_in? or freshman == @current_freshman)
+      flash[:error] = "You can only edit your own info!"
+    else
+      info = params[:freshman]
+      n = info[:name]
+      a = info[:active] == "1"
+      op = info[:on_packet] == "1"
+      result = freshman.update_attributes(name: n, active: a, on_packet: op)
+      if result
+        flash[:success] = "Successfully updated your information."
+      else
+        flash[:error] = "Unable to update your information."
+      end
+    end
     redirect_to :back
   end
 

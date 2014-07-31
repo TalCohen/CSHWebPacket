@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       session[:current_freshman_id] = freshman.id
       redirect_to freshman_path(freshman.id)
     else
-      flash[:notice] = "Invalid username/password"
+      flash[:error] = "Invalid username/password"
       redirect_to :back
     end
   end

@@ -4,11 +4,20 @@ class FreshmenController < ApplicationController
   def create
     # Just to be sure an admin is posting
     if admin_signed_in?
-      # Get the name entered
-      fresh = params[:freshman][:name]
-      # Create the freshman object
-      f = Freshman.new
-      f.create_freshman(fresh)
+      # Get the freshman attributes
+      freshman = params[:freshman]
+      n = freshman[:name]
+      p = freshman[:password]
+      pc = freshman[:password_confirmation]
+      op = freshman[:on_packet] == "1"
+
+      # Create the freshman object and sends a message to the views
+      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, on_packet: op)
+      if new_freshman.save
+        flash[:success] = "Successfully created freshman"
+      else
+        flash[:error] = "Unable to create freshman"
+      end
       redirect_to :back
     elsif @freshman_user
       # Really bad way of doing this, in my opinion, but oh well.
@@ -63,7 +72,7 @@ class FreshmenController < ApplicationController
   def show
     # If freshman does not exist, or if the freshman is not active and you are not admin, redirect
     if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not admin_signed_in?)
-      flash[:notice] = "Invalid freshman page"
+      flash[:error] = "Invalid freshman page"
       redirect_to freshmen_path
       return
     end
@@ -74,7 +83,7 @@ class FreshmenController < ApplicationController
     # If you're a freshman and you're not on your page, redirect
     unless upperclassman_signed_in?
       if freshman_signed_in? and current_freshman != @freshman
-        flash[:notice] = "Can only edit own info!"
+        flash[:error] = "You can only edit your own info!"
         redirect_to freshmen_path
       end
     end

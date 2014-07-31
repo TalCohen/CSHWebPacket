@@ -26,7 +26,7 @@ class UpperclassmenController < ApplicationController
     if Upperclassman.exists?(params[:id])
       @upperclassman = Upperclassman.find(params[:id])
     else
-      flash[:notice] = "Invalid upperclassman page"
+      flash[:error] = "Invalid upperclassman page"
       redirect_to upperclassmen_path
       return
     end

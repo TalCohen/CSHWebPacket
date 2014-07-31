@@ -13,13 +13,13 @@ class SignaturesController < ApplicationController
 	elsif freshman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_freshman)
           Signature.create(freshman: freshman, signer: @current_freshman)
 	else
-          flash[:notice] = "Unable to sign packet"
+          flash[:error] = "Unable to sign packet"
 	end
       else
-        flash[:notice] = "Unable to sign packet"
+        flash[:error] = "Unable to sign packet"
       end
     else
-      flash[:notice] = "Unable to sign packet"
+      flash[:error] = "Freshman does not exist"
     end
     redirect_to :back
   end

@@ -86,6 +86,14 @@
 
     <div class="container theme-showcase" role="main">
 
+    <% if flash[:success] %>
+      <div class="alert alert-success"><%= flash[:success] %></div>
+    <% end %>
+
+    <% if flash[:error] %>
+      <div class="alert alert-danger"><%= flash[:error] %></div>
+    <% end %>
+ 
     <%= yield %>
 
     </div> <!-- /container -->

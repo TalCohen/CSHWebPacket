@@ -1,7 +1,3 @@
-<% if flash[:notice] %>
-  <div class="alert alert-danger"><%= flash[:notice] %></div>
-<% end %>
-
 <div class="page-header">
   <h1 <% if not @freshman.active %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>

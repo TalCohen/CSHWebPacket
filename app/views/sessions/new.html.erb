@@ -2,9 +2,6 @@
   <div class="page-header">
     <h1>Freshman Sign-in</h1>
   </div>
-  <% if flash[:notice] %>
-    <div class="alert alert-danger"><%= flash[:notice] %></div>
-  <% end %>
   <%= form_tag sessions_path do %>
     <%= text_field_tag :name, params[:name], 
       { class: "form-control", placeholder: "Username", autocomplete: "off"} %> <br />

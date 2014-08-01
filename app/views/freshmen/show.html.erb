@@ -12,6 +12,10 @@
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Delete Freshman</button>
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal3">Edit Freshman</button>
   <% end %>
+
+  <% if @current_freshman == @freshman %>
+    <%= link_to "Edit Info", edit_freshman_path(@freshman.id), { class: "btn btn-info" } %>    
+  <% end %>
 </div>
 
 <% if not @user_signature %>

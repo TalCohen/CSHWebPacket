@@ -34,7 +34,29 @@ class FreshmenController < ApplicationController
         redirect_to freshmen_path
       end
     end
+  end
 
+  def edit
+    # If freshman does not exist, or if the freshman 
+    # is not active and you are not admin, redirect
+    if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not admin_signed_in?)
+      flash[:error] = "Invalid freshman page."
+      redirect_to freshmen_path
+      return
+    end
+
+    # Get the freshman object
+    @freshman = Freshman.find(params[:id])
+
+    # If you're an upperclassman and not admin, redirect to show
+    if upperclassman_signed_in? and not admin_signed_in?
+      flash[:error] = "You cannot edit a freshman's info!"
+      redirect_to freshman_path(@freshman.id)
+    # If you're a freshman and you're not on your page, redirect to show
+    elsif freshman_signed_in? and current_freshman != @freshman
+      flash[:error] = "You can only edit your own info!"
+      redirect_to freshman_path(@freshman.id)
+    end
   end
 
   def destroy
@@ -85,16 +107,6 @@ class FreshmenController < ApplicationController
 
     # Get the freshman object
     @freshman = Freshman.find(params[:id])
-
-=begin
-    # If you're a freshman and you're not on your page, redirect
-    unless upperclassman_signed_in?
-      if freshman_signed_in? and current_freshman != @freshman
-        flash[:error] = "You can only edit your own info!"
-        redirect_to freshmen_path
-      end
-    end
-=end
 
     # Define title
     @title = "#{@freshman.name}'s Packet"

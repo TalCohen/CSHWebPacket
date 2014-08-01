@@ -3,6 +3,8 @@
 </div>
 
 <div class="table-responsive" style="overflow-x: auto">
+  <button type="button" class="btn btn-default btn-xs active" id="upperclassmen">Upperclassmen</button>
+  <button type="button" class="btn btn-default btn-xs" id="freshmen">Freshmen</button>
   <table class="table table-bordered table-hover table-condensed">
     <thead>
       <tr>
@@ -13,7 +15,7 @@
       </tr>
     </thead>
 
-    <tbody>
+    <tbody id="upperTable">
       <% @upperclassmen.each do |u| %>
         <tr>
           <th><%= link_to "#{u.name}", upperclassman_path(u.id) %></th>
@@ -39,6 +41,23 @@
           </td>
         <% end %>
       </tr>
+
     </tbody>
+
+    <tbody class="hidden" id="freshTable">
+      <% @freshmen_on_packet.each do |fop| %>
+        <tr>
+          <th><%= link_to "#{fop.name}", freshman_path(fop.id) %></th>
+          <% @freshmen.each do |f| %>
+            <% if Signature.exists?(freshman_id: f.id, signer_id: fop.id) %>
+              <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
+            <% else %>
+              <td><span class="glyphicon glyphicon-remove"></span></td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+
   </table>
 </div>

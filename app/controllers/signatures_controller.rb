@@ -30,7 +30,7 @@ class SignaturesController < ApplicationController
     @title = "Packet Grid"
 
     # Get sorted freshmen and upperclassmen
-    @freshmen = Freshman.where(active: true, on_packet: true).order(name: :asc)
+    @freshmen = Freshman.where(active: true).order(name: :asc)
 
     @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
 
@@ -38,6 +38,8 @@ class SignaturesController < ApplicationController
       # Put user at front of grid
       @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@current_upperclassman.id)))
     end
+
+    @freshmen_on_packet = Freshman.where(active: true, on_packet: true).order(name: :asc)
 
   end
 end

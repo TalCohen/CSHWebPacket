@@ -9,13 +9,6 @@ class Upperclassman < ActiveRecord::Base
     self.uuid = "#{upper.entryuuid[0]}"
     self.alumni = alumni
     self.save
-
-    # Iterate through all freshmen and add a signature object
-    if alumni
-      Freshman.all.each do |f|
-        Signature.create(freshman_id: f.id, upperclassman_id: self.id)
-      end
-    end
   end
 
   def <=>(other)

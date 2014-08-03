@@ -61,8 +61,22 @@ class ApplicationController < ActionController::Base
     uuid = user.entryuuid[0]
   end
 
+  def create_alumni
+    ldap = PacketLdap::Ldap.new
+    username = request.env['REMOTE_USER']
+    user = ldap.find_by_username(username)[0]
+    upper = Upperclassman.new
+    upper.create_upperclassman(user, alumni=true)
+  end
+
   def current_upperclassman
-    @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) 
+    uuid = get_uuid
+    if Upperclassman.exists?(uuid: uuid)
+      @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) 
+    else
+      # Create the alumni
+      @current_upperclassman = create_alumni
+    end
   end
 
   def current_admin

@@ -1,6 +1,5 @@
 class SignaturesController < ApplicationController
   before_action :authenticate!
-  before_action :authenticate_upperclassman!, only: :index
 
   def create
     freshman_id = params[:signature][:freshman]
@@ -26,20 +25,24 @@ class SignaturesController < ApplicationController
   end
 
   def index
-    # Define title
-    @title = "Packet Grid"
+    if upperclassman_signed_in?
+      # Define title
+      @title = "Packet Grid"
 
-    # Get sorted freshmen and upperclassmen
-    @freshmen = Freshman.where(active: true).order(name: :asc)
+      # Get sorted freshmen and upperclassmen
+      @freshmen = Freshman.where(active: true).order(name: :asc)
 
-    @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
+      @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
 
-    unless @current_upperclassman.alumni
-      # Put user at front of grid
-      @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@current_upperclassman.id)))
+      unless @current_upperclassman.alumni
+        # Put user at front of grid
+        @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@current_upperclassman.id)))
+      end
+
+      @freshmen_on_packet = Freshman.where(active: true, on_packet: true).order(name: :asc)
+    elsif freshman_signed_in?
+      # Define title
+      @title = "CSH Packet"
     end
-
-    @freshmen_on_packet = Freshman.where(active: true, on_packet: true).order(name: :asc)
-
   end
 end

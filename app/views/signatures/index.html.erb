@@ -1,3 +1,4 @@
+<% if @current_upperclassman %>
 <div class="page-header">
   <h1>Packet Grid</h1>
 </div>
@@ -61,3 +62,58 @@
 
   </table>
 </div>
+
+<% elsif @current_freshman %>
+<div class="page-header">
+  <h1 class="text-center">Computer Science House</h1>
+  <h2 class="text-center">Introductory Packet</h2>
+</div>
+<div class="col-md-6">
+  <p>In this packet you must do the following:</p>
+
+  <ul>
+    <li>
+      List the 7 house directorships
+      <ul>
+        <li>The responsibilities of the directorship</li>
+        <li>The name of the director</li>
+        <li>The weekly meeting date and time</li>
+      </ul>
+    </li>
+    <li>List 7 annual CSH social events</li>
+    <li>List 7 CSH technical achievements</li>
+    <li>Obtain the e-signature of all on-floor members
+    (their names are listed)</li>
+    <li>Obtain the e-signature of 15 
+    advisory/honorary/off-floor members</li>
+  </ul>
+  <br />
+
+  <p>Please note that during the introductory process you are expected to:</p>
+
+  <ul>
+    <li>Attend all house meetings</li>
+    <li>Attend at least one house directorship meeting
+    each week of the process</li>
+    <li>Attend at least one house social event</li>
+    <li>Attend at least two house technical seminars</li>
+  </ul>
+  <br />
+
+  <p>Also note that during the introductory process you are
+  not allowed to vote in any house issue. However, you may
+  contribute to discussion.</p>
+  <br />
+
+  <p>You will receive a CSH account upon acceptable
+  completion of this packet.</p>
+  <br />
+
+  <p>You have two weeks to complete the packet from the
+  time stated here: </p>
+  <br />
+
+  <p>Your name is: <span class="text-primary" style="font-size: 2em; 
+  font-weight: bold;"><%= @current_freshman.name %></span></p>
+</div>
+<% end %>

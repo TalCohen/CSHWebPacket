@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
     if upperclassman_signed_in?
       redirect_to root_url
     elsif freshman_signed_in?
-      redirect_to freshman_path(@current_freshman.id)
+      redirect_to signatures_path
     end
   end
 
@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     freshman = Freshman.find_by_name(params[:name])
     if freshman and freshman.authenticate(params[:password])
       session[:current_freshman_id] = freshman.id
-      redirect_to freshman_path(freshman.id)
+      redirect_to signatures_path
     else
       flash[:error] = "Invalid username/password"
       redirect_to :back

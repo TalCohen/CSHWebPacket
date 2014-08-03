@@ -47,7 +47,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
+          <% if @current_freshman %>
+            <%= link_to 'CSH Packet', signatures_path, { class: "navbar-brand" } %>
+          <% else %>
+            <%= link_to 'CSH Packet', root_path, { class: "navbar-brand" } %>
+          <% end %>
         </div>
         <% if @current_freshman or @current_upperclassman %>
           <div class="navbar-collapse collapse">

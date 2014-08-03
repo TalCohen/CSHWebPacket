@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
     uuid = get_uuid
     if Upperclassman.exists?(uuid: uuid)
       @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) 
-    else
+    elsif uuid
       # Create the alumni
       @current_upperclassman = create_alumni
     end

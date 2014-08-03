@@ -1,1 +1,18 @@
-<h1>Edit</h1>
+<div class="col-md-6 col-lg-6">
+  <div class="page-header">
+    <h1><%= @freshman.name %>'s Info</h1>
+  </div>
+  <%= form_for @freshman do |f| %>
+    <%= f.label :info_directorships, "Please describe directorships including: the responsibilities of the directorship, the name of the director, and the weekly meeting date and time" %> <br />
+    <%= f.text_area :info_directorships, size: "80x29" %> <br /><br />
+
+    <%= f.label :info_events, "Please list 7 annual house events" %><br />
+    <%= f.text_area :info_events, size: "80x8" %> <br /><br />
+
+    <%= f.label :info_achievements, "Please list 7 CSH technical achievements" %><br />
+    <%= f.text_area :info_achievements, size: "80x8" %> <br /><br />
+    <% if @current_freshman %>
+      <%= f.submit 'Save', { class: 'btn btn-primary' } %>
+    <% end %> 
+  <% end %>
+</div>

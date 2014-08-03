@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_admin
-    current_upperclassman if current_upperclassman.admin
+    current_upperclassman if current_upperclassman and current_upperclassman.admin
   end
 
   def current_freshman

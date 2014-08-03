@@ -57,6 +57,9 @@ class FreshmenController < ApplicationController
       flash[:error] = "You can only edit your own info!"
       redirect_to freshman_path(@freshman.id)
     end
+
+    # Define title
+    @title = "#{@freshman.name}'s Info"
   end
 
   def destroy
@@ -170,10 +173,18 @@ class FreshmenController < ApplicationController
       flash[:error] = "You can only edit your own info!"
     else
       info = params[:freshman]
-      n = info[:name]
-      a = info[:active] == "1"
-      op = info[:on_packet] == "1"
-      result = freshman.update_attributes(name: n, active: a, on_packet: op)
+      result = nil
+      if admin_signed_in?
+        n = info[:name]
+        a = info[:active] == "1"
+        op = info[:on_packet] == "1"
+        result = freshman.update_attributes(name: n, active: a, on_packet: op)
+      elsif freshman == @current_freshman
+        i_d = info[:info_directorships]
+        i_e = info[:info_events]
+        i_a = info[:info_achievements]
+        result = freshman.update_attributes(info_directorships: i_d, info_events: i_e, info_achievements: i_a)
+      end
       if result
         flash[:success] = "Successfully updated your information."
       else

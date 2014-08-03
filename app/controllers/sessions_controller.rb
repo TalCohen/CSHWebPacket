@@ -5,6 +5,9 @@ class SessionsController < ApplicationController
     elsif freshman_signed_in?
       redirect_to signatures_path
     end
+
+    # Define title
+    @title = "Freshman Sign-in"
   end
 
   def create

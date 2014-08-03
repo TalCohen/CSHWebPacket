@@ -10,7 +10,8 @@
 
   <% if not @current_freshman and @current_upperclassman.admin %>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">Delete Freshman</button>
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal3">Edit Freshman</button>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal3">Edit Freshman</button>
+    <%= link_to 'Freshman\'s Info', edit_freshman_path(@freshman.id), { class: "btn btn-info" } %> 
   <% end %>
 
   <% if @current_freshman == @freshman %>

@@ -3,11 +3,11 @@ class SignaturesController < ApplicationController
 
   def create
     freshman_id = params[:signature][:freshman]
-    # Check if the freshman exists, if it's active and on the packet, and 
+    # Check if the freshman exists, if it's on the packet, and 
     # check if a signature already exists with that signer
     if Freshman.exists?(freshman_id)
       freshman = Freshman.find(freshman_id)
-      if freshman.active and freshman.on_packet
+      if freshman.on_packet
         if upperclassman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_upperclassman)
           Signature.create(freshman: freshman, signer: @current_upperclassman)
 	elsif freshman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_freshman)
@@ -30,7 +30,7 @@ class SignaturesController < ApplicationController
       @title = "Packet Grid"
 
       # Get sorted freshmen and upperclassmen
-      @freshmen = Freshman.where(active: true).order(name: :asc)
+      @freshmen = Freshman.order(name: :asc)
 
       @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
 
@@ -39,7 +39,7 @@ class SignaturesController < ApplicationController
         @upperclassmen.unshift(@upperclassmen.delete(Upperclassman.find(@current_upperclassman.id)))
       end
 
-      @freshmen_on_packet = Freshman.where(active: true, on_packet: true).order(name: :asc)
+      @freshmen_on_packet = Freshman.where(on_packet: true).order(name: :asc)
     elsif freshman_signed_in?
       # Define title
       @title = "CSH Packet"

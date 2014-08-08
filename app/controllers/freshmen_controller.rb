@@ -37,9 +37,8 @@ class FreshmenController < ApplicationController
   end
 
   def edit
-    # If freshman does not exist, or if the freshman 
-    # is not active and you are not admin, redirect
-    if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not admin_signed_in?)
+    # If freshman does not exist, redirect
+    if not Freshman.exists?(params[:id]) 
       flash[:error] = "Invalid freshman page."
       redirect_to freshmen_path
       return
@@ -67,8 +66,10 @@ class FreshmenController < ApplicationController
     if admin_signed_in?
       # Get the freshman to delete and delete
       fresh = Freshman.find(params[:id])
+      sigs = Signature.where(freshman_id: fresh.id) 
       fresh.destroy
-      if fresh.destroyed?
+      sigs.destroy_all
+      if fresh.destroyed? and sigs.length == 0
         flash[:success] = "Successfully deleted freshman."
       else
         flash[:error] = "Unable to delete freshman."
@@ -85,8 +86,8 @@ class FreshmenController < ApplicationController
     # @freshmen will be a list of [Freshman, signature_length]
     @freshmen = []
 
-    # Gets the active freshmen and how many signatures they have
-    fresh = Freshman.where(active: true)
+    # Gets the Freshmen and how many signatures they have
+    fresh = Freshman.all
 
     fresh.each do |f|
       signatures_length = Signature.where(freshman: f).length
@@ -97,12 +98,12 @@ class FreshmenController < ApplicationController
     @freshmen.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
 
     # Gets the total count of signatures on the packet (15 off-floor/alumni)
-    @total_signatures = Upperclassman.where(alumni: false).length + Freshman.where(active: true, on_packet: true).length + 15
+    @total_signatures = Upperclassman.where(alumni: false).length + Freshman.where(on_packet: true).length + 15
   end
 
   def show
-    # If freshman does not exist, or if the freshman is not active and you are not admin, redirect
-    if not Freshman.exists?(params[:id]) or (not Freshman.find(params[:id]).active and not admin_signed_in?)
+    # If freshman does not exist, redirect
+    if not Freshman.exists?(params[:id]) 
       flash[:error] = "Invalid freshman page."
       redirect_to freshmen_path
       return
@@ -120,7 +121,7 @@ class FreshmenController < ApplicationController
     @freshmen_signed = []
 
     signatures.each do |s|
-      if s.signer_type == "Freshman" and s.signer.active and s.signer.on_packet
+      if s.signer_type == "Freshman" and s.signer.on_packet
         @freshmen_signed.push(s.signer)
       elsif s.signer_type == "Upperclassman" and not s.signer.alumni
         @upperclassmen_signed.push(s.signer)
@@ -129,7 +130,7 @@ class FreshmenController < ApplicationController
 
     # Gets the unsigned upperclassmen and freshmen
     @upperclassmen_unsigned = Upperclassman.where(alumni: false) - @upperclassmen_signed
-    @freshmen_unsigned = Freshman.where(active: true, on_packet: true) - @freshmen_signed
+    @freshmen_unsigned = Freshman.where(on_packet: true) - @freshmen_signed
 
     # Sort the arrays alphabetically
     @upperclassmen_signed.sort_by!{ |s| s.name }

@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_freshman
-    @current_freshman ||= Freshman.find(session[:current_freshman_id]) if session[:current_freshman_id]
+    @current_freshman ||= Freshman.find(session[:current_freshman_id]) if session[:current_freshman_id] and Freshman.exists?(session[:current_freshman_id])
   end
 
   %w(upperclassman admin freshman).each do |role|

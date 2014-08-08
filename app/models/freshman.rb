@@ -3,13 +3,14 @@ class Freshman < ActiveRecord::Base
   has_secure_password
   validates_presence_of :password, :on => :create
 
-  def create_freshman(fresh, on_packet)
+  def create_freshman(fresh, doing_packet, on_packet)
     # Creates a freshman based on an ldap entry
     #
     # fresh - An ldap entry for the freshman
     self.name = fresh
     self.password = fresh
     self.password_confirmation = fresh
+    self.doing_packet = doing_packet
     self.on_packet = on_packet
     self.save
   end

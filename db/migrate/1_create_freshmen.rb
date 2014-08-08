@@ -3,7 +3,7 @@ class CreateFreshmen < ActiveRecord::Migration
     create_table :freshmen do |t|
       t.string :name
       t.string :password_digest
-      t.boolean :active, default: true
+      t.boolean :doing_packet
       t.boolean :on_packet
       t.text :info_directorships, default: "Evaluations: \r\n\r\n\r\n\r\n"\
         "Financial: \r\n\r\n\r\n\r\n"\

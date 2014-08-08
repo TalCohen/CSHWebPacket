@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1 <% if not @freshman.active %> style="color: red;"<% end %>>
+  <h1 <% if not @freshman.doing_packet %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>
   </h1>
   <% if not @user_signature %>
@@ -76,8 +76,8 @@
       </div>
       <div class="modal-body">
         <%= f.text_field :name, { class: "form-control", placeholder: @freshman.name, autocomplete: "off" } %> <br />
-        <%= f.label "Active" %>
-        <%= f.check_box "active" %> <br />
+        <%= f.label "Doing Packet" %>
+        <%= f.check_box "doing_packet" %> <br />
         <%= f.label "On Packet" %>
         <%= f.check_box "on_packet" %>
       </div>

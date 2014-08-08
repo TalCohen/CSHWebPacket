@@ -35,7 +35,7 @@ def create_freshmen
   freshmen.each do |fresh|
     puts("Freshman - #{fresh}")
     f = Freshman.new
-    f.create_freshman(fresh, true)
+    f.create_freshman(fresh, true, true)
   end
 end
 

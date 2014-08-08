@@ -9,11 +9,11 @@ class FreshmenController < ApplicationController
       n = freshman[:name]
       p = freshman[:password]
       pc = freshman[:password_confirmation]
-      a = freshman[:active] == "1"
+      dp = freshman[:doing_packet] == "1"
       op = freshman[:on_packet] == "1"
 
       # Create the freshman object and sends a message to the views
-      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, active: a, on_packet: op)
+      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, doing_packet: dp, on_packet: op)
       if new_freshman.save
         flash[:success] = "Successfully created freshman."
       else
@@ -177,9 +177,9 @@ class FreshmenController < ApplicationController
       result = nil
       if admin_signed_in?
         n = info[:name]
-        a = info[:active] == "1"
+        dp = info[:doing_packet] == "1"
         op = info[:on_packet] == "1"
-        result = freshman.update_attributes(name: n, active: a, on_packet: op)
+        result = freshman.update_attributes(name: n, doing_packet: dp, on_packet: op)
       elsif freshman == @current_freshman
         i_d = info[:info_directorships]
         i_e = info[:info_events]

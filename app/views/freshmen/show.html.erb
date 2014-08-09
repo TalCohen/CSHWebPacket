@@ -16,8 +16,12 @@
     <%= link_to 'Freshman\'s Info', edit_freshman_path(@freshman.id), { class: "btn btn-info" } %> 
   <% end %>
 
-  <% if @current_freshman == @freshman and @freshman.doing_packet %>
-    <%= link_to "Edit Info", edit_freshman_path(@freshman.id), { class: "btn btn-info" } %>    
+  <% if @current_freshman == @freshman %>
+    <% if @freshman.doing_packet %>
+      <%= link_to "Edit Info", edit_freshman_path(@freshman.id), { class: "btn btn-info" } %>    
+    <% end %>
+
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal2">Change Password</button>
   <% end %>
 </div>
 
@@ -80,6 +84,8 @@
       </div>
       <div class="modal-body">
         <%= f.text_field :name, { class: "form-control", placeholder: @freshman.name, autocomplete: "off" } %> <br />
+        <%= f.password_field :password, { class: "form-control", placeholder: "New Password", autocomplete: "off" } %> <br />
+        <%= f.password_field :password_confirmation, { class: "form-control", placeholder: "Confirm New Password", autocomplete: "off" } %> <br />
         <%= f.label "Doing Packet" %>
         <%= f.check_box "doing_packet" %> <br />
         <%= f.label "On Packet" %>
@@ -93,6 +99,32 @@
   </div>
 </div>
 <% end %>
+<% end %>
+
+<% if @current_freshman == @freshman %>
+<%= form_for @freshman do |f| %>
+<!-- Modal2 -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
+      </div>
+      <div class="modal-body">
+        <%= f.password_field :password, { class: "form-control", placeholder: "New Password", autocomplete: "off" } %> <br />
+        <%= f.password_field :password_confirmation, { class: "form-control", placeholder: "Confirm New Password", autocomplete: "off" } %> <br />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.submit 'Change Password', {class: 'btn btn-primary' }%>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+
 <% end %>
 
 <% if @freshman.doing_packet and @freshman.on_packet %>

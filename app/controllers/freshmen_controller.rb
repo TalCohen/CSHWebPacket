@@ -208,21 +208,38 @@ class FreshmenController < ApplicationController
     else
       info = params[:freshman]
       result = nil
-      if admin_signed_in?
-        n = info[:name]
-        dp = info[:doing_packet] == "1"
-        op = info[:on_packet] == "1"
-        result = freshman.update_attributes(name: n, doing_packet: dp, on_packet: op)
-      elsif freshman == @current_freshman
-        i_d = info[:info_directorships]
-        i_e = info[:info_events]
-        i_a = info[:info_achievements]
-        result = freshman.update_attributes(info_directorships: i_d, info_events: i_e, info_achievements: i_a)
-      end
-      if result
-        flash[:success] = "Successfully updated your information."
+      if params[:commit] == "Change Password"
+        p = info[:password]
+        pc = info[:password_confirmation]
+        result = freshman.update_attributes(password: p, password_confirmation: pc)   
+        if result
+          flash[:success] = "Successfully changed your password."
+        else
+          flash[:error] = "Unable to change your password."
+        end
       else
-        flash[:error] = "Unable to update your information."
+        if admin_signed_in?
+          n = info[:name]
+          p = info[:password] if info[:password].length > 0
+          pc = info[:password_confirmation] if info[:password_confirmation].length > 0
+          dp = info[:doing_packet] == "1"
+          op = info[:on_packet] == "1"
+          if p and pc
+            result = freshman.update_attributes(name: n, password: p, password_confirmation: pc, doing_packet: dp, on_packet: op)
+          else
+            result = freshman.update_attributes(name: n, doing_packet: dp, on_packet: op)
+          end
+        elsif freshman == @current_freshman
+          i_d = info[:info_directorships]
+          i_e = info[:info_events]
+          i_a = info[:info_achievements]
+          result = freshman.update_attributes(info_directorships: i_d, info_events: i_e, info_achievements: i_a)
+        end
+        if result
+          flash[:success] = "Successfully updated your information."
+        else
+          flash[:error] = "Unable to update your information."
+        end
       end
     end
     redirect_to :back

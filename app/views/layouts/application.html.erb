@@ -61,7 +61,13 @@
                   <%= link_to 'My Signatures', upperclassman_path(@current_upperclassman.id) %>
               <% elsif @current_freshman %>
                 <li <% if current_page?(freshman_path(@current_freshman.id)) %>class="active"<% end %>>
-                  <%= link_to 'My Packet', freshman_path(@current_freshman.id) %>
+                  <% if @current_freshman.doing_packet and @current_freshman.on_packet %>
+                    <%= link_to 'My Packet / Signatures', freshman_path(@current_freshman.id) %>
+                  <% elsif @current_freshman.on_packet %>
+                    <%= link_to 'My Signatures', freshman_path(@current_freshman.id) %>
+                  <% else %>
+                    <%= link_to 'My Packet', freshman_path(@current_freshman.id) %>
+                  <% end %>
                 </li>
               <% end %>
               <li <% if current_page?(freshmen_path) %>class="active"<% end %>>

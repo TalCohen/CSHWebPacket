@@ -9,7 +9,7 @@ class UpperclassmenController < ApplicationController
     # Gets the upperclassmen and how many signatures they have
     uppers = Upperclassman.where(alumni: false)
     uppers.each do |u|
-      signatures = u.signatures.includes(:freshman).where("freshmen.on_packet" => true)
+      signatures = u.signatures.includes(:freshman).where("freshmen.doing_packet" => true)
       @upperclassmen.push([u, signatures.length])
       end
     # Sort the upperclassmen based on highest signature count, then alphabetically
@@ -34,13 +34,13 @@ class UpperclassmenController < ApplicationController
     # Define title
     @title = "#{@upperclassman.name}'s Signatures"
 
-    # Get all freshmen objects on the packet
-    freshmen = Freshman.order(name: :asc)
+    # Get all freshmen objects doing the packet
+    freshmen = Freshman.where(doing_packet: true).order(name: :asc)
     
     # Get the signed freshmen
     @signed_freshmen = []
     @upperclassman.signatures.each do |s|
-      if s.freshman.on_packet
+      if s.freshman.doing_packet
         @signed_freshmen.push(s.freshman)
       end
     end

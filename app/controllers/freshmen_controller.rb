@@ -87,7 +87,7 @@ class FreshmenController < ApplicationController
     @freshmen = []
 
     # Gets the Freshmen and how many signatures they have
-    fresh = Freshman.all
+    fresh = Freshman.where(doing_packet: true)
 
     fresh.each do |f|
       signatures_length = Signature.where(freshman: f).length
@@ -112,59 +112,92 @@ class FreshmenController < ApplicationController
     # Get the freshman object
     @freshman = Freshman.find(params[:id])
 
-    # Define title
-    @title = "#{@freshman.name}'s Packet"
+    if @freshman.doing_packet
+      # Define title
+      @title = "#{@freshman.name}'s Packet"
 
-    # Gets the signed upperclassmen and freshmen
-    signatures = Signature.where(freshman_id: @freshman.id)
-    @upperclassmen_signed = []
-    @freshmen_signed = []
+      # Gets the signed upperclassmen and freshmen
+      signatures = Signature.where(freshman_id: @freshman.id)
+      @upperclassmen_signed = []
+      @freshmen_signed = []
 
-    signatures.each do |s|
-      if s.signer_type == "Freshman" and s.signer.on_packet
-        @freshmen_signed.push(s.signer)
-      elsif s.signer_type == "Upperclassman" and not s.signer.alumni
-        @upperclassmen_signed.push(s.signer)
+      signatures.each do |s|
+        if s.signer_type == "Freshman" and s.signer.on_packet
+          @freshmen_signed.push(s.signer)
+        elsif s.signer_type == "Upperclassman" and not s.signer.alumni
+          @upperclassmen_signed.push(s.signer)
+        end
       end
+
+      # Gets the unsigned upperclassmen and freshmen
+      @upperclassmen_unsigned = Upperclassman.where(alumni: false) - @upperclassmen_signed
+      @freshmen_unsigned = Freshman.where(on_packet: true) - @freshmen_signed
+
+      # Sort the arrays alphabetically
+      @upperclassmen_signed.sort_by!{ |s| s.name }
+      @upperclassmen_unsigned.sort_by!{ |s| s.name }
+      @freshmen_signed.sort_by!{ |s| s.name }
+      @freshmen_unsigned.sort_by!{ |s| s.name }
+
+      # Gets the alumni signatures as a list of alumni
+      @alumni_signed = @freshman.get_alumni_signatures
+
+      # Gets the information for the progress bar
+      signed = @upperclassmen_signed.length + @freshmen_signed.length + @freshman.get_alumni_signatures_count
+      total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + @alumni_signed.length - @freshman.get_alumni_signatures_count
+      progress = (100.0 * signed / total).round(2)
+      @progress_color = ""
+      if progress < 10
+        @progress_color = "progress-bar-danger"
+      elsif progress < 60
+        @progress_color = "progress-bar-warning"
+      elsif progress < 100
+        @progress_color = "progress-bar-info"
+      else
+        @progress_color = "progress-bar-success"
+      end
+      @progress = progress.to_s
+
+      # Determine whether this packet is signed or not
+      if upperclassman_signed_in?
+        @user_signature = Signature.exists?(freshman: @freshman, signer: @current_upperclassman)
+      elsif freshman_signed_in? and @current_freshman.on_packet
+        @user_signature = Signature.exists?(freshman: @freshman, signer: @current_freshman)
+        
+      end
+
+      @signature = Signature.new
+    end
+    if @freshman.on_packet
+      # Define title
+      @title = "#{@freshman.name}'s Signatures"
+
+      # Get all freshmen objects doing the packet
+      freshmen = Freshman.where(doing_packet: true).order(name: :asc)
+
+      # Get the signed freshmen
+      @signed_freshmen = []
+      @freshman.signatures.each do |s|
+        if s.freshman.doing_packet
+          @signed_freshmen.push(s.freshman)
+        end
+      end
+
+      # Sort the signed freshmen array alphabetically
+      @signed_freshmen.sort_by!{ |s| s.name }
+
+      # Get the unsigned freshmen
+      @unsigned_freshmen = freshmen - @signed_freshmen
+
+      # Gets the information for the progress bar
+      @sig_progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s  
+    end
+  
+    if @freshman.doing_packet and @freshman.on_packet
+      # Define title
+      @title = "#{@freshman.name}'s Packet/Signatures"
     end
 
-    # Gets the unsigned upperclassmen and freshmen
-    @upperclassmen_unsigned = Upperclassman.where(alumni: false) - @upperclassmen_signed
-    @freshmen_unsigned = Freshman.where(on_packet: true) - @freshmen_signed
-
-    # Sort the arrays alphabetically
-    @upperclassmen_signed.sort_by!{ |s| s.name }
-    @upperclassmen_unsigned.sort_by!{ |s| s.name }
-    @freshmen_signed.sort_by!{ |s| s.name }
-    @freshmen_unsigned.sort_by!{ |s| s.name }
-
-    # Gets the alumni signatures as a list of alumni
-    @alumni_signed = @freshman.get_alumni_signatures
-
-    # Gets the information for the progress bar
-    signed = @upperclassmen_signed.length + @freshmen_signed.length + @freshman.get_alumni_signatures_count
-    total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + @alumni_signed.length - @freshman.get_alumni_signatures_count
-    progress = (100.0 * signed / total).round(2)
-    @progress_color = ""
-    if progress < 10
-      @progress_color = "progress-bar-danger"
-    elsif progress < 60
-      @progress_color = "progress-bar-warning"
-    elsif progress < 100
-      @progress_color = "progress-bar-info"
-    else
-      @progress_color = "progress-bar-success"
-    end
-    @progress = progress.to_s
-
-    # Determine whether this packet is signed or not
-    if upperclassman_signed_in?
-      @user_signature = Signature.exists?(freshman: @freshman, signer: @current_upperclassman)
-    elsif freshman_signed_in?
-      @user_signature = Signature.exists?(freshman: @freshman, signer: @current_freshman)
-    end
-
-    @signature = Signature.new
   end
 
   def update

@@ -2,10 +2,12 @@
   <h1 <% if not @freshman.doing_packet %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>
   </h1>
-  <% if not @user_signature %>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
-  <% else %>
-    <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
+  <% if @current_upperclassman or @current_freshman.on_packet %>
+    <% if not @user_signature %>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
+    <% else %>
+      <button type="button" class="btn btn-success" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Signed</button>
+    <% end %>
   <% end %>
 
   <% if not @current_freshman and @current_upperclassman.admin %>
@@ -14,11 +16,12 @@
     <%= link_to 'Freshman\'s Info', edit_freshman_path(@freshman.id), { class: "btn btn-info" } %> 
   <% end %>
 
-  <% if @current_freshman == @freshman %>
+  <% if @current_freshman == @freshman and @freshman.doing_packet %>
     <%= link_to "Edit Info", edit_freshman_path(@freshman.id), { class: "btn btn-info" } %>    
   <% end %>
 </div>
 
+<% if @current_upperclassman or @current_freshman.on_packet %>
 <% if not @user_signature %>
 <%= form_for @signature do |s| %>
 <!-- Modal -->
@@ -40,6 +43,7 @@
     </div>
   </div>
 </div>
+<% end %>
 <% end %>
 <% end %>
 
@@ -91,99 +95,146 @@
 <% end %>
 <% end %>
 
-<div class="progress">
-  <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
-  <%= @progress %>%
-  </div>
-</div>
+<% if @freshman.doing_packet and @freshman.on_packet %>
+  <button type="button" class="btn btn-primary btn-sm active" id="packet">Packet</button>
+  <button type="button" class="btn btn-default btn-sm" id="signatures">Signatures</button>
+  <br /><br />
+<% end %>
 
-<div>
-  <table class="table table-bordered table-hover table-condensed">
-    <thead>
-      <tr>
-        <th>Upperclassman Name</th>
-        <th>Signed?</th>
-      </tr>
-    </thead>
+<% if @freshman.doing_packet %>
+  <div id="packetTable"><!-- Packet -->
+    <div class="progress">
+      <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
+      <%= @progress %>%
+      </div>
+    </div>
 
-    <tbody><!-- Upperclassmen -->
-      <% @upperclassmen_signed.each do |u| %>
-        <tr class="success">
-          <% if @current_upperclassman %>
-            <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
-          <% else %>
-            <td><%= u.name %>
-          <% end %>
-          <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-        </tr>
-      <% end %>
-
-      <% @upperclassmen_unsigned.each do |u| %>
-        <tr>
-          <% if @current_upperclassman %>
-            <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
-          <% else %>
-            <td><%= u.name %>
-          <% end %>
-          <td><span class="glyphicon glyphicon-remove"></span> No</td>
-        </tr>
-      <% end %>
-    </tbody>
-
-    <thead>
-      <tr>
-        <th></th>
-        <th></th>
-      </tr>
-
-      <tr>
-        <th>Freshman Name</th>
-        <th>Signed?</th>
-      </tr>
-    </thead>
-
-    <tbody><!-- Freshmen -->
-      <% @freshmen_signed.each do |f| %>
-        <tr class="success">
-          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
-          <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-        </tr>
-      <% end %>
-
-       <% @freshmen_unsigned.each do |f| %>
-        <tr>
-          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
-          <td><span class="glyphicon glyphicon-remove"></span> No</td>
-        </tr>
-      <% end %>
-    </tbody>
-
-    <thead>
-      <tr>
-        <th></th>
-        <th></th>
-      </tr>
-
-      <tr>
-        <th>Off-floor/Alumni/Advisory/Honorary Member Name</th>
-        <th>Signed?</th>
-      </tr>
-    </thead>
-
-    <tbody><!-- Alumni -->
-      <% @alumni_signed.each_with_index do |s, index| %>
-        <% if s %>
-          <tr class="success">
-            <td><%= index + 1 %>. <%= s.name %></td>
-            <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-          </tr>
-        <% else %>
+    <div>
+      <table class="table table-bordered table-hover table-condensed">
+        <thead>
           <tr>
-            <td><%= index + 1 %>. </td>
-            <td><span class="glyphicon glyphicon-remove"></span> No</td>
+            <th>Upperclassman Name</th>
+            <th>Signed?</th>
           </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+        </thead>
+
+        <tbody><!-- Upperclassmen -->
+          <% @upperclassmen_signed.each do |u| %>
+            <tr class="success">
+              <% if @current_upperclassman %>
+                <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+              <% else %>
+                <td><%= u.name %>
+              <% end %>
+              <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+            </tr>
+          <% end %>
+
+          <% @upperclassmen_unsigned.each do |u| %>
+            <tr>
+              <% if @current_upperclassman %>
+                <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+              <% else %>
+                <td><%= u.name %>
+              <% end %>
+              <td><span class="glyphicon glyphicon-remove"></span> No</td>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
+
+          <tr>
+            <th>Freshman Name</th>
+            <th>Signed?</th>
+          </tr>
+        </thead>
+
+        <tbody><!-- Freshmen -->
+          <% @freshmen_signed.each do |f| %>
+            <tr class="success">
+              <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+              <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+            </tr>
+          <% end %>
+
+           <% @freshmen_unsigned.each do |f| %>
+            <tr>
+              <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+              <td><span class="glyphicon glyphicon-remove"></span> No</td>
+            </tr>
+          <% end %>
+        </tbody>
+
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+          </tr>
+
+          <tr>
+            <th>Off-floor/Alumni/Advisory/Honorary Member Name</th>
+            <th>Signed?</th>
+          </tr>
+        </thead>
+
+        <tbody><!-- Alumni -->
+          <% @alumni_signed.each_with_index do |s, index| %>
+            <% if s %>
+              <tr class="success">
+                <td><%= index + 1 %>. <%= s.name %></td>
+                <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+              </tr>
+            <% else %>
+              <tr>
+                <td><%= index + 1 %>. </td>
+                <td><span class="glyphicon glyphicon-remove"></span> No</td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<% if @freshman.on_packet %>
+  <div id="signaturesTable" <% if @freshman.doing_packet %> class="hidden" <% end %>><!-- Signatures -->
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow=<%= @sig_progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @sig_progress %>%;">
+      <%= @sig_progress %>%
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Signed?</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @signed_freshmen.each do |f| %>
+            <tr class="success">
+              <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+              <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+            </tr>
+          <% end %>
+
+          <% @unsigned_freshmen.each do |f| %>
+            <tr>
+              <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+              <td><span class="glyphicon glyphicon-remove"></span> No</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

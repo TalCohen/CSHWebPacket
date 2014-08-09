@@ -7,16 +7,16 @@ class SignaturesController < ApplicationController
     # check if a signature already exists with that signer
     if Freshman.exists?(freshman_id)
       freshman = Freshman.find(freshman_id)
-      if freshman.on_packet
+      if freshman.doing_packet
         if upperclassman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_upperclassman)
           Signature.create(freshman: freshman, signer: @current_upperclassman)
-	elsif freshman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_freshman)
+        elsif freshman_signed_in? and not Signature.exists?(freshman: freshman, signer: @current_freshman)
           Signature.create(freshman: freshman, signer: @current_freshman)
-	else
+        else
           flash[:error] = "Unable to sign packet"
-	end
+        end
       else
-        flash[:error] = "Unable to sign packet"
+        flash[:error] = "Freshman is not doing the packet"
       end
     else
       flash[:error] = "Freshman does not exist"
@@ -30,7 +30,7 @@ class SignaturesController < ApplicationController
       @title = "Packet Grid"
 
       # Get sorted freshmen and upperclassmen
-      @freshmen = Freshman.order(name: :asc)
+      @freshmen = Freshman.where(doing_packet: true).order(name: :asc)
 
       @upperclassmen = Array.new(Upperclassman.where(alumni: false).order(name: :asc))
 

@@ -14,6 +14,8 @@ class SessionsController < ApplicationController
     freshman = Freshman.find_by_name(params[:name])
     if freshman and freshman.authenticate(params[:password])
       session[:current_freshman_id] = freshman.id
+      session[:created_at] = Time.now
+      session[:last_seen] = Time.now
       redirect_to freshman_path(freshman.id)
     else
       flash[:error] = "Invalid username/password"

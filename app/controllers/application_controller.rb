@@ -84,8 +84,20 @@ class ApplicationController < ActionController::Base
     current_upperclassman if current_upperclassman and current_upperclassman.admin
   end
 
+  def current_session
+    if session[:current_freshman_id] and Freshman.exists?(session[:current_freshman_id])
+      true unless Time.now > session[:last_seen] + 1.hour or Time.now > session[:created_at] + 1.day
+    end
+  end
+
   def current_freshman
-    @current_freshman ||= Freshman.find(session[:current_freshman_id]) if session[:current_freshman_id] and Freshman.exists?(session[:current_freshman_id])
+    if current_session
+      session[:last_seen] = Time.now
+      @current_freshman ||= Freshman.find(session[:current_freshman_id])
+    else
+      session.delete(:current_freshman_id)
+      @current_freshman = nil
+    end
   end
 
   %w(upperclassman admin freshman).each do |role|

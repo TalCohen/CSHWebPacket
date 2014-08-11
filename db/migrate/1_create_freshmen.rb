@@ -5,6 +5,7 @@ class CreateFreshmen < ActiveRecord::Migration
       t.string :password_digest
       t.boolean :doing_packet
       t.boolean :on_packet
+      t.date :start_date, default: Date.today.in_time_zone
       t.text :info_directorships, default: "Evaluations: \r\n\r\n\r\n\r\n"\
         "Financial: \r\n\r\n\r\n\r\n"\
         "History: \r\n\r\n\r\n\r\n"\

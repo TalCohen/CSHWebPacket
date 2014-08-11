@@ -22,20 +22,24 @@ def create_upperclassmen
 end
 
 def create_freshmen
-  # Get the freshmen names from the file
-  freshmen = []
-  f = File.read("/var/www/priv/packet/db/freshmen.txt")
-  #f = File.read("/var/www/priv/packet/db/julien.txt")
-  f.each_line do |line|
-    freshmen.push(line.chomp)
-  end
-
-  # Creates the freshmen objects
+  # Get the freshmen names from the file and create the freshmen objects
+  onfloor = File.read("/var/www/priv/packet/db/onfloor.txt")
+  offfloor = File.read("/var/www/priv/packet/db/offfloor.txt")
   puts("\nCreating Freshmen")
-  freshmen.each do |fresh|
-    puts("Freshman - #{fresh}")
+  onfloor.each_line do |line|
+    fresh = line.chomp
+    puts ("Freshman - #{fresh}")
     f = Freshman.new
     f.create_freshman(fresh, true, true)
+    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id))
+  end
+
+  offfloor.each_line do |line|
+    fresh = line.chomp
+    puts ("Freshman - #{fresh}")
+    f = Freshman.new
+    f.create_freshman(fresh, true, false)
+    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id))
   end
 end
 

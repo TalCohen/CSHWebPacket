@@ -2,7 +2,7 @@
   <h1 <% if not @freshman.doing_packet %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>
   </h1>
-  <% if @current_upperclassman or @current_freshman.on_packet %>
+  <% if @current_upperclassman or @current_freshman.on_packet and @freshman.doing_packet %>
     <% if not @user_signature %>
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Sign Packet</button>
     <% else %>
@@ -25,7 +25,7 @@
   <% end %>
 </div>
 
-<% if @current_upperclassman or @current_freshman.on_packet %>
+<% if @current_upperclassman or @current_freshman.on_packet and @freshman.doing_packet %>
 <% if not @user_signature %>
 <%= form_for @signature do |s| %>
 <!-- Modal -->

@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1 <% if not @freshman.doing_packet %> style="color: red;"<% end %>>
+  <h1 <% if not @freshman.doing_packet and not @freshman.on_packet %> style="color: red;"<% end %>>
     <%= @freshman.name %> <small>Freshman</small>
   </h1>
   <% if @current_upperclassman or @current_freshman.on_packet and @freshman.doing_packet %>
@@ -130,13 +130,13 @@
 
 <% end %>
 
-<% if @freshman.doing_packet and @freshman.on_packet %>
+<% if (@freshman.doing_packet and @freshman.on_packet) or (@current_upperclassman and @current_upperclassman.admin) %>
   <button type="button" class="btn btn-primary btn-sm active" id="packet">Packet</button>
   <button type="button" class="btn btn-default btn-sm" id="signatures">Signatures</button>
   <br /><br />
 <% end %>
 
-<% if @freshman.doing_packet %>
+<% if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) %>
   <div id="packetTable"><!-- Packet -->
     <div class="progress">
       <div class="progress-bar <%= @progress_color %>" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
@@ -237,8 +237,8 @@
   </div>
 <% end %>
 
-<% if @freshman.on_packet %>
-  <div id="signaturesTable" <% if @freshman.doing_packet %> class="hidden" <% end %>><!-- Signatures -->
+<% if @freshman.on_packet or (@current_upperclassman and @current_upperclassman.admin) %>
+  <div id="signaturesTable" <% if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) %> class="hidden" <% end %>><!-- Signatures -->
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow=<%= @sig_progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @sig_progress %>%;">
       <%= @sig_progress %>%

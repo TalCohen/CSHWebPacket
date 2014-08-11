@@ -40,8 +40,7 @@ class FreshmenController < ApplicationController
     # If freshman does not exist, redirect
     if not Freshman.exists?(params[:id]) 
       flash[:error] = "Invalid freshman page."
-      redirect_to freshmen_path
-      return
+      return redirect_to freshmen_path
     end
 
     # Get the freshman object
@@ -116,14 +115,19 @@ class FreshmenController < ApplicationController
     # If freshman does not exist, redirect
     if not Freshman.exists?(params[:id]) 
       flash[:error] = "Invalid freshman page."
-      redirect_to freshmen_path
-      return
+      return redirect_to freshmen_path
     end
 
     # Get the freshman object
     @freshman = Freshman.find(params[:id])
 
-    if @freshman.doing_packet
+    # If freshman isn't on or doing packet, and you are a normal upperclassman
+    if not @freshman.doing_packet and not @freshman.on_packet and upperclassman_signed_in? and not admin_signed_in?
+      flash[:error] = "Invalid freshman page."
+      return redirect_to freshmen_path
+    end
+
+    if @freshman.doing_packet or admin_signed_in? 
       # Define title
       @title = "#{@freshman.name}'s Packet"
 
@@ -179,7 +183,7 @@ class FreshmenController < ApplicationController
 
       @signature = Signature.new
     end
-    if @freshman.on_packet
+    if @freshman.on_packet or admin_signed_in?
       # Define title
       @title = "#{@freshman.name}'s Signatures"
 
@@ -204,7 +208,7 @@ class FreshmenController < ApplicationController
       @sig_progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s  
     end
   
-    if @freshman.doing_packet and @freshman.on_packet
+    if (@freshman.doing_packet and @freshman.on_packet) or admin_signed_in?
       # Define title
       @title = "#{@freshman.name}'s Packet/Signatures"
     end

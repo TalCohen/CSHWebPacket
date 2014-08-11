@@ -64,18 +64,29 @@ class FreshmenController < ApplicationController
   def destroy
     # Just to be sure an admin is deleting
     if admin_signed_in?
-      # Get the freshman to delete and delete
+      # Get the freshman and signatures
       fresh = Freshman.find(params[:id])
       sigs = Signature.where(freshman_id: fresh.id) 
-      fresh.destroy
-      sigs.destroy_all
-      if fresh.destroyed? and sigs.length == 0
-        flash[:success] = "Successfully deleted freshman."
+      if params[:freshman] == "signatures"
+        sigs.destroy_all
+        if sigs.length == 0
+          flash[:success] = "Successfully deleted signatures."
+        else
+          flash[:error] = "Unable to delete freshman."
+        end
+        return redirect_to :back
+      elsif params[:freshman] == "everything"
+        fresh.destroy
+        sigs.destroy_all
+        if fresh.destroyed? and sigs.length == 0
+          flash[:success] = "Successfully deleted freshman."
+        else
+          flash[:error] = "Unable to delete freshman."
+        end
       else
         flash[:error] = "Unable to delete freshman."
       end
     end
-
     redirect_to freshmen_path
   end
 

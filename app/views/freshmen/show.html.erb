@@ -62,7 +62,10 @@
         <h4 class="modal-title" id="myModalLabel"><%= @freshman.name %></h4>
       </div>
       <div class="modal-body">
-        Are you sure you want to <span style="font-weight: bold;">delete</span> <%= @freshman.name %>?
+        <%= label_tag :signatures, "Signatures" %>
+        <%= radio_button_tag :freshman, "signatures", { class: 'active' } %><br />
+        <%= label_tag :everything, "Everything" %>
+        <%= radio_button_tag :freshman, "everything" %>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

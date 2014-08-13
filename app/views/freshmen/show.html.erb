@@ -161,7 +161,14 @@
               <% else %>
                 <td><%= u.name %>
               <% end %>
-              <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+              <td>
+                <span class="glyphicon glyphicon-ok"></span> Yes
+                <% if not @current_freshman and @current_upperclassman.admin %>
+                  <%= form_for Signature.where(freshman: @freshman, signer: u).take, method: :delete do |s| %>
+                    <%= s.submit 'Delete', { class: 'btn btn-xs btn-danger' }%>
+                  <% end %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
 
@@ -193,7 +200,14 @@
           <% @freshmen_signed.each do |f| %>
             <tr class="success">
               <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
-              <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+              <td>
+                <span class="glyphicon glyphicon-ok"></span> Yes
+                <% if not @current_freshman and @current_upperclassman.admin %>
+                  <%= form_for Signature.where(freshman: @freshman, signer: f).take, method: :delete do |s| %>
+                    <%= s.submit 'Delete', { class: 'btn btn-xs btn-danger' }%>
+                  <% end %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
 
@@ -218,11 +232,18 @@
         </thead>
 
         <tbody><!-- Alumni -->
-          <% @alumni_signed.each_with_index do |s, index| %>
-            <% if s %>
+          <% @alumni_signed.each_with_index do |a, index| %>
+            <% if a %>
               <tr class="success">
-                <td><%= index + 1 %>. <%= s.name %></td>
-                <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+                <td><%= index + 1 %>. <%= a.name %></td>
+                <td>
+                  <span class="glyphicon glyphicon-ok"></span> Yes
+                  <% if not @current_freshman and @current_upperclassman.admin %>
+                    <%= form_for Signature.where(freshman: @freshman, signer: a).take, method: :delete do |s| %>
+                      <%= s.submit 'Delete', { class: 'btn btn-xs btn-danger' }%>
+                    <% end %>
+                  <% end %>
+                </td>
               </tr>
             <% else %>
               <tr>

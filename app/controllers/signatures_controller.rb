@@ -45,4 +45,23 @@ class SignaturesController < ApplicationController
       @title = "CSH Packet"
     end
   end
+
+  def destroy
+    if admin_signed_in? # Just to be sure an admin is posting
+      signature_id = params[:id]
+      if Signature.exists?(signature_id)
+        signature = Signature.find(signature_id)
+        signature.destroy
+        if signature.destroyed?
+          flash[:success] = "Successfully deleted signature."
+        else
+          flash[:error] = "Unable to delete signature."
+        end
+      else
+        flash[:error] = "Signature does not exist."
+      end
+    end
+    return redirect_to :back
+  end
+
 end

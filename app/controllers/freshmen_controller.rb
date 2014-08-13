@@ -71,7 +71,7 @@ class FreshmenController < ApplicationController
         if sigs.length == 0
           flash[:success] = "Successfully deleted signatures."
         else
-          flash[:error] = "Unable to delete freshman."
+          flash[:error] = "Unable to delete signatures."
         end
         return redirect_to :back
       elsif params[:freshman] == "everything"

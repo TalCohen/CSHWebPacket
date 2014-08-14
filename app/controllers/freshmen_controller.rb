@@ -20,19 +20,6 @@ class FreshmenController < ApplicationController
         flash[:error] = "Unable to create freshman."
       end
       redirect_to :back
-    elsif @freshman_user
-      # Really bad way of doing this, in my opinion, but oh well.
-      name = params[:freshman][:name]
-      password = params[:freshman][:password]
-      @user = Freshman.find_by(name: name, password: password)
-      if @user
-        params[:id] = @user.id
-        @freshman_first = false
-        show
-      else
-        flash[:notice] = "Invalid username/password."
-        redirect_to freshmen_path
-      end
     end
   end
 

@@ -160,18 +160,7 @@ class FreshmenController < ApplicationController
       # Gets the information for the progress bar
       signed = @upperclassmen_signed.length + @freshmen_signed.length + @freshman.get_alumni_signatures_count
       total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + @alumni_signed.length - @freshman.get_alumni_signatures_count
-      progress = (100.0 * signed / total).round(2)
-      @progress_color = ""
-      if progress < 10
-        @progress_color = "progress-bar-danger"
-      elsif progress < 60
-        @progress_color = "progress-bar-warning"
-      elsif progress < 100
-        @progress_color = "progress-bar-info"
-      else
-        @progress_color = "progress-bar-success"
-      end
-      @progress = progress.to_s
+      @progress = (100.0 * signed / total).round(2).to_s
 
       # Determine whether this packet is signed or not
       if upperclassman_signed_in?

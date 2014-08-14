@@ -131,9 +131,11 @@
 <% end %>
 
 <% if (@freshman.doing_packet and @freshman.on_packet) or (@current_upperclassman and @current_upperclassman.admin) %>
-  <button type="button" class="btn btn-primary btn-sm active" id="packet">Packet</button>
-  <button type="button" class="btn btn-default btn-sm" id="signatures">Signatures</button>
-  <br /><br />
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary btn-sm active" id="packet">Packet</button>
+    <button type="button" class="btn btn-default btn-sm" id="signatures">Signatures</button>
+    <br /><br />
+  </div>
 <% end %>
 
 <% if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) %>

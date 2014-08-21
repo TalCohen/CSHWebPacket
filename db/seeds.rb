@@ -2,6 +2,7 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
 require_relative 'packet_ldap'
+include Haddock
 
 def create_upperclassmen
   # Gets an array of the upperclassmen
@@ -28,21 +29,31 @@ def create_freshmen
   puts("\nCreating Freshmen")
   onfloor.each_line do |line|
     fresh = line.chomp
-    puts ("Freshman - #{fresh}")
+    password = Password.generate
     f = Freshman.new
-    f.create_freshman(fresh, true, true)
-    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id))
+    f.create_freshman(fresh, password, true, true)
+    puts("Freshman - #{fresh}")
+
+    File.open("/var/www/priv/packet/db/freshmen.txt", 'a') do |file|
+      file.puts("#{fresh} - #{password}")
+    end
+    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id)) # TODO: REMOVE FOR ACTUAL USE
   end
 
   offfloor.each_line do |line|
     fresh = line.chomp
-    puts ("Freshman - #{fresh}")
+    password = Password.generate
     f = Freshman.new
-    f.create_freshman(fresh, true, false)
-    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id))
+    f.create_freshman(fresh, password, true, false)
+    puts ("Freshman - #{fresh}")
+
+    File.open("/var/www/priv/packet/db/freshmen.txt", 'a') do |file|
+      file.puts("#{fresh} - #{password}")
+    end
+    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id)) # TODO: REMOVE FOR ACTUAL USE
   end
 end
 
 create_upperclassmen
 create_freshmen
-Signature.create(freshman_id: Freshman.first.id, signer: Upperclassman.find(2))
+Signature.create(freshman_id: Freshman.first.id, signer: Upperclassman.find(2)) # TODO: REMOVE FOR ACTUAL USE

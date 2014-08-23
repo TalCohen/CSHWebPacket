@@ -2,7 +2,7 @@ class CreateFreshmen < ActiveRecord::Migration
   def change
     create_table :freshmen do |t|
       t.string :name
-      t.string :password_digest
+      t.binary :password_digest
       t.boolean :doing_packet
       t.boolean :on_packet
       t.date :start_date, default: Date.today.in_time_zone

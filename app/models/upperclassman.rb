@@ -1,15 +1,18 @@
 class Upperclassman < ActiveRecord::Base
   has_many :signatures, as: :signer, dependent: :destroy
 
-  def create_upperclassman(upper, admin, alumni=false)
+  def create_upperclassman(upper, admin=false, alumni=false)
     # Creates an upperclassman based on an ldap entry
     #
     # upper - An ldap entry for the upperclassman
+    #
+    # returns - The created upperclassman
     self.name = "#{upper.givenName[0]} #{upper.sn[0]}"
     self.uuid = "#{upper.entryuuid[0]}"
     self.admin = admin
     self.alumni = alumni
     self.save
+    return self
   end
 
   def <=>(other)

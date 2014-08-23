@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
     username = request.env['REMOTE_USER']
     user = ldap.find_by_username(username)[0]
     upper = Upperclassman.new
-    upper.create_upperclassman(user, alumni=true)
+    alumni = upper.create_upperclassman(user, false, true)
   end
 
   def current_upperclassman

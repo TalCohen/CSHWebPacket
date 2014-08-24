@@ -37,7 +37,6 @@ def create_freshmen
     File.open("/var/www/priv/packet/db/freshmen.txt", 'a') do |file|
       file.puts("#{fresh} - #{password}")
     end
-    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id)) # TODO: REMOVE FOR ACTUAL USE
   end
 
   offfloor.each_line do |line|
@@ -50,10 +49,8 @@ def create_freshmen
     File.open("/var/www/priv/packet/db/freshmen.txt", 'a') do |file|
       file.puts("#{fresh} - #{password}")
     end
-    Signature.create(freshman_id: f.id, signer: Upperclassman.find(f.id)) # TODO: REMOVE FOR ACTUAL USE
   end
 end
 
 create_upperclassmen
 create_freshmen
-Signature.create(freshman_id: Freshman.first.id, signer: Upperclassman.find(2)) # TODO: REMOVE FOR ACTUAL USE

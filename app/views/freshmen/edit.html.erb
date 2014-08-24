@@ -3,7 +3,9 @@
     <h1><%= @freshman.name %>'s Info</h1>
   </div>
   <%= form_for @freshman do |f| %>
-    <%= f.label :info_directorships, "Please describe directorships including: the responsibilities of the directorship, the name of the director, and the weekly meeting date and time" %> <br />
+    <%= f.label :info_directorships, "Please describe directorships including: the responsibilities of the directorship, the name of the director, and the weekly meeting date and time." %>
+    <%= f.label :info_directorships, "Directorships are: Evaluations, Financial, History, House Improvements, Operational Communications, Research & Development, and Social" %> <br />
+
     <%= f.text_area :info_directorships, size: "80x29" %> <br /><br />
 
     <%= f.label :info_events, "Please list 7 annual house events" %><br />

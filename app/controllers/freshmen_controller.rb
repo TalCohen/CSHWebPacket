@@ -56,7 +56,8 @@ class FreshmenController < ApplicationController
       sigs = Signature.where(freshman_id: fresh.id) 
       if params[:freshman] == "signatures"
         sigs.destroy_all
-        if sigs.length == 0
+        changed = fresh.update_attributes(start_date: Date.today.in_time_zone)
+        if sigs.length == 0 and changed
           flash[:success] = "Successfully deleted signatures."
         else
           flash[:error] = "Unable to delete signatures."

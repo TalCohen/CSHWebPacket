@@ -229,13 +229,18 @@ class FreshmenController < ApplicationController
         # Gets the alumni signatures as a list of alumni
         alumni_signed = freshman.get_alumni_signatures
 
+        # Export to CSV
         CSV.open("/var/www/priv/packet/db/packets/" + freshman.name + ".csv", "w") do |csv|
-          csv << ["Upperclassman Name", "Date Signed"]
+          csv << ["#{freshman.name}"]
+          csv << ["#{freshman.start_date}"]
+          csv << ["#{Date.today.in_time_zone.to_date}"]
+
+          csv << ["Upperclassman uuid", "Date Signed"]
           upperclassmen_signed.each do |u|
-            csv << ["#{u.name}", "#{Signature.where(freshman: freshman, signer: u).first.created_at.to_date}"]
+            csv << ["#{u.uuid}", "#{Signature.where(freshman: freshman, signer: u).first.created_at.to_date}"]
           end
           upperclassmen_unsigned.each do |u|
-            csv << ["#{u.name}"]
+            csv << ["#{u.uuid}"]
           end
 
           csv << ["Freshman Name", "Date Signed"]
@@ -246,10 +251,10 @@ class FreshmenController < ApplicationController
             csv << ["#{f.name}"]
           end
 
-          csv << ["Off-floor/Alumni/Advisory/Honorary Member Name", "Date Signed"]
+          csv << ["Off-floor/Alumni/Advisory/Honorary Member uuid", "Date Signed"]
           alumni_signed.each do |a|
             if a
-              csv << ["#{a.name}", "#{Signature.where(freshman: freshman, signer: a).first.created_at.to_date}"]
+              csv << ["#{a.uuid}", "#{Signature.where(freshman: freshman, signer: a).first.created_at.to_date}"]
             end
           end
         end

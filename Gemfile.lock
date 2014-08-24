@@ -56,6 +56,7 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.10.1)
+    mysql (2.9.1)
     net-ldap (0.7.0)
     polyglot (0.3.5)
     rack (1.5.2)
@@ -122,6 +123,7 @@ DEPENDENCIES
   haddock
   jbuilder (~> 1.2)
   jquery-rails
+  mysql
   net-ldap
   rails (= 4.0.2)
   sass-rails (~> 4.0.0)

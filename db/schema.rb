@@ -18,10 +18,10 @@ ActiveRecord::Schema.define(version: 3) do
     t.binary   "password_digest"
     t.boolean  "doing_packet"
     t.boolean  "on_packet"
-    t.date     "start_date",         default: '2014-08-23'
-    t.text     "info_directorships", default: "Evaluations: \r\n\r\n\r\n\r\nFinancial: \r\n\r\n\r\n\r\nHistory: \r\n\r\n\r\n\r\nHouse Improvements: \r\n\r\n\r\n\r\nOperational Communications: \r\n\r\n\r\n\r\nResearch & Development: \r\n\r\n\r\n\r\nSocial: \r\n\r\n\r\n\r\n"
-    t.text     "info_events",        default: "1. \r\n2. \r\n3. \r\n4. \r\n5. \r\n6. \r\n7. \r\n"
-    t.text     "info_achievements",  default: "1. \r\n2. \r\n3. \r\n4. \r\n5. \r\n6. \r\n7. \r\n"
+    t.date     "start_date",         default: '2014-08-24'
+    t.string   "info_directorships", default: "Evaluations: \r\n\r\n\r\n\r\nFinancial: \r\n\r\n\r\n\r\nHistory: \r\n\r\n\r\n\r\nHouse Improvements: \r\n\r\n\r\n\r\nOperational Communications: \r\n\r\n\r\n\r\nResearch & Development: \r\n\r\n\r\n\r\nSocial: \r\n\r\n\r\n\r\n"
+    t.string   "info_events",        default: "1. \r\n2. \r\n3. \r\n4. \r\n5. \r\n6. \r\n7. \r\n"
+    t.string   "info_achievements",  default: "1. \r\n2. \r\n3. \r\n4. \r\n5. \r\n6. \r\n7. \r\n"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(version: 3) do
     t.datetime "updated_at"
   end
 
-  add_index "signatures", ["freshman_id"], name: "index_signatures_on_freshman_id"
-  add_index "signatures", ["signer_id", "signer_type"], name: "index_signatures_on_signer_id_and_signer_type"
+  add_index "signatures", ["freshman_id"], name: "index_signatures_on_freshman_id", using: :btree
+  add_index "signatures", ["signer_id", "signer_type"], name: "index_signatures_on_signer_id_and_signer_type", using: :btree
 
   create_table "upperclassmen", force: true do |t|
     t.string   "name"

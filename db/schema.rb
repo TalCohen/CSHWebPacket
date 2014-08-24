@@ -19,9 +19,9 @@ ActiveRecord::Schema.define(version: 3) do
     t.boolean  "doing_packet"
     t.boolean  "on_packet"
     t.date     "start_date",         default: '2014-08-24'
-    t.string   "info_directorships", default: "Evaluations: \r\n\r\n\r\n\r\nFinancial: \r\n\r\n\r\n\r\nHistory: \r\n\r\n\r\n\r\nHouse Improvements: \r\n\r\n\r\n\r\nOperational Communications: \r\n\r\n\r\n\r\nResearch & Development: \r\n\r\n\r\n\r\nSocial: \r\n\r\n\r\n\r\n"
-    t.string   "info_events",        default: "1. \r\n2. \r\n3. \r\n4. \r\n5. \r\n6. \r\n7. \r\n"
-    t.string   "info_achievements",  default: "1. \r\n2. \r\n3. \r\n4. \r\n5. \r\n6. \r\n7. \r\n"
+    t.text     "info_directorships"
+    t.text     "info_events"
+    t.text     "info_achievements"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

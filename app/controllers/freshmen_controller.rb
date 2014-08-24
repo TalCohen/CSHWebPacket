@@ -1,5 +1,6 @@
 class FreshmenController < ApplicationController
   before_action :authenticate!
+  require 'csv'
 
   def create
     # Just to be sure an admin is posting
@@ -199,7 +200,66 @@ class FreshmenController < ApplicationController
     else
       info = params[:freshman]
       result = nil
-      if params[:commit] == "Change Password"
+      if params[:commit] == "Finish Packet"
+        # Needs to be refactored, same as logic in show action
+
+        # Gets the signed upperclassmen and freshmen
+        signatures = Signature.where(freshman_id: freshman.id)
+        upperclassmen_signed = []
+        freshmen_signed = []
+
+        signatures.each do |s|
+          if s.signer_type == "Freshman" and s.signer.on_packet
+            freshmen_signed.push(s.signer)
+          elsif s.signer_type == "Upperclassman" and not s.signer.alumni
+            upperclassmen_signed.push(s.signer)
+          end
+        end
+
+        # Gets the unsigned upperclassmen and freshmen
+        upperclassmen_unsigned = Upperclassman.where(alumni: false) - upperclassmen_signed
+        freshmen_unsigned = Freshman.where(on_packet: true) - freshmen_signed
+
+        # Sort the arrays alphabetically
+        upperclassmen_signed.sort_by!{ |s| s.name }
+        upperclassmen_unsigned.sort_by!{ |s| s.name }
+        freshmen_signed.sort_by!{ |s| s.name }
+        freshmen_unsigned.sort_by!{ |s| s.name }
+
+        # Gets the alumni signatures as a list of alumni
+        alumni_signed = freshman.get_alumni_signatures
+
+        CSV.open("/var/www/priv/packet/db/packets/" + freshman.name + ".csv", "w") do |csv|
+          csv << ["Upperclassman Name", "Date Signed"]
+          upperclassmen_signed.each do |u|
+            csv << ["#{u.name}", "#{Signature.where(freshman: freshman, signer: u).first.created_at.to_date}"]
+          end
+          upperclassmen_unsigned.each do |u|
+            csv << ["#{u.name}"]
+          end
+
+          csv << ["Freshman Name", "Date Signed"]
+          freshmen_signed.each do |f|
+            csv << ["#{f.name}", "#{Signature.where(freshman: freshman, signer: f).first.created_at.to_date}"]
+          end
+          freshmen_unsigned.each do |f|
+            csv << ["#{f.name}"]
+          end
+
+          csv << ["Off-floor/Alumni/Advisory/Honorary Member Name", "Date Signed"]
+          alumni_signed.each do |a|
+            if a
+              csv << ["#{a.name}", "#{Signature.where(freshman: freshman, signer: a).first.created_at.to_date}"]
+            end
+          end
+        end
+        result = freshman.update_attributes(doing_packet: false)
+        if result
+          flash[:success] = "Successfully finished packet." 
+        else
+          flash[:error] = "Unable to finish packet."
+        end
+      elsif params[:commit] == "Change Password"
         p = info[:password]
         pc = info[:password_confirmation]
         result = freshman.update_attributes(password: p, password_confirmation: pc)   

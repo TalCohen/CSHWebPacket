@@ -14,7 +14,7 @@ class FreshmenController < ApplicationController
       op = freshman[:on_packet] == "1"
 
       # Create the freshman object and sends a message to the views
-      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, doing_packet: dp, on_packet: op)
+      new_freshman = Freshman.new(name: n, password: p, password_confirmation: pc, doing_packet: dp, on_packet: op, start_date: Date.today.in_time_zone.to_date)
       if new_freshman.save
         flash[:success] = "Successfully created freshman."
       else

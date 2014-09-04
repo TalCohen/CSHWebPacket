@@ -89,7 +89,20 @@ class FreshmenController < ApplicationController
     fresh = Freshman.where(doing_packet: true)
 
     fresh.each do |f|
-      signatures_length = Signature.where(freshman: f).length
+      signatures = Signature.where(freshman: f)  
+      signatures_length = signatures.length
+
+      # Adjust numbers for increased alumni signature count
+      alumni_count = 0
+      signatures.where(signer_type: "Upperclassman").each do |s|
+        if s.signer.alumni
+          alumni_count += 1
+        end
+      end
+      if alumni_count > 15
+        signatures_length -= (alumni_count - 15)
+      end
+
       @freshmen.push([f, signatures_length])
     end
 

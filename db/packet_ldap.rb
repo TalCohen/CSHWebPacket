@@ -13,7 +13,7 @@ module PacketLdap
             host     = 'ldap.csh.rit.edu'
             port     = 636
             username = 'cn=packet,ou=Apps,dc=csh,dc=rit,dc=edu'
-            password = IO.read('/var/www/priv/packet/db-key').chomp 
+            password = IO.read('db-key').chomp 
             @ldap = LDAP.new({
                 :host => host,
                 :port => port,

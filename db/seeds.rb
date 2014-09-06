@@ -9,7 +9,7 @@ def create_upperclassmen
   packet_ldap =  PacketLdap::Ldap.new
   upperclassmen =  packet_ldap.find_upperclassmen
 
-  admin_uuid = File.read("/var/www/priv/packet/db/admin.txt").chomp
+  admin_uuid = File.read("db/admin.txt").chomp
 
   # Creates the upperclassmen objects
   puts("\nCreating Upperclassmen...")
@@ -24,8 +24,8 @@ end
 
 def create_freshmen
   # Get the freshmen names from the file and create the freshmen objects
-  onfloor = File.read("/var/www/priv/packet/db/onfloor.txt")
-  offfloor = File.read("/var/www/priv/packet/db/offfloor.txt")
+  onfloor = File.read("db/onfloor.txt")
+  offfloor = File.read("db/offfloor.txt")
   puts("\nCreating Freshmen")
   onfloor.each_line do |line|
     fresh = line.chomp
@@ -34,7 +34,7 @@ def create_freshmen
     f.create_freshman(fresh, password, true, true)
     puts("Freshman - #{fresh}")
 
-    File.open("/var/www/priv/packet/db/freshmen.txt", 'a') do |file|
+    File.open("db/freshmen.txt", 'a') do |file|
       file.puts("#{fresh} - #{password}")
     end
   end
@@ -46,7 +46,7 @@ def create_freshmen
     f.create_freshman(fresh, password, true, false)
     puts ("Freshman - #{fresh}")
 
-    File.open("/var/www/priv/packet/db/freshmen.txt", 'a') do |file|
+    File.open("db/freshmen.txt", 'a') do |file|
       file.puts("#{fresh} - #{password}")
     end
   end

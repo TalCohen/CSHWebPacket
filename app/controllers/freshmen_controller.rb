@@ -244,7 +244,7 @@ class FreshmenController < ApplicationController
         alumni_signed = freshman.get_alumni_signatures
 
         # Export to CSV
-        CSV.open("/var/www/priv/packet/db/packets/" + freshman.name + ".csv", "w") do |csv|
+        CSV.open("db/packets/" + freshman.name + ".csv", "w") do |csv|
           csv << ["#{freshman.name}"]
           csv << ["#{freshman.start_date}"]
           csv << ["#{Date.today.in_time_zone.to_date}"]

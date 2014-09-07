@@ -40,6 +40,17 @@ class SignaturesController < ApplicationController
       end
 
       @freshmen_on_packet = Freshman.where(on_packet: true).order(name: :asc)
+      f_ids = []
+      @freshmen.each {|f| f_ids << f.id }
+      @upperclass_signatures = Hash.new
+      @freshmen_signatures = Hash.new
+      Signature.where(freshman_id: f_ids).each do |s|
+          if s.signer_type == "Upperclassman"
+              @upperclass_signatures[[s.signer_id, s.freshman_id]] = s
+          else
+              @freshmen_signatures[[s.signer_id, s.freshman_id]] = s
+          end
+      end
     elsif freshman_signed_in?
       # Define title
       @title = "CSH Packet"

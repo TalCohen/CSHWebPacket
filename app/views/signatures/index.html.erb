@@ -23,7 +23,7 @@
         <tr>
           <th><%= link_to "#{u.name}", upperclassman_path(u.id) %></th>
           <% @freshmen.each do |f| %>
-            <% if Signature.exists?(freshman_id: f.id, signer_id: u.id, signer_type: "Upperclassman") %>
+            <% if @upperclass_signatures[[u.id, f.id]] != nil %>
               <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
             <% else %>
               <td><span class="glyphicon glyphicon-remove"></span></td>
@@ -52,7 +52,7 @@
         <tr>
           <th><%= link_to "#{fop.name}", freshman_path(fop.id) %></th>
           <% @freshmen.each do |f| %>
-            <% if Signature.exists?(freshman_id: f.id, signer_id: fop.id, signer_type: "Freshman") %>
+            <% if @freshmen_signatures[[fop.id, f.id]] != nil %>
               <td class="success"><span class="glyphicon glyphicon-ok"></span></td>  
             <% else %>
               <td><span class="glyphicon glyphicon-remove"></span></td>

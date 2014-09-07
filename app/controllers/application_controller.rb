@@ -29,6 +29,12 @@ class ApplicationController < ActionController::Base
     if Upperclassman.exists?(uuid: uuid)
       @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) 
     elsif uuid
+      # Check to see if it's a freshman that just got an account
+      File.open("db/freshmen_uuids.txt", "r") do |f|
+        f.each_line do |line|
+          return nil if uuid == line.chomp
+        end
+      end
       # Create the alumni
       @current_upperclassman = create_alumni
     end

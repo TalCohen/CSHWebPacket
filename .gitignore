@@ -18,5 +18,6 @@ db-key
 admin.txt
 julien.txt
 freshmen.txt
+freshmen_uuids.txt
 database.yml
 public/nowebauth

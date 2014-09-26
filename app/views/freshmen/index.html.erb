@@ -37,6 +37,11 @@
 <% end %>
 <% end %>
 
+<div class="btn-group">
+  <button type="button" class="btn btn-primary btn-sm active" id="doing">Active Packets</button>
+  <button type="button" class="btn btn-default btn-sm" id="finished">Finished Packets</button>
+</div>
+
 <div class="table-responsive">
   <table class="table table-bordered table-hover table-condensed">
     <thead>
@@ -46,8 +51,21 @@
       </tr>
     </thead>
 
-    <tbody>
-      <% @freshmen.each do |f| %>
+    <tbody id="doingTable">
+      <% @freshmen_doing.each do |f| %>
+        <% if f[1] == @total_signatures %>
+          <tr class="success">
+        <% else %>
+          <tr>
+        <% end %>
+          <td><%= link_to "#{f[0].name}", freshman_path(f[0].id) %></td>
+          <td><%= f[1] %> / <%= @total_signatures %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tbody id="finishedTable" class="hidden">
+      <% @freshmen_finished.each do |f| %>
         <% if f[1] == @total_signatures %>
           <tr class="success">
         <% else %>

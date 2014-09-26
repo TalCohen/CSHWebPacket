@@ -82,11 +82,12 @@ class FreshmenController < ApplicationController
     # Define title
     @title = "Freshmen Packets"
 
-    # @freshmen will be a list of [Freshman, signature_length]
-    @freshmen = []
+    # @freshmen_doing/finished will be a list of [Freshman, signature_length]
+    @freshmen_doing = []
+    @freshmen_finished = []
 
     # Gets the Freshmen and how many signatures they have
-    fresh = Freshman.where(doing_packet: true)
+    fresh = Freshman.all
 
     fresh.each do |f|
       signatures = Signature.where(freshman: f)  
@@ -103,11 +104,17 @@ class FreshmenController < ApplicationController
         signatures_length -= (alumni_count - 15)
       end
 
-      @freshmen.push([f, signatures_length])
+      # Add freshman to respective list
+      if f.doing_packet
+        @freshmen_doing.push([f, signatures_length])
+      else
+        @freshmen_finished.push([f, signatures_length])
+      end
     end
 
     # Sort the freshmen based on highest signature count, then aphabetically
-    @freshmen.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
+    @freshmen_doing.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
+    @freshmen_finished.sort! {|a,b| [b[1],a[0].name.downcase] <=> [a[1],b[0].name.downcase]}
 
     # Gets the total count of signatures on the packet (15 off-floor/alumni)
     @total_signatures = Upperclassman.where(alumni: false).length + Freshman.where(on_packet: true).length + 15
@@ -123,13 +130,7 @@ class FreshmenController < ApplicationController
     # Get the freshman object
     @freshman = Freshman.find(params[:id])
 
-    # If freshman isn't on or doing packet, and you are a normal upperclassman
-    if not @freshman.doing_packet and not @freshman.on_packet and upperclassman_signed_in? and not admin_signed_in?
-      flash[:error] = "Invalid freshman page."
-      return redirect_to freshmen_path
-    end
-
-    if @freshman.doing_packet or admin_signed_in? 
+    # if @freshman.doing_packet or admin_signed_in? TEMPORARY
       # Define title
       @title = "#{@freshman.name}'s Packet"
 
@@ -173,7 +174,8 @@ class FreshmenController < ApplicationController
       end
 
       @signature = Signature.new
-    end
+    # end TEMPORARY
+
     if @freshman.on_packet or admin_signed_in?
       # Define title
       @title = "#{@freshman.name}'s Signatures"
@@ -197,13 +199,14 @@ class FreshmenController < ApplicationController
 
       # Gets the information for the progress bar
       @sig_progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s  
-    end
-  
-    if (@freshman.doing_packet and @freshman.on_packet) or admin_signed_in?
-      # Define title
+
       @title = "#{@freshman.name}'s Packet/Signatures"
     end
-
+  
+    # if (@freshman.doing_packet and @freshman.on_packet) or admin_signed_in?
+    #  # Define title
+    #  @title = "#{@freshman.name}'s Packet/Signatures"
+    # end
   end
 
   def update

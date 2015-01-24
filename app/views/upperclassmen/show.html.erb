@@ -8,35 +8,39 @@
   </h1>
 </div>
 
-<div class="progress">
-  <div class="progress-bar" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
-    <%= @progress %>%
+<% if @freshmen_length > 0 %>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
+      <%= @progress %>%
+    </div>
   </div>
-</div>
 
-<div class="table-responsive">
-  <table class="table table-bordered table-hover table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Signed?</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @signed_freshmen.each do |f| %>
-        <tr class="success">
-          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
-          <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
-        </tr>
-      <% end %>
-
-      <% @unsigned_freshmen.each do |f| %>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed">
+      <thead>
         <tr>
-          <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
-          <td><span class="glyphicon glyphicon-remove"></span> No</td>
+          <th>Name</th>
+          <th>Signed?</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+
+      <tbody>
+        <% @signed_freshmen.each do |f| %>
+          <tr class="success">
+            <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+            <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
+          </tr>
+        <% end %>
+
+        <% @unsigned_freshmen.each do |f| %>
+          <tr>
+            <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+            <td><span class="glyphicon glyphicon-remove"></span> No</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <p>Currently no freshmen are doing the packet.</p>
+<% end %>

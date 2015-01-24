@@ -3,6 +3,7 @@
   <h1>Packet Grid</h1>
 </div>
 
+<% if @freshmen.length > 0 %>
 <div class="table-responsive" style="overflow-x: auto">
   <div class="btn-group">
     <button type="button" class="btn btn-primary btn-sm active" id="upperclassmen">Upperclassmen</button>
@@ -64,6 +65,9 @@
 
   </table>
 </div>
+<% else %>
+  <p>Currently no freshmen are doing the packet.</p>
+<% end %>
 
 <% elsif @current_freshman %>
 <div class="page-header">

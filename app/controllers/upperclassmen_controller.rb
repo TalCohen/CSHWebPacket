@@ -53,5 +53,6 @@ class UpperclassmenController < ApplicationController
     
     # Gets the information for the progress bar
     @progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s
+    @freshmen_length = freshmen.length
   end
 end

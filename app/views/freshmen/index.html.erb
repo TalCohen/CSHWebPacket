@@ -42,6 +42,7 @@
   <button type="button" class="btn btn-default btn-sm" id="finished">Finished Packets</button>
 </div>
 
+<% if @freshmen_doing.length > 0 or @freshmen_finished.length > 0 %>
 <div class="table-responsive">
   <table class="table table-bordered table-hover table-condensed">
     <thead>
@@ -78,3 +79,6 @@
     </tbody>
   </table>
 </div>
+<% else %>
+  <p>No freshmen packets.</p>
+<% end %>

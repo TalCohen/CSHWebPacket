@@ -25,6 +25,7 @@ ready = ->
     $('#packetTable').removeClass('hidden')
     $('#signaturesTable').addClass('hidden')
 
+### Finished packets
   $('#finished').click (e) ->
     e.preventDefault()
     $(this).addClass('active')
@@ -46,6 +47,7 @@ ready = ->
     $('#finished').addClass('btn-default')
     $('#doingTable').removeClass('hidden')
     $('#finishedTable').addClass('hidden')
+###
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

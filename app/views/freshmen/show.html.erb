@@ -134,8 +134,8 @@
 
 <% end %>
 
-<% # if (@freshman.doing_packet and @freshman.on_packet) or (@current_upperclassman and @current_upperclassman.admin) TEMPORARY %>
-<% if @freshman.on_packet or (@current_upperclassman and @current_upperclassman.admin) %>
+<% if (@freshman.doing_packet and @freshman.on_packet) or (@current_upperclassman and @current_upperclassman.admin) %>
+<% # if @freshman.on_packet or (@current_upperclassman and @current_upperclassman.admin) Finished packets %>
   <div class="btn-group">
     <button type="button" class="btn btn-primary btn-sm active" id="packet">Packet</button>
     <button type="button" class="btn btn-default btn-sm" id="signatures">Signatures</button>
@@ -143,7 +143,7 @@
   </div>
 <% end %>
 
-<% # if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) TEMPORARY %>
+<% if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) %>
   <div id="packetTable"><!-- Packet -->
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow=<%= @progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @progress %>%;">
@@ -263,12 +263,10 @@
       </table>
     </div>
   </div>
-<% # end TEMPORARY %>
+<% end %>
 
 <% if @freshman.on_packet or (@current_upperclassman and @current_upperclassman.admin) %>
-  <div id="signaturesTable" class="hidden"> 
-    <% # if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) TEMPORARY end%> 
-<!-- Signatures -->
+  <div id="signaturesTable" <% if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) %> class="hidden" <% end %>><!-- Signatures -->
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow=<%= @sig_progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @sig_progress %>%;">
       <%= @sig_progress %>%

@@ -266,6 +266,7 @@
 <% end %>
 
 <% if @freshman.on_packet or (@current_upperclassman and @current_upperclassman.admin) %>
+  <% if @freshmen_length > 0 %>
   <div id="signaturesTable" <% if @freshman.doing_packet or (@current_upperclassman and @current_upperclassman.admin) %> class="hidden" <% end %>><!-- Signatures -->
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow=<%= @sig_progress %> aria-valuemin="0" aria-valuemax="100" style="min-width: 7%; width: <%= @sig_progress %>%;">
@@ -300,4 +301,7 @@
       </table>
     </div>
   </div>
+  <% else %>
+  <p>Currently no freshmen are doing the packet.</p>
+  <% end %>
 <% end %>

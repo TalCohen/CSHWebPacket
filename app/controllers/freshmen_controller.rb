@@ -202,6 +202,7 @@ class FreshmenController < ApplicationController
 
       # Gets the information for the progress bar
       @sig_progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s 
+      @freshmen_length = freshmen.length
     end
 
     if (@freshman.doing_packet and @freshman.on_packet) or admin_signed_in?

@@ -86,7 +86,11 @@ class FreshmenController < ApplicationController
     @freshmen = []
 
     # Gets the Freshmen and how many signatures they have
-    fresh = Freshman.where(doing_packet: true)
+    if admin_signed_in?
+      fresh = Freshman.all
+    else
+      fresh = Freshman.where(doing_packet: true)
+    end
 
     fresh.each do |f|
       signatures = Signature.where(freshman: f)  

@@ -22,7 +22,7 @@
         <%= f.password_field :password_confirmation, { class: "form-control", placeholder: "Password Confirmation", autocomplete: "off" } %> <br />
 
         <%= f.label "Doing Packet" %>
-        <%= f.check_box "doing_packet" %> <br />
+        <%= f.check_box "doing_packet", {checked: true} %> <br />
 
         <%= f.label "On Packet" %>
         <%= f.check_box "on_packet" %>

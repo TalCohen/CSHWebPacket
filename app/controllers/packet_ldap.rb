@@ -2,7 +2,8 @@ require 'net-ldap'
 
 LDAP_USER_BASE   = 'ou=Users,dc=csh,dc=rit,dc=edu'.freeze
 LDAP_GROUPS_BASE = 'ou=Groups,dc=csh,dc=rit,dc=edu'.freeze
-LDAP_GROUP_CN    = 'eboard'.freeze
+LDAP_EBOARD_CN   = 'eboard'.freeze
+LDAP_INTRO_CN    = 'intromembers'.freeze 
 module PacketLdap
     class Ldap
         include Net
@@ -69,31 +70,32 @@ module PacketLdap
         end
 
         def find_active_onfloor
-            active = LDAP::Filter.eq('active', '1')
+            #active = LDAP::Filter.eq('active', '1')
             onfloor = LDAP::Filter.eq('onfloor', '1')
 
-            filter = LDAP::Filter.join(active, onfloor)
-            return filter
+            #filter = LDAP::Filter.join(active, onfloor)
+            #return filter
+            return onfloor
         end
 
-        def find_eboard
-            eboard = @ldap.search({
+        def find_group(group_cn)
+            group = @ldap.search({
                 :base       => LDAP_GROUPS_BASE,
                 :filter     => LDAP::Filter.join(LDAP::Filter.eq('objectClass', \
-                                'groupOfNames'), LDAP::Filter.eq('cn', LDAP_GROUP_CN)),
+                                'groupOfNames'), LDAP::Filter.eq('cn', group_cn)),
             })
-            eboard = eboard[0].member # gets list of eboard members
+            group = group[0].member # gets list of the group members
             
-            first = eboard[0].split(',')[0].split('=')[1] # gets the first uid
+            first = group[0].split(',')[0].split('=')[1] # gets the first uid
             filter = LDAP::Filter.eq('uid', "#{first}") # initializes filter
-            eboard.shift # shifts eboard one element
+            group.shift # shifts group one element
 
-            eboard.each do |e| 
-                uid = e.split(',')[0].split('=')[1] # uid of the eboard member
+            group.each do |g| 
+                uid = g.split(',')[0].split('=')[1] # uid of the group member
                 # or do through regexp
                 
                 f = LDAP::Filter.eq('uid', "#{uid}")
-                filter = LDAP::Filter.intersect(filter, f) # will be all of the eboard members
+                filter = LDAP::Filter.intersect(filter, f) # will be all of the group members
                                                            # added one by one
             end
 
@@ -102,9 +104,12 @@ module PacketLdap
 
         def find_upperclassmen
             active_onfloor = find_active_onfloor
-            eboard = find_eboard
+            eboard = find_group(LDAP_EBOARD_CN)
+            intro = find_group(LDAP_INTRO_CN)         
 
-            filter = LDAP::Filter.intersect(active_onfloor, eboard)
+            filter = LDAP::Filter.intersect(active_onfloor, eboard) # filter is onfloor and eboard
+            intro = LDAP::Filter.join(intro, filter) # intro is just the ones in filter
+            filter = LDAP::Filter.join(~intro, filter) # filter is onfloor and eboard - intro members
             result = @ldap.search({
                 :base       => LDAP_USER_BASE,
                 :filter     => filter,
@@ -148,7 +153,7 @@ module PacketLdap
             begin
                 result = @ldap.search({
                     :base       => LDAP_GROUPS_BASE,
-                    :filter     => LDAP::Filter.join(LDAP::Filter.eq('objectClass', 'groupOfNames'), LDAP::Filter.eq('cn', LDAP_GROUP_CN)),
+                    :filter     => LDAP::Filter.join(LDAP::Filter.eq('objectClass', 'groupOfNames'), LDAP::Filter.eq('cn', LDAP_EBOARD_CN)),
                     :attributes => ['member'],
                     :size       => 1
                 }).first

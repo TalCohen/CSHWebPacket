@@ -1,7 +1,13 @@
+<% if @freshman.id == 49 || @freshman.id == 4%>
+  <div class="alert alert-info">
+    <%= @freshman.name %>'s packet is now due on Sunday, September 13th.
+  </div>
+<% end %>
+
 <div class="page-header">
-  <h1>
+  <h3>
     <%= @freshman.name %> <small>Freshman</small> 
-  </h1>
+  </h3>
   <h4>
     Started: <%= @freshman.start_date.to_formatted_s(:long_ordinal) %>
   </h4>

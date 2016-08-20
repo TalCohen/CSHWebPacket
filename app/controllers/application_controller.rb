@@ -8,12 +8,17 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def get_uuid
+  def get_ldap_user
     ldap = PacketLdap::Ldap.new
     username = request.env['REMOTE_USER']
     return nil if username == nil
     user = ldap.find_by_username(username)[0]
-    uuid = user.entryuuid[0]
+  end
+
+  def intromember?(uuid)
+    ldap = PacketLdap::Ldap.new
+    intromembers = ldap.find_intromembers
+    return intromembers.select { |intro| intro.entryuuid[0] == uuid }.length > 0
   end
 
   def create_alumni
@@ -25,18 +30,18 @@ class ApplicationController < ActionController::Base
   end
 
   def current_upperclassman
-    uuid = get_uuid
-    if Upperclassman.exists?(uuid: uuid)
-      @current_upperclassman ||= Upperclassman.find_by(uuid: get_uuid) 
-    elsif uuid
+    user = get_ldap_user
+    uuid = user.entryuuid[0] if user
+    if uuid
       # Check to see if it's a freshman that just got an account
-      File.open("db/freshmen_uuids.txt", "r") do |f|
-        f.each_line do |line|
-          return nil if uuid == line.chomp
-        end
+      return nil if intromember?(uuid)
+
+      if Upperclassman.exists?(uuid: uuid)
+        @current_upperclassman ||= Upperclassman.find_by(uuid: uuid) 
+      else
+        # Create the alumni
+        @current_upperclassman = create_alumni
       end
-      # Create the alumni
-      @current_upperclassman = create_alumni
     end
   end
 

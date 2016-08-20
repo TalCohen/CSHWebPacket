@@ -8,16 +8,24 @@ def create_upperclassmen
   # Gets an array of the upperclassmen
   packet_ldap =  PacketLdap::Ldap.new
   upperclassmen =  packet_ldap.find_upperclassmen
+  eval_director = packet_ldap.find_eval_director
 
+  eval_uuid = eval_director[0].entryuuid[0] if eval_director
+  puts eval_uuid
   admin_uuid = File.read("db/admin.txt").chomp
 
   # Creates the upperclassmen objects
   puts("\nCreating Upperclassmen...")
   upperclassmen.each do |upper|
-    admin = upper.entryuuid[0] == admin_uuid
+    admin = upper.entryuuid[0] == admin_uuid || upper.entryuuid[0] == eval_uuid
     u = Upperclassman.new
     u.create_upperclassman(upper, admin)
-    puts("Upperclassman - #{u.name}, #{u.uuid}")
+    print "Upperclassman - #{u.name}, #{u.uuid}"
+    if admin
+      puts " - Admin"
+    else
+      puts ""
+    end
   end
   puts("Upperclassmen Length - #{upperclassmen.length}")
 end

@@ -1,12 +1,14 @@
-<div class="col-md-6 col-lg-6">
-  <div class="page-header">
-    <h1>Freshman Sign-in</h1>
+<div class="row">
+  <div class="col-md-6 col-lg-6">
+    <div class="page-header">
+      <h3>Freshman Sign-in</h3>
+    </div>
+    <%= form_tag sessions_path do %>
+      <%= text_field_tag :name, params[:name], 
+        { class: "form-control", placeholder: "Username", autocomplete: "off"} %> <br />
+      <%= password_field_tag :password, params[:password],
+        { class: "form-control", placeholder: "Password" } %> <br />
+      <%= submit_tag 'Login', { class: 'btn btn-primary' } %>
+    <% end %>
   </div>
-  <%= form_tag sessions_path do %>
-    <%= text_field_tag :name, params[:name], 
-      { class: "form-control", placeholder: "Username", autocomplete: "off"} %> <br />
-    <%= password_field_tag :password, params[:password],
-      { class: "form-control", placeholder: "Password" } %> <br />
-    <%= submit_tag 'Login', { class: 'btn btn-primary' } %>
-  <% end %>
 </div>

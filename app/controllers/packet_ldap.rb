@@ -2,6 +2,7 @@ require 'net-ldap'
 
 LDAP_USER_BASE   = 'ou=Users,dc=csh,dc=rit,dc=edu'.freeze
 LDAP_GROUPS_BASE = 'ou=Groups,dc=csh,dc=rit,dc=edu'.freeze
+LDAP_EVAL_BASE   = 'cn=Evaulations,ou=Committees,dc=csh,dc=rit,dc=edu'.freeze
 LDAP_EBOARD_CN   = 'eboard'.freeze
 LDAP_INTRO_CN    = 'intromembers'.freeze 
 module PacketLdap
@@ -69,13 +70,8 @@ module PacketLdap
             conn.bind
         end
 
-        def find_active_onfloor
-            #active = LDAP::Filter.eq('active', '1')
-            onfloor = LDAP::Filter.eq('onfloor', '1')
-
-            #filter = LDAP::Filter.join(active, onfloor)
-            #return filter
-            return onfloor
+        def find_onfloor
+          onfloor = LDAP::Filter.eq('roomNumber', '*')
         end
 
         def find_group(group_cn)
@@ -102,12 +98,24 @@ module PacketLdap
             return filter
         end
 
+        def find_intromembers
+            intro = find_group(LDAP_INTRO_CN)         
+            result = @ldap.search({
+                :base       => LDAP_USER_BASE,
+                :filter     => intro,
+                :attributes => ["*", "+"]
+            })
+            return result
+        end
+
         def find_upperclassmen
-            active_onfloor = find_active_onfloor
+            onfloor = find_onfloor
             eboard = find_group(LDAP_EBOARD_CN)
             intro = find_group(LDAP_INTRO_CN)         
 
-            filter = LDAP::Filter.intersect(active_onfloor, eboard) # filter is onfloor and eboard
+            filter = LDAP::Filter.intersect(onfloor, eboard) # filter is onfloor and eboard
+
+            # These lines should only be used for the semester renew!
             intro = LDAP::Filter.join(intro, filter) # intro is just the ones in filter
             filter = LDAP::Filter.join(~intro, filter) # filter is onfloor and eboard - intro members
             result = @ldap.search({
@@ -116,6 +124,18 @@ module PacketLdap
                 :attributes => ["*", "+"]
             })
             return result
+        end
+
+        def find_eval_director
+          filter = LDAP::Filter.eq('uid', '*')
+          result = @ldap.search({
+                :base       => LDAP_EVAL_BASE,
+                :attributes => ['head']
+            })
+          if result.length
+            uid = result[0].head[0].split(',')[0].split('=')[1]
+            find_by_username(uid) 
+          end
         end
 
         def find_by_username(username)

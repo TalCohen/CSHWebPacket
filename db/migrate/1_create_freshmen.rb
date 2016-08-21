@@ -5,6 +5,7 @@ class CreateFreshmen < ActiveRecord::Migration
       t.binary :password_digest
       t.boolean :doing_packet
       t.boolean :on_packet
+      t.string  :announcement
       t.date :start_date, default: Date.today.in_time_zone
       t.text :info_directorships
       t.text :info_events

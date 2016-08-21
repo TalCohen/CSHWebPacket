@@ -299,10 +299,11 @@ class FreshmenController < ApplicationController
           pc = info[:password_confirmation] if info[:password_confirmation].length > 0
           dp = info[:doing_packet] == "1"
           op = info[:on_packet] == "1"
+          a = info[:announcement]
           if p and pc
-            result = freshman.update_attributes(name: n, password: p, password_confirmation: pc, doing_packet: dp, on_packet: op)
+            result = freshman.update_attributes(name: n, password: p, password_confirmation: pc, doing_packet: dp, on_packet: op, announcement: a)
           else
-            result = freshman.update_attributes(name: n, doing_packet: dp, on_packet: op)
+            result = freshman.update_attributes(name: n, doing_packet: dp, on_packet: op, announcement: a)
           end
         elsif freshman == @current_freshman
           i_d = info[:info_directorships]

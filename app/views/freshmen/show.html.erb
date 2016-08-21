@@ -1,6 +1,6 @@
-<% if @freshman.id == 49 || @freshman.id == 4%>
+<% if @freshman.announcement and not @freshman.announcement.empty? %>
   <div class="alert alert-info">
-    <%= @freshman.name %>'s packet is now due on Sunday, September 13th.
+    <%= @freshman.announcement %>
   </div>
 <% end %>
 
@@ -98,6 +98,7 @@
         <%= f.text_field :name, { class: "form-control", placeholder: @freshman.name, autocomplete: "off" } %> <br />
         <%= f.password_field :password, { class: "form-control", placeholder: "New Password", autocomplete: "off" } %> <br />
         <%= f.password_field :password_confirmation, { class: "form-control", placeholder: "Confirm New Password", autocomplete: "off" } %> <br />
+        <%= f.text_field :announcement, { class: "form-control", placeholder: "Announcement", autocomplete: "off" } %> <br />
         <%= f.label "Doing Packet" %>
         <%= f.check_box "doing_packet" %> <br />
         <%= f.label "On Packet" %>

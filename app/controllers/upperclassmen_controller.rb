@@ -55,4 +55,9 @@ class UpperclassmenController < ApplicationController
     @progress = (100.0 * @signed_freshmen.length / freshmen.length).round(2).to_s
     @freshmen_length = freshmen.length
   end
+
+  def update
+    @current_upperclassman.update_attributes(talpacket_theme: params[:active])
+    render json: params[:active], status: :ok
+  end
 end

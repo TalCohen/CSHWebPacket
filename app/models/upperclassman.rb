@@ -11,6 +11,7 @@ class Upperclassman < ActiveRecord::Base
     self.uuid = "#{upper.entryuuid[0]}"
     self.admin = admin
     self.alumni = alumni
+    self.talpacket_theme = false
     self.save
     return self
   end

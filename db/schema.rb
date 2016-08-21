@@ -18,7 +18,8 @@ ActiveRecord::Schema.define(version: 3) do
     t.binary   "password_digest"
     t.boolean  "doing_packet"
     t.boolean  "on_packet"
-    t.date     "start_date",         default: '2016-08-20'
+    t.string   "announcement"
+    t.date     "start_date",         default: '2016-08-21'
     t.text     "info_directorships"
     t.text     "info_events"
     t.text     "info_achievements"
@@ -40,8 +41,9 @@ ActiveRecord::Schema.define(version: 3) do
   create_table "upperclassmen", force: true do |t|
     t.string   "name"
     t.string   "uuid"
-    t.boolean  "admin",      default: false
+    t.boolean  "admin",           default: false
     t.boolean  "alumni"
+    t.boolean  "talpacket_theme", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

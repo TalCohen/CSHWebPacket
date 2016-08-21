@@ -86,6 +86,14 @@
               <ul class="nav navbar-nav pull-right">
                 <li><%= link_to 'Logout', "/sessions", method: :delete %></li>
               </ul>
+            <% else %>
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <div class="navbar-btn">
+                    <button type="button" id="toggle-talpacket" class="btn btn-default" data-upper=<%= @current_upperclassman.id %> data-active=<%= @current_upperclassman.talpacket_theme %>>Button</button>
+                  </div>
+                </li>
+              </ul>
             <% end %>
           </div><!--/.nav-collapse -->
         <% end %>

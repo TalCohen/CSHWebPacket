@@ -41,8 +41,9 @@ ActiveRecord::Schema.define(version: 3) do
   create_table "upperclassmen", force: true do |t|
     t.string   "name"
     t.string   "uuid"
-    t.boolean  "admin",      default: false
+    t.boolean  "admin",           default: false
     t.boolean  "alumni"
+    t.boolean  "talpacket_theme", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

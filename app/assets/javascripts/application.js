@@ -15,3 +15,26 @@
 //= require turbolinks
 //= require_tree 
 //= require 'bootstrap.min'
+
+$('document').ready(function() {
+
+  $('#toggle-talpacket').on('click', function(e) {
+    var $this = $(this),
+        active = $this.data('active'),
+        id = $this.data('upper');
+
+    $.ajax({
+      type: "PUT",
+      url: "/upperclassmen/" + id,
+      data: { "active": !active },
+      success: function(data) {
+        $this.data('active', data);
+        // Change the theme through JS
+      },
+      error: function(data) {
+        console.log("Failed to change theme.");
+      },
+    });
+  });
+
+});

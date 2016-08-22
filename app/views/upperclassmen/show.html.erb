@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h3><%= @upperclassman.name %> 
+  <h3><span class="talpacket hidden">Tal Packet - </span><%= @upperclassman.name %> 
     <% if not @upperclassman.alumni %>
       <small>Upperclassman</small>
     <% else %>
@@ -27,14 +27,22 @@
       <tbody>
         <% @signed_freshmen.each do |f| %>
           <tr class="success">
-            <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+            <td>
+              <%= link_to freshman_path(f.id) do %>
+                <span class="talpacket hidden">Tal Packet - </span><%= f.name %>
+              <% end %>
+            </td>
             <td><span class="glyphicon glyphicon-ok"></span> Yes</td>
           </tr>
         <% end %>
 
         <% @unsigned_freshmen.each do |f| %>
           <tr>
-            <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+            <td>
+              <%= link_to freshman_path(f.id) do %>
+                <span class="talpacket hidden">Tal Packet - </span><%= f.name %>
+              <% end %>
+            </td>
             <td><span class="glyphicon glyphicon-remove"></span> No</td>
           </tr>
         <% end %>

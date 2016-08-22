@@ -1,5 +1,6 @@
 <div class="page-header">
-  <h3>Freshmen Packets</h3>
+  <h3 class="default-theme hidden">Freshmen Packets</h3>
+  <h3 class="talpacket hidden">Tal Packets</h3>
   <% if not @current_freshman and @current_upperclassman.admin %>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Freshman</button>
   <% end %>
@@ -59,8 +60,14 @@
         <% else %>
           <tr>
         <% end %>
-          <td><%= link_to "#{f[0].name}", freshman_path(f[0].id) %></td>
-          <td><%= f[1] %> / <%= @total_signatures %></td>
+          <td>
+            <%= link_to freshman_path(f[0].id) do %>
+              <span class="talpacket hidden">Tal Packet - </span><%= f[0].name %>
+            <% end %>
+          </td>
+          <td>
+            <%= f[1] %> <span class="talpacket hidden">Tal Packet </span>/ <%= @total_signatures %><span class="talpacket hidden"> Tal Packets</span>
+          </td>
         </tr>
       <% end %>
     </tbody>

@@ -16,7 +16,10 @@
 //= require_tree 
 //= require 'bootstrap.min'
 
-$('document').ready(function() {
+
+var ready;
+ready = function() {
+  toggleTheme($('.talpacket'), $('#toggle-talpacket').data('active'));
 
   $('#toggle-talpacket').on('click', function(e) {
     var $this = $(this),
@@ -29,7 +32,7 @@ $('document').ready(function() {
       data: { "active": !active },
       success: function(data) {
         $this.data('active', data);
-        // Change the theme through JS
+        toggleTheme($('.talpacket'), data);
       },
       error: function(data) {
         console.log("Failed to change theme.");
@@ -37,4 +40,18 @@ $('document').ready(function() {
     });
   });
 
-});
+  function toggleTheme($theme, active) {
+    if (active) {
+      $theme.removeClass('hidden');
+      $('.default-theme').addClass('hidden');
+    } else {
+      $theme.addClass('hidden');
+      $('.default-theme').removeClass('hidden');
+    }
+  }
+
+}
+
+$(document).ready(ready);
+$(document).on('page:load', ready);
+

@@ -6,7 +6,7 @@
 
 <div class="page-header">
   <h3>
-    <%= @freshman.name %> <small>Freshman</small> 
+    <span class="talpacket hidden">Tal Packet - </span><%= @freshman.name %> <small>Freshman</small> 
   </h3>
   <h4>
     Started: <%= @freshman.start_date.to_formatted_s(:long_ordinal) %>
@@ -144,8 +144,8 @@
 <% if (@freshman.doing_packet and @freshman.on_packet) or (@current_upperclassman and @current_upperclassman.admin) %>
 <% # if @freshman.on_packet or (@current_upperclassman and @current_upperclassman.admin) Finished packets %>
   <div class="btn-group">
-    <button type="button" class="btn btn-primary btn-sm active" id="packet">Packet</button>
-    <button type="button" class="btn btn-default btn-sm" id="signatures">Signatures</button>
+    <button type="button" class="btn btn-primary btn-sm active" id="packet"><span class="talpacket hidden">Tal </span>Packet</button>
+    <button type="button" class="btn btn-default btn-sm" id="signatures"><span class="talpacket hidden">Tal Packet </span>Signatures</button>
     <br /><br />
   </div>
 <% end %>
@@ -171,7 +171,11 @@
           <% @upperclassmen_signed.each do |u| %>
             <tr class="success">
               <% if @current_upperclassman %>
-                <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+                <td>
+                  <%= link_to upperclassman_path(u.id) do %>
+                    <span class="talpacket hidden">Tal Packet - </span><%= u.name %>
+                  <% end %>
+                </td>
               <% else %>
                 <td><%= u.name %>
               <% end %>
@@ -189,7 +193,11 @@
           <% @upperclassmen_unsigned.each do |u| %>
             <tr>
               <% if @current_upperclassman %>
-                <td><%= link_to "#{u.name}", upperclassman_path(u.id) %></td>
+                <td>
+                  <%= link_to upperclassman_path(u.id) do %>
+                    <span class="talpacket hidden">Tal Packet - </span><%= u.name %>
+                  <% end %>
+                </td>
               <% else %>
                 <td><%= u.name %>
               <% end %>
@@ -213,7 +221,11 @@
         <tbody><!-- Freshmen -->
           <% @freshmen_signed.each do |f| %>
             <tr class="success">
-              <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+              <td>
+                <%= link_to freshman_path(f.id) do %>
+                  <% if @current_upperclassman %><span class="talpacket hidden">Tal Packet - </span><% end %><%= f.name %>
+                <% end %>
+              </td>
               <td>
                 <span class="glyphicon glyphicon-ok"></span> Yes
                 <% if not @current_freshman and @current_upperclassman.admin %>
@@ -227,7 +239,11 @@
 
            <% @freshmen_unsigned.each do |f| %>
             <tr>
-              <td><%= link_to "#{f.name}", freshman_path(f.id) %></td>
+              <td>
+                <%= link_to freshman_path(f.id) do %>
+                  <% if @current_upperclassman %><span class="talpacket hidden">Tal Packet - </span><% end %><%= f.name %>
+                <% end %>
+              </td>
               <td><span class="glyphicon glyphicon-remove"></span> No</td>
             </tr>
           <% end %>
@@ -249,7 +265,7 @@
           <% @alumni_signed.each_with_index do |a, index| %>
             <% if a %>
               <tr class="success">
-                <td><%= index + 1 %>. <%= a.name %></td>
+                <td><%= index + 1 %>. <% if @current_upperclassman %><span class="talpacket hidden">Tal Packet - </span><% end %><%= a.name %></td>
                 <td>
                   <span class="glyphicon glyphicon-ok"></span> Yes
                   <% if not @current_freshman and @current_upperclassman.admin %>

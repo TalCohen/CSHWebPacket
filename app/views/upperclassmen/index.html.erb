@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h3>Upperclassmen Signatures</h3>
+  <h3>Upperclassmen <span class="talpacket hidden">Tal Packet </span>Signatures</h3>
 </div>
 
 <div class="table-responsive">
@@ -7,15 +7,19 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Packets Signed</th>
+        <th><span class="talpacket hidden">Tal </span>Packets Signed</th>
       </tr>
     </thead>
 
     <tbody>
       <% @upperclassmen.each do |u| %>
         <tr>
-          <td><%= link_to "#{u[0].name}", upperclassman_path(u[0].id) %></td>
-          <td><%= u[1] %></td>
+          <td>
+            <%= link_to upperclassman_path(u[0].id) do %>
+              <span class="talpacket hidden">Tal Packet - </span><%= u[0].name %>
+            <% end %>
+          </td>
+          <td><%= u[1] %><span class="talpacket"> Tal Packets</span></td>
         </tr>
       <% end %>
     </tbody>

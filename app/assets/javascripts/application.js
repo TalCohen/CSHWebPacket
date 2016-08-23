@@ -24,15 +24,17 @@ ready = function() {
   $('#toggle-talpacket').on('click', function(e) {
     var $this = $(this),
         active = $this.data('active'),
-        id = $this.data('upper');
+        id = $this.data('upper'),
+        new_active = !active;
+
+    $this.data('active', new_active);
+    toggleTheme($('.talpacket'), new_active);
 
     $.ajax({
       type: "PUT",
       url: "/upperclassmen/" + id,
-      data: { "active": !active },
+      data: { "active": new_active },
       success: function(data) {
-        $this.data('active', data);
-        toggleTheme($('.talpacket'), data);
       },
       error: function(data) {
         console.log("Failed to change theme.");

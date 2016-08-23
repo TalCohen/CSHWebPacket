@@ -97,17 +97,26 @@ class FreshmenController < ApplicationController
       signatures_length = signatures.length
 
       # Adjust numbers for increased alumni signature count
+      # Also check if the current upperclassman signed it
       alumni_count = 0
-      signatures.where(signer_type: "Upperclassman").each do |s|
-        if s.signer.alumni
-          alumni_count += 1
+      current_signed = false
+      signatures.each do |s|
+        if s.signer_type == "Upperclassman"
+          if s.signer.alumni
+            alumni_count += 1
+          end
+
+          current_signed ||= upperclassman_signed_in? && s.signer.id == @current_upperclassman.id
+        else
+          current_signed ||= freshman_signed_in? && s.signer.id == @current_freshman.id
         end
       end
+
       if alumni_count > 15
         signatures_length -= (alumni_count - 15)
       end
 
-      @freshmen.push([f, signatures_length])
+      @freshmen.push([f, signatures_length, current_signed])
     end
 
     # Sort the freshmen based on highest signature count, then aphabetically

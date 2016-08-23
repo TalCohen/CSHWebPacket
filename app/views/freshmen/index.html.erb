@@ -50,6 +50,7 @@
       <tr>
         <th>Name</th>
         <th>Signatures Received</th>
+        <th>I signed?</th>
       </tr>
     </thead>
 
@@ -68,6 +69,11 @@
           <td>
             <%= f[1] %> <span class="talpacket hidden">Tal Packet </span>/ <%= @total_signatures %><span class="talpacket hidden"> Tal Packets</span>
           </td>
+          <% if f[2] %>
+            <td class="success"><span class="glyphicon glyphicon-ok"></span> Yes</td>
+          <% else %>
+            <td><span class="glyphicon glyphicon-remove"></span> No</td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

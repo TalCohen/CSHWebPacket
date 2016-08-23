@@ -106,9 +106,9 @@ class FreshmenController < ApplicationController
             alumni_count += 1
           end
 
-          current_signed ||= upperclassman_signed_in? && s.signer.id == @current_upperclassman.id
+          current_signed ||= @current_upperclassman && s.signer.id == @current_upperclassman.id
         else
-          current_signed ||= freshman_signed_in? && s.signer.id == @current_freshman.id
+          current_signed ||= @current_freshman && s.signer.id == @current_freshman.id
         end
       end
 

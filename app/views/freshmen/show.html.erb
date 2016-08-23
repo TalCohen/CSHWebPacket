@@ -6,7 +6,8 @@
 
 <div class="page-header">
   <h3>
-    <span class="talpacket hidden">Tal Packet - </span><%= @freshman.name %> <small>Freshman</small> 
+    <span class="talpacket hidden">Tal Packet - </span><%= @freshman.name %>
+    <small><% if @freshman.on_packet %>On-Floor <% else %>Off-Floor <% end %>Freshman</small> 
   </h3>
   <h4>
     Started: <%= @freshman.start_date.to_formatted_s(:long_ordinal) %>

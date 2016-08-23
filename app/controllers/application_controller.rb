@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_upperclassman
+    return @current_upperclassman if @current_upperclassman
+
     user = get_ldap_user
     uuid = user.entryuuid[0] if user
     if uuid

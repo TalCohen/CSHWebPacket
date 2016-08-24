@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   force_ssl
+  before_filter :get_all_users
 
   private
 
@@ -87,6 +88,15 @@ class ApplicationController < ActionController::Base
     unless signed_in?
       redirect_to new_sessions_path
     end
+  end
+
+  def get_all_users
+    if upperclassman_signed_in?
+      @all_upperclassmen = Upperclassman.all.select(:id, :name)
+    else
+      @all_upperclassmen = []
+    end
+    @all_freshmen = Freshman.all.select(:id, :name)
   end
 
 end

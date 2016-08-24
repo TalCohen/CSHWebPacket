@@ -82,7 +82,7 @@
               <% unless @current_freshman %>
                 <li <% if current_page?(upperclassmen_path) %>class="active"<% end %>>
                   <%= link_to upperclassmen_path do %>
-                    Upperclassmen <span class="talpacket hidden">Tal Packet </span>Signatures
+                    Upperclassmen <span class="default-theme hidden">Signatures</span><span class="talpacket hidden">Tal Packets</span>
                   <% end %>
                 </li>
                 <li <% if current_page?(signatures_path) %>class="active"<% end %>>
@@ -93,7 +93,7 @@
               <% end %>
             </ul>
             <% if @current_freshman %>
-              <ul class="nav navbar-nav pull-right">
+              <ul class="nav navbar-nav navbar-right">
                 <li><%= link_to 'Logout', "/sessions", method: :delete %></li>
               </ul>
             <% else %>
@@ -105,6 +105,9 @@
                 </li>
               </ul>
             <% end %>
+            <form class="nav navbar-form navbar-right">
+              <input type="text" id="user-search" class="form-control" autocomplete="off" data-provide="typeahead" placeholder="Search">
+            </form>
           </div><!--/.nav-collapse -->
         <% end %>
       </div>
@@ -125,6 +128,20 @@
     <div class="row">
       <footer class="text-center" style="font-weight:bold;font-size:1.2em;">Tal - <a href="https://github.com/TalCohen/CSHWebPacket">Packet</a></footer>
     </div>
+
+    <div class="hidden">
+      <ul>
+        <% @all_upperclassmen.each do |u| %>
+          <li class="search-upperclassman" data-id="<%= u.id %>" data-name="<%= u.name %>"></li>
+        <% end %>
+      </ul>
+      <ul>
+        <% @all_freshmen.each do |f| %>
+          <li class="search-freshman" data-id="<%= f.id %>" data-name="<%= f.name %>"></li>
+        <% end %>
+      </ul>
+    </div>
+
     </div> <!-- /container -->
 </body>
 </html>

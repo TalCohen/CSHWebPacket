@@ -15,7 +15,7 @@
 //= require turbolinks
 //= require_tree 
 //= require 'bootstrap.min'
-
+//= require 'bootstrap3-typeahead.min'
 
 var ready;
 ready = function() {
@@ -52,6 +52,34 @@ ready = function() {
     }
   }
 
+  var $input = $('#user-search'),
+      $upperclassmen = $('.search-upperclassman'),
+      $freshmen = $('.search-freshman'),
+      source = []
+
+  $upperclassmen.each(function() {
+    source.push({id: $(this).data('id'), name: $(this).data('name'), type: "upperclassmen"})
+  });
+  $freshmen.each(function() {
+    source.push({id: $(this).data('id'), name: $(this).data('name'), type: "freshmen"})
+  });
+
+  $input.typeahead({source: source, autoSelect: true});
+  $input.change(function() {
+      var current = $input.typeahead("getActive");
+      if (current) {
+          // Some item from your model is active!
+          if (current.name == $input.val()) {
+              // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+              window.location.href = "/" + current.type + "/" + current.id;
+          } else {
+              // This means it is only a partial match, you can either add a new item 
+              // or take the active if you don't want new items
+          }
+      } else {
+          // Nothing is active so it is a new value (or maybe empty value)
+      }
+  });
 }
 
 $(document).ready(ready);

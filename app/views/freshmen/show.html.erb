@@ -171,15 +171,15 @@
         <tbody><!-- Upperclassmen -->
           <% @upperclassmen_signed.each do |u| %>
             <tr class="success">
+              <td>
               <% if @current_upperclassman %>
-                <td>
-                  <%= link_to upperclassman_path(u.id) do %>
-                    <span class="talpacket hidden">Tal Packet - </span><%= u.name %>
-                  <% end %>
-                </td>
+                <%= link_to upperclassman_path(u.id) do %>
+                  <span class="talpacket hidden">Tal Packet - </span><%= u.name %>
+                <% end %>
               <% else %>
-                <td><%= u.name %>
+                <%= u.name %>
               <% end %>
+              </td>
               <td>
                 <span class="glyphicon glyphicon-ok"></span> Yes
                 <% if not @current_freshman and @current_upperclassman.admin %>
@@ -263,14 +263,23 @@
         </thead>
 
         <tbody><!-- Alumni -->
-          <% @alumni_signed.each_with_index do |a, index| %>
-            <% if a %>
+          <% (1..[15, @alumni_signed.length].max).each do |num| %>
+            <% if @alumni_signed[num-1] %>
               <tr class="success">
-                <td><%= index + 1 %>. <% if @current_upperclassman %><span class="talpacket hidden">Tal Packet - </span><% end %><%= a.name %></td>
+                <td><%= num %>. 
+                  <% if @current_upperclassman %>
+                    <%= link_to upperclassman_path(@alumni_signed[num-1].id) do %>
+                      <span class="talpacket hidden">Tal Packet - </span><%= @alumni_signed[num-1].name %>
+                    <% end %>
+                  <% else %>
+                    <%= @alumni_signed[num-1].name %>
+                  <% end %>
+                  <% if num > 15 %> - <strong>Extra</strong><% end %>
+                </td>
                 <td>
                   <span class="glyphicon glyphicon-ok"></span> Yes
                   <% if not @current_freshman and @current_upperclassman.admin %>
-                    <%= form_for Signature.where(freshman: @freshman, signer: a).take, method: :delete do |s| %>
+                    <%= form_for Signature.where(freshman: @freshman, signer: @alumni_signed[num-1]).take, method: :delete do |s| %>
                       <%= s.submit 'Delete', { class: 'btn btn-xs btn-danger' }%>
                     <% end %>
                   <% end %>
@@ -278,7 +287,7 @@
               </tr>
             <% else %>
               <tr>
-                <td><%= index + 1 %>. </td>
+                <td><%= num %>. </td>
                 <td><span class="glyphicon glyphicon-remove"></span> No</td>
               </tr>
             <% end %>

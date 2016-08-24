@@ -147,15 +147,20 @@ class FreshmenController < ApplicationController
       @title = "#{@freshman.name}'s Packet"
 
       # Gets the signed upperclassmen and freshmen
-      signatures = Signature.where(freshman_id: @freshman.id)
+      signatures = Signature.where(freshman_id: @freshman.id).order(updated_at: :asc)
       @upperclassmen_signed = []
       @freshmen_signed = []
+      @alumni_signed = []
 
       signatures.each do |s|
-        if s.signer_type == "Freshman" and s.signer.on_packet
+        if s.signer_type == "Freshman" && s.signer.on_packet
           @freshmen_signed.push(s.signer)
-        elsif s.signer_type == "Upperclassman" and not s.signer.alumni
-          @upperclassmen_signed.push(s.signer)
+        elsif s.signer_type == "Upperclassman"
+          if s.signer.alumni
+            @alumni_signed.push(s.signer)
+          else
+            @upperclassmen_signed.push(s.signer)
+          end
         end
       end
 
@@ -169,12 +174,10 @@ class FreshmenController < ApplicationController
       @freshmen_signed.sort_by!{ |s| s.name }
       @freshmen_unsigned.sort_by!{ |s| s.name }
 
-      # Gets the alumni signatures as a list of alumni
-      @alumni_signed = @freshman.get_alumni_signatures
-
       # Gets the information for the progress bar
-      signed = @upperclassmen_signed.length + @freshmen_signed.length + @freshman.get_alumni_signatures_count
-      total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + @alumni_signed.length - @freshman.get_alumni_signatures_count
+      allowed_alumni_signed_count = [15, @alumni_signed.length].min
+      signed = @upperclassmen_signed.length + @freshmen_signed.length + allowed_alumni_signed_count 
+      total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + (15 - allowed_alumni_signed_count)
       @progress = (100.0 * signed / total).round(2).to_s
 
       # Determine whether this packet is signed or not
@@ -232,15 +235,20 @@ class FreshmenController < ApplicationController
         # Needs to be refactored, same as logic in show action
 
         # Gets the signed upperclassmen and freshmen
-        signatures = Signature.where(freshman_id: freshman.id)
+        signatures = Signature.where(freshman_id: freshman.id).order(updated_at: :asc)
         upperclassmen_signed = []
         freshmen_signed = []
+        alumni_signed = []
 
         signatures.each do |s|
           if s.signer_type == "Freshman" and s.signer.on_packet
             freshmen_signed.push(s.signer)
-          elsif s.signer_type == "Upperclassman" and not s.signer.alumni
-            upperclassmen_signed.push(s.signer)
+          elsif s.signer_type == "Upperclassman"
+            if s.signer.alumni
+              alumni_signed.push(s.signer)
+            else
+              upperclassmen_signed.push(s.signer)
+            end
           end
         end
 
@@ -253,9 +261,6 @@ class FreshmenController < ApplicationController
         upperclassmen_unsigned.sort_by!{ |s| s.name }
         freshmen_signed.sort_by!{ |s| s.name }
         freshmen_unsigned.sort_by!{ |s| s.name }
-
-        # Gets the alumni signatures as a list of alumni
-        alumni_signed = freshman.get_alumni_signatures
 
         # Export to CSV
         CSV.open("db/packets/" + freshman.name + ".csv", "w") do |csv|

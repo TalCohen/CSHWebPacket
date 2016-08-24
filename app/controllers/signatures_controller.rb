@@ -44,9 +44,14 @@ class SignaturesController < ApplicationController
       @freshmen.each {|f| f_ids << f.id }
       @upperclass_signatures = Hash.new
       @freshmen_signatures = Hash.new
+      @alumni_signatures = Hash.new(0)
       Signature.where(freshman_id: f_ids).each do |s|
           if s.signer_type == "Upperclassman"
+            if s.signer.alumni
+              @alumni_signatures[s.freshman_id] += 1
+            else
               @upperclass_signatures[[s.signer_id, s.freshman_id]] = s
+            end
           else
               @freshmen_signatures[[s.signer_id, s.freshman_id]] = s
           end

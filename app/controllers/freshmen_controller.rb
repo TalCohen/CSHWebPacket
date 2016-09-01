@@ -53,20 +53,23 @@ class FreshmenController < ApplicationController
     if admin_signed_in?
       # Get the freshman and signatures
       fresh = Freshman.find(params[:id])
-      sigs = Signature.where(freshman_id: fresh.id) 
+      fresh_signed = Signature.where(signer_id: params[:id], signer_type: "freshman")
+      fresh_sigs = Signature.where(freshman_id: fresh.id)
       if params[:freshman] == "signatures"
-        sigs.destroy_all
+        fresh_sigs.destroy_all
         changed = fresh.update_attributes(start_date: Date.today.in_time_zone)
-        if sigs.length == 0 and changed
+        if fresh_sigs.length == 0 and changed
           flash[:success] = "Successfully deleted signatures."
         else
           flash[:error] = "Unable to delete signatures."
         end
         return redirect_to :back
       elsif params[:freshman] == "everything"
+        fresh_signed.destroy_all
+        fresh_sigs.destroy_all
         fresh.destroy
-        sigs.destroy_all
-        if fresh.destroyed? and sigs.length == 0
+
+        if fresh_sigs.length == 0 && fresh_signed.length == 0 && fresh.destroyed?
           flash[:success] = "Successfully deleted freshman."
         else
           flash[:error] = "Unable to delete freshman."

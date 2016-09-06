@@ -63,7 +63,7 @@
         <% end %>
           <td>
             <%= link_to freshman_path(f[0].id) do %>
-              <span class="talpacket hidden">Tal Packet - </span><%= f[0].name %>
+              <span class="talpacket hidden">Tal Packet - </span><%= f[0].name %><% if f[1] == @total_signatures %> 💯<% end %>
             <% end %>
           </td>
           <td>

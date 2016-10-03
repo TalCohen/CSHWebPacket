@@ -179,9 +179,13 @@ class FreshmenController < ApplicationController
 
       # Gets the information for the progress bar
       allowed_alumni_signed_count = [15, @alumni_signed.length].min
-      signed = @upperclassmen_signed.length + @freshmen_signed.length + allowed_alumni_signed_count 
-      total = signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + (15 - allowed_alumni_signed_count)
-      @progress = (100.0 * signed / total).round(2).to_s
+      total_signed = @upperclassmen_signed.length + @freshmen_signed.length + allowed_alumni_signed_count 
+      total_total = total_signed + @upperclassmen_unsigned.length + @freshmen_unsigned.length + (15 - allowed_alumni_signed_count)
+      @total_progress = (100.0 * total_signed / total_total).round(2).to_s
+
+      upper_signed = total_signed - @freshmen_signed.length
+      upper_total = total_total - @freshmen_unsigned.length
+      @upper_progress = (100.0 * upper_signed / upper_total).round(2).to_s
 
       # Determine whether this packet is signed or not
       if upperclassman_signed_in?

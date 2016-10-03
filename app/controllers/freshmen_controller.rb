@@ -184,7 +184,7 @@ class FreshmenController < ApplicationController
       @total_progress = (100.0 * total_signed / total_total).round(2).to_s
 
       upper_signed = total_signed - @freshmen_signed.length
-      upper_total = total_total - @freshmen_unsigned.length
+      upper_total = upper_signed + @upperclassmen_unsigned.length + (15 - allowed_alumni_signed_count)
       @upper_progress = (100.0 * upper_signed / upper_total).round(2).to_s
 
       # Determine whether this packet is signed or not

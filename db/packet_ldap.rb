@@ -5,6 +5,7 @@ LDAP_GROUPS_BASE = 'ou=Groups,dc=csh,dc=rit,dc=edu'.freeze
 LDAP_EVAL_BASE   = 'cn=Evaulations,ou=Committees,dc=csh,dc=rit,dc=edu'.freeze
 LDAP_EBOARD_CN   = 'eboard'.freeze
 LDAP_INTRO_CN    = 'intromembers'.freeze 
+LDAP_FAILED_CN    = 'failed'.freeze 
 module PacketLdap
     class Ldap
         include Net
@@ -111,13 +112,17 @@ module PacketLdap
         def find_upperclassmen
             onfloor = find_onfloor
             eboard = find_group(LDAP_EBOARD_CN)
-            intro = find_group(LDAP_INTRO_CN)         
+            intro = find_group(LDAP_INTRO_CN)
+            failed = find_group(LDAP_FAILED_CN)
 
             filter = LDAP::Filter.intersect(onfloor, eboard) # filter is onfloor and eboard
 
             # These lines should only be used for the semester renew!
             intro = LDAP::Filter.join(intro, filter) # intro is just the ones in filter
             filter = LDAP::Filter.join(~intro, filter) # filter is onfloor and eboard - intro members
+
+            failed = LDAP::Filter.join(failed, filter) # failed is just the ones in filter
+            filter = LDAP::Filter.join(~failed, filter) # filter is onfloor and eboard - (intro members and failed members)
             result = @ldap.search({
                 :base       => LDAP_USER_BASE,
                 :filter     => filter,

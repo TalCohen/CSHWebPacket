@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 3) do
     t.boolean  "doing_packet"
     t.boolean  "on_packet"
     t.string   "announcement"
-    t.date     "start_date",         default: '2016-08-21'
+    t.date     "start_date",         default: '2017-08-27'
     t.text     "info_directorships"
     t.text     "info_events"
     t.text     "info_achievements"
